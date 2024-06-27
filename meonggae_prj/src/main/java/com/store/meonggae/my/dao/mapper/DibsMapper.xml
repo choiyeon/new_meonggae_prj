@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.dibs">
+
+<!-- 마이페이지 메인 : 찜목록 -->
+<select id="allDibsList" resultType="goodsDomain" parameterType="String">
+select		goodsnum, name, price, img, goodsinputdate inputdate
+from		v_dibs_list
+where		mem_num='${memnum}'
+</select>
+
+</mapper>

@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.agree {
+	height: 150px;
+	border: 1px solid black;
+	overflow-y: scroll; /* y축으로 오버플로우 되는 것을 scroll방식으로 바꾸는 것 */
+}
+
+.chkAgree {
+	text-align: right;
+	background-color: #F1F3F5;
+	padding-top: 4px;
+}
+
+th {
+	vertical-align: middle;
+}
+
+.space {
+	width: 5px;
+	height: auto;
+	display: inline-block;
+}
+
+.space2 {
+	width: 25px;
+	height: auto;
+	display: inline-block;
+}
+
+.writeForm_btn {
+	padding-bottom: 10px;
+}
+
+.writeForm_btn .btn {
+	width: 150px;
+}
+.item_style{
+	color: red;
+}

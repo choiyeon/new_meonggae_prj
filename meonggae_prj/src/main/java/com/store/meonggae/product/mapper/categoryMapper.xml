@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.product">
+<!-- 카테고리 조회 -->
+<select id="selectCategory" resultType="categoryDomain" parameterType="String">
+select CATEGORY_NUM as categoryNum , NAME, PARENT_CATEGORY_NUM parentCategoryNum
+from GOODS_CATEGORY
+where PARENT_CATEGORY_NUM=#{PARENT_CATEGORY_NUM}
+</select>
+ <!-- 부모 카테고리인지 확인하는 쿼리 -->
+ <!-- 0이 아니면 부모, 0이면 자식 -->
+<select id="isParentCategory" resultType="int" >
+SELECT COUNT(*)
+FROM GOODS_CATEGORY
+WHERE PARENT_CATEGORY_NUM = #{categoryNum}
+</select>
+<select id="selectCategoryName" resultType="String" >
+select NAME
+from GOODS_CATEGORY
+where CATEGORY_NUM=#{categoryNum}
+</select>
+</mapper>

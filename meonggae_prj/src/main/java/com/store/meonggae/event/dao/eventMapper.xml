@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.event">
+<!-- 이벤트 총 개수 -->
+<select id="selectTotalCount" resultType="int" parameterType="pagingVO">
+select count(*) cnt from event
+<where>
+<if test="keyword neq null and keyword neq ''">
+	<choose>
+		<when test ="field eq 0">
+			title
+		</when>
+		<when test="field eq 1">
+			content
+		</when>
+		<otherwise>
+			id
+		</otherwise>
+	</choose>
+	like '%'||#{ keyword }||'%'
+</if>
+</where>
+</select>
+<!-- 이벤트 목록 -->
+<select id="selectEventList" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="pagingVO">
+select EVENT_NUM as eventNum, title, img, start_date, end_date, input_date, cnt, rnum
+from (select EVENT_NUM, title, img, start_date, end_date, input_date, cnt, 
+row_number() over(order by start_date desc) rnum
+from event
+<where>
+	<if test="keyword neq null and keyword neq ''">
+		instr(
+		<choose>
+			<when test="field eq 0">
+			title
+			</when>
+			<when test="field eq 1">
+			content
+			</when>
+			<otherwise>
+			input_date
+			</otherwise>
+		</choose>
+		,#{ keyword } ) > 0
+		</if>
+</where>
+) where rnum between #{ startPageNum } and #{ endPageNum }
+<!-- 이벤트 상세페이지 -->
+</select>
+<select id="selectDetailEvent" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="int">
+	select title, content, input_date, cnt, img
+	from event
+	where event_num=#{ event_num, jdbcType=VARCHAR }
+</select>
+<!-- 조회수 cnt -->
+<update id="updateCnt" parameterType="int">
+	update event
+	set cnt=cnt+1
+	where event_num=#{event_num, jdbcType=VARCHAR}
+</update>
+</mapper>

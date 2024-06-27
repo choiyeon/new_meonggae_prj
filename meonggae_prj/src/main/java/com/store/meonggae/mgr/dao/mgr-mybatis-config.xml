@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <properties resource="properties/database.properties"></properties>
+  <typeAliases>
+  	<typeAlias type="com.store.meonggae.mgr.login.vo.MgrVO" alias="mgrVO"/>
+  	<typeAlias type="com.store.meonggae.mgr.login.domain.MgrDomain" alias="mgrDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.GoodsTradeRatioDomain" alias="cateRatioDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.CategoryTopDomain" alias="cateTopDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.UserGraphDomain" alias="usrGraphDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.UserSummaryDomain" alias="usrSummaryDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.vo.SelOptionVO" alias="selOptVO"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.TopEventDomain" alias="eventDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.ReportRecentDomain" alias="repDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.vo.VisitorDatepickVO" alias="visitorDateVO"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.VisitorGraphDomain" alias="visitorGrpDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.VisitorDomain" alias="visitorDomain"/>
+  </typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${connectionURL}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrLoginMapper.xml"/>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrDashboardMapper.xml"/>
+  </mappers>
+</configuration>

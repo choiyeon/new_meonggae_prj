@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mypageMain">
+
+<!-- 마이페이지 메인 : 찜목록 -->
+<select id="dibsList" resultType="goodsDomain" parameterType="String">
+select		goodsnum, price, name, rnum, img, inputdate
+from		(select		goodsnum, name, price, img, goodsinputdate inputdate,
+						row_number() over(order by dibsinputdate desc) rnum
+			from		v_dibs_list
+			where		mem_num='${memnum}')
+where		rnum between 1 and 4
+</select>
+
+<!-- 마이페이지 메인 : 판매 완료 목록 -->
+<select id="soldList" resultType="goodsDomain" parameterType="String">
+select		goodsnum, price, name, rnum, img, inputdate
+from		(select		GOODS_NUM goodsnum, name, price, img, inputdate,
+						row_number() over(order by sell_date desc) rnum
+			from		V_SOLD_LIST
+			where		MEM_NUM_Sell='${memnum}')
+where		rnum between 1 and 4
+</select>
+
+<!-- 마이페이지 메인 : 구매 완료 목록 -->
+<select id="boughtList" resultType="goodsDomain" parameterType="String">
+select    	goodsnum, price, name, rnum, img, inputdate
+from		(select    MEM_NUM_BUY, GOODS_NUM goodsnum, NAME, PRICE, IMG, SELL_DATE, INPUTDATE,
+								row_number() over(order by sell_date desc) rnum
+			from			v_bought_list
+			where			MEM_NUM_BUY='${memnum}')
+where      rnum between 1 and 4
+</select>
+
+</mapper>

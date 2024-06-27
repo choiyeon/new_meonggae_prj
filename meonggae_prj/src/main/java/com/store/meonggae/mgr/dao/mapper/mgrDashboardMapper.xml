@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.dashboard">
+	<resultMap type="usrGraphDomain" id="usrGraphDomResult">
+		<result column="input_date" property="col"/>
+		<result column="CNT" property="cnt"/>
+	</resultMap>
+	<resultMap type="eventDomain" id="evtDomResult">
+		<result column="RNUM" property="rnum"/>
+		<result column="TITLE" property="title"/>
+		<result column="START_DATE" property="dateStart"/>
+		<result column="END_DATE" property="dateEnd"/>
+		<result column="CNT" property="cnt"/>
+	</resultMap>
+	<resultMap type="repDomain" id="repDomResult">
+		<result column="REP_NUM" property="repNum"/>
+		<result column="MEM_NUM" property="memNum"/>
+		<result column="IMG" property="img"/>
+		<result column="STORE_NAME" property="storeName"/>
+		<result column="CNT" property="cnt"/>
+		<result column="DATE_REPORT_RECENT" property="dateReportRecent"/>
+	</resultMap>
+	<resultMap type="visitorGrpDomain" id="visitorGrpDomResult">
+		<result column="INPUT_DATE" property="col"/>
+		<result column="ALL_CNT" property="allCnt"/>
+		<result column="MEM_CNT" property="memCnt"/>
+		<result column="NON_MEM_CNT" property="nonMemCnt"/>
+	</resultMap>
+	<resultMap type="visitorDomain" id="visitorDomResult">
+		<result column="USER_TOTAL_CNT" property="userTotalCnt"/>
+		<result column="USER_TOTAL_RATIO_CHANGE" property="userTotalRatioChange"/>
+		<result column="MEMBER_CNT" property="memberCnt"/>
+		<result column="MEMBER_RATIO_CHANGE" property="memberRatioChange"/>
+		<result column="NON_MEMBER_CNT" property="nonMemberCnt"/>
+		<result column="NON_MEMBER_RATIO_CHANGE" property="nonMemberRatioChange"/>
+	</resultMap>
+
+	<!-- 상위 거래 카테고리 - 그래프 -->
+	<select id="selectListCategoryRatio" resultType="cateRatioDomain" parameterType="int" >
+		
+		with gc as
+		(
+		select	NAME, gc.CATEGORY_NUM, gc.PARENT_CATEGORY_NUM, nvl(sc.cnt, 0) cnt
+		from	goods_category gc,
+				(select 	category_num, count(goods_num) cnt
+				from	goods
+				where	SELL_STATUS_CODE = 'S' and sell_date &gt;= trunc(sysdate - #{period})
+				group by	category_num
+				) sc
+		where	sc.category_num(+) = gc.category_num
+		start with 	PARENT_CATEGORY_NUM is null
+		connect by	prior gc.category_num = gc.PARENT_CATEGORY_NUM
+		),
+		lev_category as
+		(
+		SELECT	level lev, name,
+				(
+				SELECT SUM(cnt)
+		        FROM gc
+		        START WITH category_num = a.category_num
+		        CONNECT BY PRIOR category_num = PARENT_CATEGORY_NUM
+		        ) sum_cnt
+		from	gc a
+		START WITH	PARENT_CATEGORY_NUM IS NULL
+		CONNECT BY	PRIOR category_num = PARENT_CATEGORY_NUM
+		),
+		second_category as
+		(
+		select	lev_category.*, row_number() over(order by sum_cnt desc) rnum
+		from	lev_category
+		where	lev=2
+		)
+		select	rnum grade, name categoryName, sum_cnt tradeCnt,
+				case
+					when sum(sum_cnt) over () = 0 then 25
+					else round(sum_cnt / sum(sum_cnt) over (), 3) * 100
+				end tradePercent
+		from	(
+				select	name, sum_cnt, rnum
+				from	second_category
+				where	rnum &lt; 4
+				union all
+				select	'기타' name, sum(sum_cnt) sum_cnt,
+						case
+							when max(rnum) &gt; 4 then 4
+							else max(rnum)
+						end rnum
+				from 	second_category
+				where	rnum &gt;= 4
+				)
+	</select>
+	<!-- 상위 거래 카테고리 - 총 거래수 -->
+	<select id="selectOneCategoryTop" resultType="int" parameterType="int" >
+		select count(*) from goods where sell_status_code = 'S' and SELL_DATE &gt; trunc(sysdate - #{period})
+	</select>
+	
+	<!-- 사용자수 요약 - 항목/오늘/어제/전일대비 -->
+	<select  id="selectListUserSummary" resultType="usrSummaryDomain" parameterType="int" >
+		<![CDATA[
+			select	type item, this cnt_now, before cnt_prev,
+					case
+						when this = before then '.'
+						when this > before and before != 0 then '+' || round((this / before  - 1) * 100, 1) || '%'
+						when this > before and before = 0 then '*'
+						when this < before and this != 0 then '-' || round((before - this) / before * 100, 1) || '%'
+						when this < before and this = 0 then '/'
+						else '.'
+					end ratio_change
+			from	(
+					select	type, nvl(this, 0) this, nvl(before, 0) before
+					from	(
+							select	'visitor' type,
+									(select sum(all_cnt) from visitor where input_date > to_char(sysdate - #{period}, 'yyyy-mm-dd') and input_date <= to_char(sysdate, 'yyyy-mm-dd')) this,
+									(select sum(all_cnt) from visitor where input_date > to_char(sysdate - (#{period} * 2), 'yyyy-mm-dd') and input_date <= to_char(sysdate - #{period}, 'yyyy-mm-dd')) before
+							from	dual
+							union all
+							select	'member' type,
+									(select count(*) from member where join_date < trunc(sysdate + 1)) this,
+									(select count(*) from member where join_date < trunc(sysdate - (#{period} - 1))) before
+							from	dual
+							union all
+							select	'join' type,
+									(select count(*) from member where join_date >= trunc(sysdate - (#{period} - 1)) and join_date < trunc(sysdate + 1)) this,
+									(select count(*) from member where join_date >= trunc(sysdate - (#{period} * 2 - 1)) and join_date < trunc(sysdate - (#{period} - 1))) before
+							from dual
+							union all
+							select	'withdraw' type,
+									(select count(*) from member where WITHDRAW_DATE >= trunc(sysdate - (#{period} - 1)) and WITHDRAW_DATE < trunc(sysdate + 1)) this,
+									(select count(*) from member where WITHDRAW_DATE >= trunc(sysdate - (#{period} * 2 - 1)) and WITHDRAW_DATE < trunc(sysdate - (#{period} - 1))) before
+							from dual
+							)
+					)
+		]]>
+	</select>
+	
+	<!-- 사용자수 요약 추이 - 방문자수 -->
+	<select  id="selectListUserTendencyVisitor" resultMap="usrGraphDomResult" parameterType="int">
+		<![CDATA[
+			select	input_date, all_cnt cnt
+			from 	visitor
+			where	input_date > to_char(sysdate - (#{period} * 2), 'yyyy-mm-dd') and input_date <= to_char(sysdate, 'yyyy-mm-dd')
+			order by	input_date
+		]]>		
+	</select>
+
+	<!-- 사용자수 요약 추이 - 회원수 -->
+	<select  id="selectListUserTendencyMember" resultMap="usrGraphDomResult" parameterType="int">
+		select	input_date, cnt
+		from	(
+				select	id.input_date,
+						nvl(last_value(sum_cnt ignore nulls) over (order by id.input_date rows between unbounded preceding and current row), 0) cnt
+				from	(
+						select	to_char(sysdate - (select sysdate - min(join_date) from member) + level, 'yyyy-mm-dd') input_date
+						from 	dual
+						connect by level &lt;= (select sysdate - min(join_date) from member)
+						) id,
+						(
+						select	join_date, sum(cnt) over(order by join_date) sum_cnt
+						from	(
+								select	join_date, count(join_date) cnt
+								from	(
+										select	to_char(join_date, 'yyyy-mm-dd') join_date
+										from	member
+										)
+								group by	join_date
+								)
+						) jd
+				where	jd.join_date(+) = id.input_date
+				)
+		where	input_date &gt; to_char(sysdate - (#{period} * 2), 'yyyy-mm-dd')		
+	</select>
+	
+	<!-- 사용자수 요약 추이 - 가입자수 또는 탈퇴자수 -->
+	<select  id="selectListUserTendencyJoinWithdraw" resultMap="usrGraphDomResult" parameterType="selOptVO">
+			select	id.input_date, nvl(jd.cnt, 0) cnt
+			from	(
+					select	to_char(sysdate - (#{period} * 2) + level, 'yyyy-mm-dd') input_date
+					from 	dual
+					<![CDATA[
+					connect by level <= #{period} * 2
+					]]>
+					) id,
+					(
+					select	join_date, count(join_date) cnt
+					from	(
+							select	to_char(join_date, 'yyyy-mm-dd') join_date
+							from	member
+							<where>
+								<choose>
+									<when test="item eq 0">
+										<![CDATA[
+											join_date >= trunc(sysdate - (#{period} * 2 - 1)) and join_date < trunc(sysdate + 1)
+										]]>
+									</when>
+									<otherwise>
+										<![CDATA[
+											WITHDRAW_DATE >= trunc(sysdate - (#{period} * 2 - 1)) and WITHDRAW_DATE < trunc(sysdate + 1)
+										]]>
+									</otherwise>
+								</choose>
+							</where>
+							)	
+					group by join_date
+					) jd
+			where	jd.join_date(+) = id.input_date
+			order by	id.input_date			
+	</select>
+	
+	<!-- 이벤트 조회수 현황 -->
+	<select  id="selectListTopEvent" resultMap="evtDomResult" parameterType="int">
+		select	rnum, title, start_date, end_date, cnt
+		from	(
+				select row_number() over(order by cnt desc, end_date desc, start_date desc) rnum, title, start_date, end_date, cnt from EVENT 
+				<where>
+					<choose>
+						<when test="type_ eq 0">
+							<![CDATA[
+							to_char(sysdate, 'yyyy-mm-dd') <= end_date						
+							]]>
+						</when>
+						<when test="type_ eq 1">
+							<![CDATA[
+							to_char(sysdate, 'yyyy-mm-dd') > end_date						
+							]]>
+						</when>
+					</choose>
+				</where>
+				)
+		<![CDATA[
+		where	rnum <= 4
+		]]>		
+	</select>
+	
+	<!-- 신고 현황 -->
+	<select  id="selectReportRecent" resultMap="repDomResult">
+		select	REP_NUM,MEM_NUM,IMG,STORE_NAME,CNT,DATE_REPORT_RECENT
+		from	(
+				select	row_number() over(order by rpt.input_date desc) rnum, joi.rep_num, joi.mem_num, mem.img, mem.nick store_name, joi.cnt, rpt.input_date date_report_recent
+				from	(
+						select	max(rpt.rep_num) rep_num, mem.mem_num, count(rpt.rep_num) cnt
+						from	member mem, report rpt, goods gds
+						where	gds.MEM_NUM_SELL = mem.mem_num and rpt.goods_num = gds.goods_num and PROCESS_STATUS_CODE != '11'
+						group by mem_num
+						) joi, member mem, report rpt
+				where	rpt.rep_num = joi.rep_num and mem.mem_num = joi.mem_num
+				)
+		where	rnum &lt; 4
+	</select>
+	
+	<!-- 사이트 방문자수 - 그래프 -->
+	<select id="selectVisitorGraph" resultMap="visitorGrpDomResult" parameterType="visitorDateVO">
+		select	case
+					when input_date &lt; to_date(#{visitorStartDate}, 'yyyy-mm-dd') then #{visitorStartDate}
+					else to_char(input_date, 'yyyy-mm-dd') 
+				end input_date,
+				nvl(all_cnt, 0) all_cnt, nvl(mem_cnt, 0) mem_cnt, nvl(all_cnt, 0) - nvl(mem_cnt, 0) non_mem_cnt
+		from	(
+				select	<choose>
+							<when test="visitorSel eq 1">
+								TRUNC(input_date, 'WW') input_date, 
+							</when>
+							<when test="visitorSel eq 2">
+								TRUNC(input_date, 'MM') input_date, 
+							</when>
+							<otherwise>
+								TRUNC(input_date, 'DD') input_date, 
+							</otherwise>
+						</choose>
+						sum(all_cnt) all_cnt, sum(mem_cnt) mem_cnt
+				from	(
+						select	lev.input_date, vi.all_cnt, vi.mem_cnt
+						from	(select (to_date(#{visitorStartDate}, 'yyyy-mm-dd') + level - 1) input_date
+								from dual connect by level &lt;= (select to_date(#{visitorEndDate}, 'yyyy-mm-dd') - to_date(#{visitorStartDate}, 'yyyy-mm-dd') + 1 from dual)) lev,
+								(select INPUT_DATE, all_CNT, MEM_CNT from visitor) vi
+						where	vi.input_date(+) = lev.input_date
+						)
+				<choose>
+					<when test="visitorSel eq 1">
+						group by TRUNC(input_date, 'WW')
+					</when>
+					<when test="visitorSel eq 2">
+						group by TRUNC(input_date, 'MM')
+					</when>
+					<otherwise>
+						group by TRUNC(input_date, 'DD')
+					</otherwise>
+				</choose>
+				)
+		order by	input_date
+	</select>
+	
+	<!-- 사이트 방문자수 개요 -->
+	<select id="selectVisitorSummary" resultMap="visitorDomResult" parameterType="visitorDateVO">
+		with visit as
+		(
+		select	row_number() over(order by lev.input_date) rnum, lev.input_date,
+				nvl(vi.all_cnt, 0) all_cnt,
+				nvl(vi.mem_cnt, 0) mem_cnt,
+				nvl(vi.all_cnt, 0) - nvl(vi.mem_cnt, 0) non_mem_cnt
+		from	(
+				select (to_date(#{visitorStartDate}, 'yyyy-mm-dd') + level - 1) input_date
+				from dual connect by level &lt;= (select to_date(#{visitorEndDate}, 'yyyy-mm-dd') - to_date(#{visitorStartDate}, 'yyyy-mm-dd') + 1 from dual)
+				) lev,
+				(
+				select	input_date, all_cnt, mem_cnt
+				from	visitor
+				) vi
+		where	vi.input_date(+) = lev.input_date
+		)
+		select	sum_all_cnt user_total_cnt,
+				case
+					when all_cnt_l = all_cnt_f then '.'
+					when all_cnt_l &gt; all_cnt_f and all_cnt_f != 0 then '+' || round((all_cnt_l / all_cnt_f  - 1) * 100, 1) || '%'
+					when all_cnt_l &gt; all_cnt_f and all_cnt_f = 0 then '*'
+					when all_cnt_l &lt; all_cnt_f and all_cnt_l != 0 then '-' || round((all_cnt_f - all_cnt_l) / all_cnt_f * 100, 1) || '%'
+					when all_cnt_l &lt; all_cnt_f and all_cnt_l = 0 then '/'
+					else '.'
+				end user_total_ratio_change,
+				sum_mem_cnt member_cnt,
+				case
+					when mem_cnt_l = mem_cnt_f then '.'
+					when mem_cnt_l &gt; mem_cnt_f and mem_cnt_f != 0 then '+' || round((mem_cnt_l / mem_cnt_f  - 1) * 100, 1) || '%'
+					when mem_cnt_l &gt; mem_cnt_f and mem_cnt_f = 0 then '*'
+					when mem_cnt_l &lt; mem_cnt_f and mem_cnt_l != 0 then '-' || round((mem_cnt_f - mem_cnt_l) / mem_cnt_f * 100, 1) || '%'
+					when mem_cnt_l &lt; mem_cnt_f and mem_cnt_l = 0 then '/'
+					else '.'
+				end member_ratio_change,
+				sum_non_mem_cnt non_member_cnt,
+				case
+					when non_mem_cnt_l = non_mem_cnt_f then '.'
+					when non_mem_cnt_l &gt; non_mem_cnt_f and non_mem_cnt_f != 0 then '+' || round((non_mem_cnt_l / non_mem_cnt_f  - 1) * 100, 1) || '%'
+					when non_mem_cnt_l &gt; non_mem_cnt_f and non_mem_cnt_f = 0 then '*'
+					when non_mem_cnt_l &lt; non_mem_cnt_f and non_mem_cnt_l != 0 then '-' || round((non_mem_cnt_f - non_mem_cnt_l) / non_mem_cnt_f * 100, 1) || '%'
+					when non_mem_cnt_l &lt; non_mem_cnt_f and non_mem_cnt_l = 0 then '/'
+					else '.'
+				end non_member_ratio_change
+		from	(
+				select	f.all_cnt_f, f.mem_cnt_f, f.non_mem_cnt_f, l.all_cnt_l, l.mem_cnt_l, l.non_mem_cnt_l, s.sum_all_cnt, s.sum_mem_cnt, s.sum_non_mem_cnt
+				from	(
+						select	'1' jo, all_cnt all_cnt_f, mem_cnt mem_cnt_f, non_mem_cnt non_mem_cnt_f
+						from	visit
+						where 	rnum = (select min(rnum) from visit)
+						) f,
+						(
+						select	'1' jo, all_cnt all_cnt_l, mem_cnt mem_cnt_l, non_mem_cnt non_mem_cnt_l
+						from	visit
+						where 	rnum = (select max(rnum) from visit)
+						) l,
+						(
+						select	'1' jo, sum(all_cnt) sum_all_cnt, sum(mem_cnt) sum_mem_cnt, sum(non_mem_cnt) sum_non_mem_cnt
+						from 	visit
+						) s
+				where	f.jo = l.jo and l.jo = s.jo
+				)
+	</select>
+</mapper>

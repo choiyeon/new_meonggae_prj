@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.store.meonggae.user_login">
+	<resultMap
+		type="com.store.meonggae.user.login.domain.LoginDomain" id="ldResult">
+		<result column="MEM_NUM" property="memNum" />
+		<result column="NICK" property="nick" />
+		<result column="MEM_ID" property="id" />
+		<result column="PASS" property="pass" />
+		<result column="IMG" property="img" />
+		<result column="SUSPEND_FLAG" property="suspendFlag" />
+		<result column="LOGIN_FLAG" property="loginFlag" />
+		<result column="SUSPEND_DATE" property="suspendDate" />
+		<result column="UNSUSPEND_DATE" property="unsuspendDate" />
+		<result column="WITHDRAW_FLAG" property="withdrawFlag" />
+		<result column="WITHDRAW_DATE" property="withdrawDate" />
+		<result column="mem_status" property="memStatus" />
+	</resultMap>
+	<select id="selectOneUser" resultMap="ldResult"
+		parameterType="com.store.meonggae.user.login.vo.LoginVO">
+		select mem_num, nick, mem_id, pass, img, login_flag,
+		suspend_date, unsuspend_date, withdraw_flag,
+		withdraw_date, mem_status
+		from VIEW_MEMBER
+		where mem_id = #{id}
+	</select>
+	<insert id="kakaoUserInsert"
+		parameterType="com.store.meonggae.user.login.domain.LoginDomain"
+		useGeneratedKeys="true" keyProperty="memNum">
+		<selectKey keyProperty="memNum" resultType="int"
+			order="BEFORE">
+			SELECT seq_member.nextval FROM dual
+		</selectKey>
+		insert into member(mem_num, login_flag, nick, img)
+		values(#{memNum},
+		'S', #{nick, jdbcType=VARCHAR}, #{img, jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="KaKaoIdInsert"
+		parameterType="com.store.meonggae.user.login.domain.LoginDomain">
+		insert into member_detail(mem_id, mem_num, pass)
+		values(#{id, jdbcType=VARCHAR}, #{memNum}, #{pass})
+	</insert>
+
+</mapper>

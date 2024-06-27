@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.product.ProductDetailInfoMapper">
+
+<!-- 공통쿼리문 작성 -->
+<sql id="countSteam">
+select count(*)
+from STEAM s
+JOIN MEMBER m ON s.MEM_NUM = m.MEM_NUM
+where m.MEM_STATUS in ('N', 'S')
+and s.steam_flag='Y'
+</sql>
+
+<!-- 상품의 전체 찜 횟수 조회 -->
+<select id="countAllSteam" resultType="int" parameterType="String">
+<include refid="countSteam"/>
+and s.goods_num=#{ goodsNum }
+</select>
+
+<!-- 회원의 찜 여부 조회 찜했으면 1 아니면 0-->
+<select id="checkMemSteam" resultType="int" parameterType="com.store.meonggae.product.vo.SteamVO">
+<include refid="countSteam"/>
+and s.goods_num=#{ goodsNum }
+and s.mem_num=#{ memNum }
+</select>
+
+<!-- 값이 있으면 다시찜. 없으면 첫찜. -->
+<select id="checkFirstSteam" resultType="int" parameterType="com.store.meonggae.product.vo.SteamVO">
+select count(*) 
+from steam 
+where goods_num=#{ goodsNum } 
+and mem_num=#{ memNum }
+</select>
+
+<!-- 찜 등록(첫 찜) -->
+<insert id="insertSteam" parameterType="com.store.meonggae.product.vo.SteamVO">
+insert into steam(GOODS_NUM, MEM_NUM, STEAM_FLAG, INPUT_DATE) 
+values( #{ goodsNum }, #{ memNum }, 'Y', SYSDATE)
+</insert>
+
+<!-- 찜 등록(삭제 후 다시 찜) -->
+<update id="updateSteamToY" parameterType="com.store.meonggae.product.vo.SteamVO">
+update steam
+set steam_flag='Y'
+where goods_num=#{ goodsNum }
+and mem_num=#{ memNum }
+</update>
+
+<!-- 찜 삭제(update STEAM_FLAG='N') -->
+<update id="updateSteamToN" parameterType="com.store.meonggae.product.vo.SteamVO">
+update steam
+set steam_flag='N'
+where goods_num=#{ goodsNum }
+and mem_num=#{ memNum }
+</update>
+
+<!-- 신고 insert -->
+<select id="insertReport" parameterType="com.store.meonggae.product.vo.ReportVO" statementType="CALLABLE">
+{
+	call insert_report(
+	#{ iMemNumRep, mode=IN, jdbcType=NUMERIC },
+	#{ iGoodsNum, mode=IN, jdbcType=VARCHAR },
+	#{ iCategory, mode=IN, jdbcType=VARCHAR },
+	#{ iTitle, mode=IN, jdbcType=VARCHAR },
+	#{ iContents, mode=IN, jdbcType=VARCHAR },
+	#{ cntMem, mode=OUT, jdbcType=NUMERIC },
+	#{ cntMgr, mode=OUT, jdbcType=NUMERIC },
+	#{ errMsg, mode=OUT, jdbcType=VARCHAR }
+	)
+}
+</select>
+
+
+<resultMap type="sellerInfoDomain" id="sellerInfoDomainResult">
+<result column="MEM_NUM" property="memNum"/>
+<result column="NICK" property="nick"/>
+<result column="IMG" property="img"/>
+</resultMap>
+<!-- 판매자 정보 조회-->
+<select id="sellerInfo" resultMap="sellerInfoDomainResult" parameterType="int">
+select  MEM_NUM, NICK, IMG
+from MEMBER
+where MEM_NUM=#{ memNum }
+</select>
+
+<resultMap type="sellOtherPrdDomain" id="sellOtherPrdDomainResult">
+<result column="MEM_NUM_SELL" property="memNumSell"/>
+<result column="GOODS_NUM" property="goodsNum"/>
+<result column="IMG_NAME" property="imgName"/>
+<result column="PRICE_FM" property="priceFm"/>
+</resultMap>
+<!-- 판매자 상품 조회 -->
+<select id="sellerOtherPrd" resultMap="sellOtherPrdDomainResult" parameterType="com.store.meonggae.product.vo.SteamVO">
+select MEM_NUM_SELL, GOODS_NUM, IMG_NAME, PRICE_FM
+from V_SELECT_ALL_GOODS
+where MEM_NUM_SELL = #{ memNum }
+and GOODS_NUM not in( #{ goodsNum } )
+</select> 
+
+
+<resultMap type="searchReviewDomain" id="searchReviewDomainResult">
+<result column="BUYER_NUM" property="buyerNum"/>
+<result column="BUYER_NICK" property="buyerNick"/>
+<result column="BUYER_IMG" property="buyerImg"/>
+<result column="GOODS_NUM" property="goodsNum"/>
+<result column="CONTENT" property="content"/>
+<result column="STAR" property="star"/>
+<result column="INPUT_DATE" property="inputDate"/>
+<result column="TIME_AGO_STR" property="timeAgoStr"/>
+</resultMap>
+<!-- 리뷰 조회 -->
+<select id="searchReview" resultMap="searchReviewDomainResult" parameterType="int">
+SELECT BUYER_NUM, BUYER_NICK, BUYER_IMG, GOODS_NUM, CONTENT, STAR, INPUT_DATE, TIME_AGO_STR
+FROM V_SELECT_REVIEW_STAR
+WHERE GOODS_NUM IN (
+    SELECT GOODS_NUM
+    FROM GOODS
+    WHERE MEM_NUM_SELL = #{ memNum }
+)
+</select>
+
+<!-- 조회수 올리기 -->
+<update id="updateCnt" parameterType="String">
+UPDATE GOODS
+SET CNT=CNT+1
+WHERE GOODS_NUM=#{ goodsNum }
+</update>
+
+</mapper>

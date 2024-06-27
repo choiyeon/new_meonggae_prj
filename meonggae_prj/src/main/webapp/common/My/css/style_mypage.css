@@ -1,0 +1,320 @@
+#mypageMenu{
+	font-size: 30px;
+	text-decoration: none;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#menuBottonLine{
+	margin-top: 10px;
+}
+
+#selected{
+	font-weight: bold;
+	color: #000000;
+}
+
+#unSelected{
+	font-weight: lighter;
+	color: #000000;
+}
+
+#dibListTitle{
+	height: 50px;
+	background-color: #BFC5F4;
+	color: #FFFFFF;
+	font-size: 22px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-left: 20px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#dibList{
+	border: 1px solid #AEAEAE;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#soldListTitle{
+	height: 50px;
+	background-color: #A2ECE3;
+	color: #FFFFFF;
+	font-size: 22px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-left: 20px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin-top: 40px;
+}
+
+#soldList{
+	border: 1px solid #AEAEAE;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#boughtListTitle{
+	height: 50px;
+	background-color: #FCBA9D;
+	color: #FFFFFF;
+	font-size: 22px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-left: 20px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	margin-top: 40px;
+}
+
+#boughtList{
+	border: 1px solid #AEAEAE;
+	padding-top: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#infoChk1{
+	font-size: 30px;
+	font-weight: bold;
+	margin-top: 80px;
+}
+
+#infoChk2{
+	font-size: 23px;
+	display: inline-block;
+}
+
+#pwChkBtn{
+	width: 60px;
+	height: 40px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: 1px solid #D8B0B0;
+	background-color: #D8B0B0;
+}
+
+#chkFail{
+	display: none;
+	color: #FF0000;
+	font-size: 16px;
+	margin-top: 10px;
+}
+
+#pTable{
+	font-size: 18px;
+	width: 100%;
+}
+
+#pTable tr td{
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+	padding-left: 10px;
+}
+
+#pTable tr:last-child td {
+	border-bottom:none;
+}
+
+#tableTitle1{
+	background-color: #F5F6F8;
+	width: 200px;
+	font-size: 18px;
+	font-weight: bold;
+	height: 200px;
+}
+
+#tableTitle2{
+	background-color: #F5F6F8;
+	width: 200px;
+	font-size: 18px;
+	font-weight: bold;
+	height: 80px;
+}
+
+#tableTitle3{
+	background-color: #F5F6F8;
+	width: 200px;
+	font-size: 18px;
+	font-weight: bold;
+	height: 100px;
+}
+
+#btnWrap{
+	text-align: center;
+	margin-bottom: 300px;
+}
+
+#btnWrap2{
+	margin-top: 20px;
+}
+
+#quit1{
+	font-size: 30px;
+	font-weight: bold;
+	color: #565656;
+	text-align: center;
+	margin-top: 100px;
+}
+
+#quit2{
+	font-size: 26px;
+	font-weight: bold;
+	color: #000000;
+	text-align: center;
+}
+
+#quit3{
+	font-size: 18px;
+	color: #000000;
+	text-align: center;
+}
+
+#lowMenu{
+	font-size: 27px;
+	margin-top: 10px;
+	margin-bottom: -10px
+}
+
+#notice{
+	font-size: 15px;
+	margin-top: -10px;
+	margin-bottom: 25px
+}
+
+#notice1{
+	font-size: 15px;
+	margin-bottom: 5px;
+}
+
+#inquiryTable{
+	font-size: 18px;
+	border-top: 1px solid #303030;
+	border-bottom: 1px solid #303030;
+	text-align: center;
+}
+
+#inquiryTable thead{
+	font-weight: bold;
+	background-color: #D1D1D1;
+}
+
+#deleteImg{
+	width: 25px;
+	height: 25px;
+}
+
+#reviewLowMenu1{
+	font-size: 25px;
+	font-weight: bold;
+}
+
+#reviewLowMenu2{
+	font-size: 25px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#inquiryDetail{
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+}
+
+#postDetail{
+	background-color: #D9D9D9 ;
+	padding-top: 10px;
+	padding-left: 10px;
+	height: 110px;
+}
+
+.postTitle{
+	font-size: 25px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#postEtc{
+	font-size: 18px;
+}
+
+#content{
+	background-color: #F2F2F2;
+	font-size: 18px;
+	padding: 10px;
+}
+
+#answerContent{
+	margin-top: 20px;
+	font-size: 18px;
+}
+
+#answer{
+	background-color: #F2F2F2;
+	padding: 10px;
+	border-bottom: 1px solid #333;
+}
+
+.inquiryStyle1{
+	font-size: 28px;
+	margin-bottom: 8px;
+}
+
+.inquiryStyle2{
+	font-size: 18px;
+	margin-bottom: 10px;
+	height: 50px;
+	width: 600px;
+	border: none;
+	background-color: #F5F5F5;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+#imgGuide{
+	font-size: 12px;
+	color: #ABABAB;
+}
+
+.noGoodsDibs{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #A4ACEB;
+	padding: 40px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.noGoodsSold{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #40BEA7;
+	padding: 40px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.noGoodsBought{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #F1AB8C;
+	padding: 40px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.noGoodsSales{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	color: #97BED9;
+	padding: 40px;
+	margin-top: 30px;
+	margin-bottom: 50px;
+}

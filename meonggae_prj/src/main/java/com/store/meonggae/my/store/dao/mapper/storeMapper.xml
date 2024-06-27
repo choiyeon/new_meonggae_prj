@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.store">
+
+<!-- 내상점 메인 판매상품 리스트 -->
+<select id="storeSalesList" resultType="storeMainDomain" parameterType="String">
+select		*
+from		V_SALES_LIST
+where		NICK='${nick}'
+<!-- 	where	rnum between 1 and 10 -->
+</select>
+
+<!-- 프로필사진 -->
+<select id="userProfile" resultType="String" parameterType="String">
+select		IMG
+from		MEMBER
+where		nick='${nick}'
+</select>
+
+<!-- 닉네임 검색 -->
+<select id="userNum" resultType="String" parameterType="String">
+select		mem_num
+from		MEMBER
+where		nick='${nick}'
+</select>
+
+<!-- 리뷰 목록 -->
+<select id="reviewList" resultType="reviewDomain" parameterType="reviewVO">
+select		writer, starScore, CONTENT
+from		(
+			select	m.NICK writer, s.STAR starScore, r.CONTENT,
+							row_number() over(order by r.input_date desc) rnum
+			from	GOODS g, MEMBER m, STAR_RATE s, REVIEW r
+			where	r.goods_num=s.goods_num
+					and s.mem_num=r.mem_num
+					and r.mem_num=m.mem_num
+			        and g.goods_num=r.goods_num
+					and g.MEM_NUM_SELL=#{num}
+			)
+where		rnum between #{startNum} and #{endNum}
+</select>
+
+<!-- 총별점 -->
+<select id="starScore" resultType="double" parameterType="String">
+select		s.STAR starScore
+from		GOODS g, MEMBER m, STAR_RATE s
+where		s.goods_num=g.goods_num
+			and g.mem_num_sell=m.mem_num
+			and m.nick='${nick}'
+</select>
+
+</mapper>

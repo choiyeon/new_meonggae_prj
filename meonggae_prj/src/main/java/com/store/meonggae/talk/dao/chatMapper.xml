@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.store.meonggae.chat">
+    <resultMap type="com.store.meonggae.talk.domain.ChatDomain" id="chat">
+        <result property="chatKey" column="chat_key"/>
+        <result property="content" column="content"/>
+        <result property="inputDate" column="input_date"/>
+        <result property="productImg" column="product_img"/>
+        <result property="productName" column="name"/>
+        <result property="productPrice" column="price"/>
+        <result property="sellStatus" column="sell_status_code"/>
+        <result property="nick" column="nick"/>
+    </resultMap>
+
+    <select id="selectChat" resultMap="chat" parameterType="loginVO">
+        SELECT chat_key, content, input_date, product_img, name, price, sell_status_code, nick
+        FROM V_CHAT
+        WHERE mem_id = #{memId}
+    </select>
+</mapper>

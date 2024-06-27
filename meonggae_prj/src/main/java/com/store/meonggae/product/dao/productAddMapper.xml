@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.product">
+	<!-- 상품을 사용자별로 선택 -->
+	<select id="selectProductByUser"
+		resultType="com.store.meonggae.product.domain.ProductDomain"
+		parameterType="int">
+		select gi.name as imgFileName, g.goods_num as goodsNum,
+		g.mem_num_sell as memNumSell, g.mem_num_buy,
+		g.category_num, gc.name as
+		category,
+		g.name, g.detail, g.price, g.delivery_fee, g.cnt,
+		g.trade_method_code, g.location,
+		g.quality_code, g.sell_status_code
+		from GOODS g, goods_img gi
+		,member_detail md, goods_category gc
+		where
+		g.goods_num = gi.goods_num
+		and md.mem_num = g.mem_num_sell and
+		g.category_num = gc.category_num
+		and
+		md.mem_num = #{memNum,
+		jdbcType=INTEGER}
+	</select>
+
+	<select id="selectProductByGoodsNum"
+		resultType="com.store.meonggae.product.domain.ProductDomain"
+		parameterType="String">
+		select gi.name as imgFileName, g.goods_num as goodsNum,
+		g.mem_num_sell, g.mem_num_buy,
+		g.category_num, gc.name as
+		category,
+		g.name, g.detail, g.price, g.cnt, g.trade_method_code,
+		g.location,
+		g.quality_code, g.sell_status_code
+		from GOODS g, goods_img
+		gi
+		,member_detail md, goods_category gc
+		where g.goods_num = gi.goods_num
+		and md.mem_num = g.mem_num_sell and
+		g.category_num = gc.category_num
+		and
+		g.goods_num = #{goodsNum, jdbcType=VARCHAR}
+	</select>
+	<!-- 상품 추가 -->
+	<insert id="insertProduct"
+		parameterType="com.store.meonggae.product.domain.ProductDomain"
+		useGeneratedKeys="true" keyProperty="goodsNum">
+		<selectKey keyProperty="goodsNum" resultType="String"
+			order="BEFORE">
+			select seq_goods.nextval from dual
+		</selectKey>
+		insert into goods (
+		goods_num,
+		mem_num_sell,
+		name,
+		detail,
+		price,
+		delivery_fee,
+		cnt,
+		trade_method_code,
+		input_date,
+		category_num,
+		location,
+		quality_code,
+		sell_status_code
+		)
+		values(
+		#{goodsNum},
+		#{mem_num_sell, jdbcType=INTEGER},
+		#{name},
+		#{detail},
+		#{price},
+		#{delivery_fee, jdbcType=INTEGER},
+		0,
+		#{trade_method_code, jdbcType=CHAR},
+		sysdate,
+		#{category_num, jdbcType=VARCHAR},
+		#{location, jdbcType=VARCHAR},
+		#{quality_code,
+		jdbcType=VARCHAR},
+		'N'
+		)
+	</insert>
+
+	<!-- 상품 이미지 추가 -->
+	<insert id="insertProductImg"
+		parameterType="com.store.meonggae.product.domain.ProductDomain">
+		insert into goods_img (goods_img_num, goods_num, name,
+		input_date)
+		values(seq_goods_img.nextval, #{goodsNum}, #{imgFileName},
+		sysdate)
+	</insert>
+
+	<!-- 상품 업데이트 -->
+	<update id="updateProduct" parameterType="com.store.meonggae.product.domain.ProductDomain">
+    update goods
+    set
+    name = #{name, jdbcType=VARCHAR},
+    location = #{location, jdbcType=VARCHAR},
+    price = #{price, jdbcType=VARCHAR},
+    sell_status_code = #{sell_status_code, jdbcType=CHAR}
+    where goods_num = #{goodsNum, jdbcType=VARCHAR}
+</update>
+
+	<!-- <update id="updateProductImg" parameterType="com.store.meonggae.product.domain.ProductDomain"> 
+		update goods_img set name = #{imgFileName} where goods_num = #{goodsNum} 
+		</update> -->
+</mapper>

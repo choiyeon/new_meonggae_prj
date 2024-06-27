@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.login">
+	<select id="selectOneManager" resultType="mgrDomain" parameterType="mgrVO" >
+		select	MANAGER_ID, PASS, NICK, PERMISSION, EMAIL
+		from	manager
+		where	MANAGER_ID=#{manager_id}
+	</select>
+</mapper>

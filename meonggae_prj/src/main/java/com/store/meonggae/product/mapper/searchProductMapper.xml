@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.product">
+
+<resultMap type="searchProductDomain" id="searchProductDomain">
+<result column="GOODS_NUM" property="goodsNum"/>
+<result column="GOODS_NAME" property="goodsName"/>
+<result column="GOODS_IMG_NUM" property="goodsImgNum"/>
+<result column="IMG_NAME" property="imgName"/>
+<result column="PRICE" property="price"/>
+<result column="PRICE_FM" property="priceFm"/>
+<result column="CATEGORY_NUM" property="categoryNum"/>
+<result column="CATEGORY_NAME" property="categoryName"/>
+<result column="PARENT_CATEGORY_NUM" property="parentCategoryNum"/>
+<result column="LOCATION" property="location"/>
+<result column="LOCATION_STR" property="locationStr"/>
+<result column="INPUT_DATE" property="inputDate"/>
+<result column="TIME_AGO" property="timeAgo"/>
+<result column="MEM_NUM_SELL" property="memNumSell"/>
+</resultMap>
+<!-- 전체 상품 조회 -->
+<select id="selectAllProduct" resultMap="searchProductDomain">
+select *
+from v_select_all_goods
+</select>
+<!-- 키워드(상품명&지역) 조회 -->
+<!-- 데이터 내 공백 & 키워드 내 공백 제거 -->
+<select id="selectPrdKey" resultMap="searchProductDomain" parameterType="String">
+select *
+from v_select_all_goods
+where (REPLACE(GOODS_NAME, ' ', '') like '%'|| REPLACE(#{keyword}, ' ', '') ||'%' or REPLACE(LOCATION, ' ', '') like '%'|| REPLACE(#{keyword}, ' ', '') ||'%')
+</select>
+<!-- 키워드(상품명&지역)조회 후 카테고리 조회 -->
+<!-- 데이터 내 공백 & 키워드 내 공백 제거 -->
+<select id="selectPrdKeyCate" resultMap="searchProductDomain" parameterType="com.store.meonggae.product.vo.SearchProductVO">
+select *
+from v_select_all_goods
+where (REPLACE(GOODS_NAME, ' ', '') like '%'|| REPLACE(#{keyword}, ' ', '') ||'%' or REPLACE(LOCATION, ' ', '') like '%'|| REPLACE(#{keyword}, ' ', '') ||'%')
+and CATEGORY_NUM=#{ categoryNum }
+</select>
+<!-- 카테고리 단독 조회 - 부모 -->
+<select id="selectPrdCateP" resultMap="searchProductDomain" parameterType="String">
+select *
+from v_select_all_goods
+where PARENT_CATEGORY_NUM=#{ categoryNum } or CATEGORY_NUM=#{ categoryNum }
+</select>
+<!-- 카테고리 단독 조회 - 자식-->
+<select id="selectPrdCate" resultMap="searchProductDomain" parameterType="String">
+select *
+from v_select_all_goods
+where CATEGORY_NUM=#{ categoryNum }
+</select>
+
+<resultMap type="SearchProductDetailDomain" id="SearchProductDetailDomain">
+<result column="GOODS_NUM" property="goodsNum"/>
+<result column="GOODS_NAME" property="goodsName"/>
+<result column="GOODS_IMG_NUM" property="goodsImgNum"/>
+<result column="IMG_NAME" property="imgName"/>
+<result column="PRICE" property="price"/>
+<result column="PRICE_FM" property="priceFm"/>
+<result column="CATEGORY_NUM" property="categoryNum"/>
+<result column="CATEGORY_NAME" property="categoryName"/>
+<result column="PARENT_CATEGORY_NUM" property="parentCategoryNum"/>
+<result column="LOCATION" property="location"/>
+<result column="LOCATION_STR" property="locationStr"/>
+<result column="INPUT_DATE" property="inputDate"/>
+<result column="TIME_AGO" property="timeAgo"/>
+<result column="MEM_NUM_SELL" property="memNumSell"/>
+<result column="DETAIL" property="detail"/>
+<result column="DELIVERY_FEE" property="deliveryFee"/>
+<result column="TRADE_METHOD_CODE" property="tradeMethodCode"/>
+<result column="TRADE_METHOD_CODE_STR" property="tradeMethodCodeStr"/>
+<result column="QUALITY_CODE" property="qualityCode"/>
+<result column="QUALITY_CODE_STR" property="qualityCodeStr"/>
+<result column="CNT" property="cnt"/>
+</resultMap>
+
+<!-- 상품 상세 조회 -->
+<select id="selectPrdDetail" resultMap="SearchProductDetailDomain" parameterType="String">
+select *
+from V_SELECT_GOODS_DETAIL
+where GOODS_NUM=#{ goodsNum }
+</select>
+
+</mapper>

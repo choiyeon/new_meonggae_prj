@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.join">
+<!-- 아이디 중복 확인 -->
+<select id="idDup" resultType="String" parameterType="String">
+select MEM_ID 
+from MEMBER_DETAIL 
+where MEM_ID = #{ memId }
+</select>
+
+<!-- 닉네임 중복 확인 -->
+<select id="nickDup" resultType="String" parameterType="String">
+select NICK
+from MEMBER
+where NICK = #{ nick }
+</select>
+
+<!-- 회원등록_MEMBER -->
+<insert id="insertMem" parameterType="String">
+insert into MEMBER(MEM_NUM, LOGIN_FLAG, NICK, IMG, JOIN_DATE, MEM_STATUS)
+values(MEONGAE.SEQ_MEMBER.NEXTVAL, 'N', #{ nick }, 'default.png', SYSDATE, 'N')
+</insert>
+<!-- 회원등록_MEMBER_DETAIL -->
+<insert id="insertMemDetail" parameterType="com.store.meonggae.user.join.vo.JoinVO">
+insert into MEMBER_DETAIL(MEM_NUM, MEM_ID, PASS, BIRTH, ADDR, ADDR_DETAIL, TEL, GENDER, NAME)
+values(MEONGAE.SEQ_MEMBER.CURRVAL, #{ memId }, #{ pass }, #{ birth }, #{ addr }, #{ addrDetail }, #{ tel }, #{ gender }, #{ name })
+</insert>
+</mapper>
