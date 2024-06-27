@@ -46,14 +46,14 @@
 <!-- header 끝 -->
 
 <div class="container" style="height:100%">
-<c:if test="${ not empty result && result == 'true' }">
+<c:if test="${ result eq 'true' }">
 	<script>
 	alert("회원가입 되었습니다.");
 	location.href="http://localhost/meonggae_prj/index.do";
 	</script>
 </c:if>
 <!-- 회원가입 시작 -->
-<form name="frm" id="frm" action="http://localhost/meonggae_prj/memJoin.do" method="post">
+<form name="frm" id="frm" action="memJoin.do" method="post">
         <!-- 이용약관 시작 -->
         <div class="agree">
             <div>

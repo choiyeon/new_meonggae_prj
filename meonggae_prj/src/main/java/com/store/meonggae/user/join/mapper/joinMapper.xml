@@ -7,7 +7,7 @@
 <select id="idDup" resultType="String" parameterType="String">
 select MEM_ID 
 from MEMBER_DETAIL 
-where MEM_ID = #{ memId }
+where MEM_ID = #{ id }
 </select>
 
 <!-- 닉네임 중복 확인 -->
@@ -22,9 +22,10 @@ where NICK = #{ nick }
 insert into MEMBER(MEM_NUM, LOGIN_FLAG, NICK, IMG, JOIN_DATE, MEM_STATUS)
 values(MEONGAE.SEQ_MEMBER.NEXTVAL, 'N', #{ nick }, 'default.png', SYSDATE, 'N')
 </insert>
+
 <!-- 회원등록_MEMBER_DETAIL -->
 <insert id="insertMemDetail" parameterType="com.store.meonggae.user.join.vo.JoinVO">
-insert into MEMBER_DETAIL(MEM_NUM, MEM_ID, PASS, BIRTH, ADDR, ADDR_DETAIL, TEL, GENDER, NAME)
-values(MEONGAE.SEQ_MEMBER.CURRVAL, #{ memId }, #{ pass }, #{ birth }, #{ addr }, #{ addrDetail }, #{ tel }, #{ gender }, #{ name })
+insert into MEMBER_DETAIL(MEM_NUM, MEM_ID, PASS, BIRTH, ADDR, ADDR_DETAIL, TEL, GENDER, NAME, ZIPCODE)
+values(MEONGAE.SEQ_MEMBER.CURRVAL, #{ id }, #{ password }, #{ birthday }, #{ addr0 }, #{ addr1 }, #{ cell }, #{ gender }, #{ name }, #{ zipcode })
 </insert>
 </mapper>

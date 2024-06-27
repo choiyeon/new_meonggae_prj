@@ -1,4 +1,4 @@
-package com.store.meonggae.user.contoller;
+package com.store.meonggae.user.controller;
 
 
 import javax.servlet.http.HttpSession;

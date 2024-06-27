@@ -1,4 +1,4 @@
-package com.store.meonggae.user.contoller;
+package com.store.meonggae.user.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -160,8 +160,8 @@ public class MainController {
 	}
 	//회원가입
 	@GetMapping("/join_page/mem_join.do")
-	public String join() {
-		
+	public String join(@RequestParam(name = "result", required = false) String result, Model model) {
+		model.addAttribute("result", result);
 		return "/join_page/mem_join";
 	}
 }
