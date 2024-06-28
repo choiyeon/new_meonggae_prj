@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<properties resource="properties/database.properties"/>
+<typeAliases>
+<!-- login -->
+	<typeAlias type="com.store.meonggae.user.login.vo.LoginVO" alias="loginVO"/>
+	<typeAlias type="com.store.meonggae.user.login.domain.LoginDomain" alias="loginDomain"/>
+<!-- event -->	
+	<typeAlias type="com.store.meonggae.event.vo.PagingVO" alias="pagingVO"/>
+	<typeAlias type="com.store.meonggae.event.vo.EventVO" alias="eventVO"/>
+	<typeAlias type="com.store.meonggae.event.domain.EventDomain" alias="eventDomain"/>
+<!-- product -->
+
+	<typeAlias type="com.store.meonggae.product.domain.CategoryDomain" alias="categoryDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.SearchProductDetailDomain" alias="searchProductDetailDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.SearchProductDomain" alias="searchProductDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.SellerInfoDomain" alias="sellerInfoDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.SellOtherPrdDomain" alias="sellOtherPrdDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.SearchReviewDomain" alias="searchReviewDomain"/>
+
+	<typeAlias type="com.store.meonggae.product.domain.ProductDomain" alias="productDomain"/>
+	
+<!-- store,my -->
+	<!-- store -->
+	<typeAlias type="com.store.meonggae.my.store.domain.StoreMainDomain" alias="storeMainDomain"/>
+	<typeAlias type="com.store.meonggae.my.store.domain.ReviewDomain" alias="reviewDomain"/>
+	<typeAlias type="com.store.meonggae.my.store.VO.ReviewVO" alias="reviewVO"/>
+	
+	<!-- my -->
+	<typeAlias type="com.store.meonggae.my.domain.GoodsDomain" alias="goodsDomain"/>
+	<typeAlias type="com.store.meonggae.my.domain.PersonalDomain" alias="personalDomain"/>
+	<typeAlias type="com.store.meonggae.my.vo.PwVO" alias="pwVO"/>
+<!-- store,my -->
+
+</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${connectionURL}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/store/meonggae/user/login/dao/loginMapper.xml"/>
+    <mapper resource="com/store/meonggae/event/dao/eventMapper.xml"/>
+    <mapper resource="com/store/meonggae/product/mapper/categoryMapper.xml"/>
+    <mapper resource="com/store/meonggae/product/mapper/searchProductMapper.xml"/>
+    <mapper resource="com/store/meonggae/product/mapper/productDetailInfoMapper.xml"/>
+    <mapper resource="com/store/meonggae/user/join/mapper/joinMapper.xml"/>
+    <mapper resource="com/store/meonggae/product/dao/productAddMapper.xml"/>
+    
+   	<!-- 내상점, 마이페이지 시작 -->
+	   	<!-- 내상점 -->
+    <mapper resource="com/store/meonggae/my/store/dao/mapper/storeMapper.xml"/>
+    
+	   	<!-- 마이페이지 -->
+    <mapper resource="com/store/meonggae/my/dao/mapper/MypageMainMapper.xml"/>
+    <mapper resource="com/store/meonggae/my/dao/mapper/DibsMapper.xml"/>
+    <mapper resource="com/store/meonggae/my/dao/mapper/SalesListMapper.xml"/>
+    <mapper resource="com/store/meonggae/my/dao/mapper/PersonalMapper.xml"/>
+    <!-- 내상점, 마이페이지 끝 -->
+  </mappers>
+</configuration>
