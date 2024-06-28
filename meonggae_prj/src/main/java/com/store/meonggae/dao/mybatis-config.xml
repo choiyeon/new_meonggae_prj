@@ -33,6 +33,7 @@
 	<typeAlias type="com.store.meonggae.my.domain.GoodsDomain" alias="goodsDomain"/>
 	<typeAlias type="com.store.meonggae.my.domain.PersonalDomain" alias="personalDomain"/>
 	<typeAlias type="com.store.meonggae.my.vo.PwVO" alias="pwVO"/>
+	<typeAlias type="com.store.meonggae.my.vo.PersonalInfoVO" alias="piVO"/>
 <!-- store,my -->
 
 </typeAliases>

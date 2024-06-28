@@ -1,8 +1,19 @@
 #back{
 	background-color: #F5F6F8;
-	width: 400px;
-	height: 260px;
+	width: 500px;
+	height: 275px;
 	padding: 30px;
+	padding-left: 75px;
+	padding-right: 75px;
+}
+
+#backNick{
+	background-color: #F5F6F8;
+	width: 500px;
+	height: 280px;
+	padding: 30px;
+	padding-left: 100px;
+	padding-right: 100px;
 }
 
 #title{
@@ -18,9 +29,10 @@
 
 #btnWrap{
 	text-align: center;
+	margin-bottom: 15px;
 }
 
-#pw1, #pw2{
+#pw1, #pw2, #nick{
 	font-size : 12px;
 	width: 300px;
 	height: 30px;
@@ -29,4 +41,47 @@
 
 #blank{
 	margin-bottom: 20px;
+}
+
+#selectDiv{
+	text-align: center;
+	margin: 10px;
+}
+
+#output{
+	font-size: 14px;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+#selectNick{
+	width: 70px;
+	height: 29px;
+	border: none;
+	color: white;
+	background-color: #D68383;
+	border-radius: 3px;
+	font-size: 12px;
+	display: none;
+}
+
+.btn1{
+	width: 73px;
+	height: 29px;
+	border: none;
+	color: white;
+	background-color: #75AEDF;
+	border-radius: 3px;
+	font-size: 12px;
+}
+
+.btn2{
+	width: 46px;
+	height: 29px;
+	border: none;
+	color: white;
+	background-color: #B7B7B7;
+	border-radius: 3px;
+	font-size: 12px;
 }
