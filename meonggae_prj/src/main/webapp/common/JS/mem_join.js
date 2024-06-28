@@ -1,8 +1,4 @@
 $(function() {
-	//datepicker 사용
-	// 기본 사용
-	//$( "#datepicker" ).datepicker();
-
 	//input을 datepicker로 선언
 	$("#datepicker").datepicker({ 
 		dayNamesMin: ["일", "월", "화", "수", "목", "금", "토"],
@@ -20,14 +16,38 @@ $(function() {
     	idDupWin();
     });
     
-	//비밀번호 확인
-	$("#password2").focusout(function() {
+	//비밀번호 입력 형식 확인
+	$("#password").focusout(function() {
 		chkCorrectPw();
 	});
+	//비밀번호 확인과 일치 확인
+	$("#password2").focusout(function() {
+		chkCorrectPw2();
+	});
 	
+	//생년월일 입력 형식 확인
+    $('#CalregistdateIcon').on('click', function() {
+      $('#datepicker').datepicker('show'); // 입력 필드에 포커스 설정
+    });
+     
+	//전화번호 입력 형식 확인
+	$("#cell").focusout(function() {
+		chkCell();
+	});
 	//닉네임 유효성검사
 	$("#nickChk").click(function(){
 		nickDupWin();
+	});
+	//이름 유효성검사
+	$("#name").focusout(function(){
+		if( $("#name").val().length < 2){
+			$("#nameMsg").html("이름의 최소글자는 2글자입니다.");
+    		$("#nameMsg").css('display', 'block');
+			$("#name").css('color', 'red');
+		}else{
+			$("#nameMsg").css('display', 'none');
+			$("#name").css('color', 'black');
+		}
 	});
 	
 	//우편번호 검색
@@ -48,22 +68,42 @@ $(function() {
 
 //아이디 유효성검사 후 중복 팝업 생성
 function idDupWin(){
-	var id=$("#id").val().trim();
-    var reg = /^[A-z0-9]{5,12}$/;//영문/숫자 5~12자 이내인지 확인
+	var id=$("#id").val();
+	//정규 표현식
+    var reg = /^(?=.*?[A-Za-z])(?=.*?[0-9])\S{5,12}$/;//영문/숫자 5~12자 이내인지 확인
     if( !reg.test(id) ){
-    	alert("아이디를 영문, 숫자를 사용하여 5~12자 이내로 입력해주세요.");
-        $("#id").val('');
-        $("#id").focus();
-    } else {
-    	window.open("id_dup.do?id="+id, "idDup", "width=472, height=390, top="+
+    	$("#idMsg").html("아이디 형식을 확인해주세요.");
+		$("#idMsg").css('display', 'block');
+		$("#id").css('color', 'red');
+	}else{
+		$("#idMsg").css('display', 'none');
+		$("#id").css('color', 'black');
+		window.open("id_dup.do?id="+id, "idDup", "width=472, height=390, top="+
         (window.screenY+203)+", left="+(window.screenX+306));
-    }
+	}
 };//idDupWin
 
-//비밀번호와 비밀번호 확인이 일치하는지
+//비밀번호 형식 확인
 function chkCorrectPw() {
-	if ($("#password").val() != $("#password2").val()) {
-		alert('비밀번호가 다릅니다');
+	//정규 표현식
+	var password=$("#password").val();
+	var reg = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-])\S{6,12}$/;//영문/숫자/특수문자 6~12자 이내인지 확인
+	if( !reg.test(password) ){
+    	$("#passwordMsg").html("비밀번호 형식을 확인해주세요.");
+    	$("#passwordMsg").css('display', 'block');
+		$("#password").css('color', 'red');
+	}else{
+		$("#passwordMsg").css('display', 'none');
+		$("#password").css('color', 'black');
+	}
+}; // chkCorrectPw	
+
+//비밀번호와 비밀번호 확인이 일치 확인
+function chkCorrectPw2() {
+    if ($("#password").val() != $("#password2").val()) {
+		$("#passwordMsg").html("비밀번호가 다릅니다.");
+    	$("#passwordMsg").css('display', 'block');
+		$("#password").css('color', 'red');
 		$("#password").val('');
 		$("#password2").val('');
 		$("#password").focus();
@@ -72,17 +112,36 @@ function chkCorrectPw() {
 
 //닉네임 유효성검사 후 중복 팝업 생성
 function nickDupWin() {
-	var nick=$("#nick").val().trim();
-    var ko_reg = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,12}$/;//한글/영문/숫자 1~12자 이내인지 확인
+	var nick=$("#nick").val();
+	//정규 표현식
+    var ko_reg = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]\S{1,12}$/;//한글/영문/숫자 1~12자 이내인지 확인
     if( !ko_reg.test(nick) ){
-    	alert("닉네임을 한글, 영문, 숫자를 사용하여 1~12자 이내로 입력해주세요.");
-    	$("#nick").val('');
-        $("#nick").focus();
-     } else {
-        window.open("nick_dup.do?nick="+nick, "nickDup", "width=472, height=390, top="+
+    	$("#nickMsg").html("닉네임 형식을 확인해주세요.");
+		$("#nickMsg").css('display', 'block');
+		$("#nick").css('color', 'red');
+	}else{
+		$("#nickMsg").css('display', 'none');
+		$("#nick").css('color', 'black');
+		window.open("nick_dup.do?nick="+nick, "nickDup", "width=472, height=390, top="+
         (window.screenY+203)+", left="+(window.screenX+306));
-     }
+	}
+    	
 }; //nickDupWin	
+
+//	전화번호 유효성 검사
+function chkCell() {
+	var cell=$("#cell").val(); 
+	var cell_reg = /^(?=\d{11}$)\d{3}\D*\d{4}\D*\d{4}$/;
+	if(!cell_reg.test(cell)){
+		$("#cellMsg").html("전화번호가 정확한지 확인해주세요");
+		$("#cellMsg").css('display', 'block');
+		$("#cell").css('color', 'red');
+	}else{
+		$("#cellMsg").css('display', 'none');
+		$("#cell").css('color', 'black');
+		$("#cell").val(cell.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`));
+	}
+}//chkCell
 
 //	다음 우편번호 API 설정
 function zipcodeApi() {
@@ -124,7 +183,7 @@ function chkInputAll() {
 	//필수 입력란 확인
 	let flagInputArrAll = true;
 	let arrEssential = $(".essential");
-	let arrLabel = ['아이디', '비밀번호', '이름', '닉네임', '생년월일', '전화번호', '우편번호', '주소', '상세주소']
+	let arrLabel = ['아이디', '비밀번호', '이름', '닉네임', '생년월일', '전화번호', '우편번호', '주소','상세주소']
 	var errorMsg = [];
 	
 	//약관에 모두 동의했을 경우
@@ -144,7 +203,14 @@ function chkInputAll() {
 				
 				//폼 제출 막기
 				flagInputArrAll = false;
-			} // end if
+			}else if ($(value).val() != "") {
+				//빈칸인 필드의 ID와 에러 메시지를 구성.
+				let inputId = $(value).attr('id');
+				
+				$("#" + inputId + "Msg").css('display', 'none');
+				$("#" + inputId).css('color', 'black');
+				$("#" + inputId).val($("#" + inputId).val().trim());//양옆 공백 제거
+			}
 		});//end each
 		
 		//에러메시지가 있으면 상단으로 올라가기
@@ -160,10 +226,34 @@ function chkInputAll() {
 			
 			//폼 제출 막기
 			flagInputArrAll = false;
-		} // end if
+		}else{
+			$("#genderMsg").css('display', 'none');
+			$("#gender").css('color', 'black');
+		}
+		
+		var chkIdDup = $("#id").prop("readonly");
+		var chkNickDup = $("#nick").prop("readonly");
+		
+		//중복 검사 여부 확인
+		if(!chkIdDup){
+			$("#idMsg").html('아이디 중복확인은 필수입니다.');
+			$("#idMsg").css('display', 'block');
+			window.scrollTo(0,540);
+			
+			//폼 제출 막기
+			flagInputArrAll = false;
+		}else if(!chkNickDup){
+			$("#nickMsg").html('닉네임 중복확인은 필수입니다.');
+			$("#nickMsg").css('display', 'block');
+			window.scrollTo(0,540);
+			
+			//폼 제출 막기
+			flagInputArrAll = false;
+		}
 		
 		//폼 제출
 		if (flagInputArrAll) {
+			//폼 제출
 			$("#frm").submit();
 		} // end if
 	}else{
