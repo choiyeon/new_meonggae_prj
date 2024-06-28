@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.review">
+	<resultMap type="com.store.meonggae.mgr.review.domain.MgrReviewDomain" id="mgrReviewDomResult">
+		<result column="GOODS_NUM" property="goodsNum"/>
+		<result column="MEM_NUM_SELL" property="memNumSell"/>
+		<result column="MEM_NUM_BUY" property="memNumBuy"/>
+		<result column="NICK_SELL" property="nickSell"/>
+		<result column="NICK_BUY" property="nickBuy"/>
+		<result column="GOODS_TITLE" property="goodsTitle"/>
+		<result column="GOODS_IMG" property="goodsImg"/>
+		<result column="CATEGORY_NUM" property="categoryNum"/>
+		<result column="CATEGORY_NAME" property="categoryName"/>
+		<result column="PARENT_CATEGORY_NUM" property="parentCategoryNum"/>
+		<result column="PARENT_CATEGORY_NAME" property="parentCategoryName"/>
+		<result column="CONTENT" property="content"/>
+		<result column="STAR" property="star"/>
+		<result column="DELETE_FLAG" property="deleteFlag"/>
+		<result column="REVIEW_INPUT_DATE" property="reviewInputDate"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="GOODS_INPUT_DATE" property="goodsInputDate"/>
+		<result column="SELL_DATE" property="sellDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.review.domain.MgrCategoryDomain" id="mgrCategoryDomResult">
+		<result column="CATEGORY_NUM" property="categoryNum"/>
+		<result column="CATEGORY_NAME" property="categoryName"/>
+	</resultMap>
+	
+	<!-- 게시판 리스트의 수 -->
+	<select id="selectOneListCnt" resultType="int" parameterType="com.store.meonggae.mgr.review.vo.MgrReviewSearchVO">
+		select	count(*) cnt
+		from	view_mgr_review
+		<where>
+			<choose>
+				<when test="field eq 0">
+					NICK_BUY like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 1">
+					CONTENT like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 2">
+					NICK_SELL like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 3">
+					GOODS_TITLE like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose> 
+			<choose>
+				<when test="categoryNum neq null">
+					and category_num = #{categoryNum}
+				</when>
+				<otherwise> 
+					<if test="parentCategoryNum neq null">
+						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+					</if>
+				</otherwise>
+			</choose>
+			<if test="startDate neq null">
+				and review_INPUT_DATE &gt;= #{startDate}
+			</if>
+			<if test="endDate neq null">
+				and review_INPUT_DATE &lt;= #{endDate}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 게시판 리스트 목록 조회 -->
+	<select id="selectListReviewList" resultMap="mgrReviewDomResult" parameterType="com.store.meonggae.mgr.review.vo.MgrReviewSearchVO">
+		select	rnum, GOODS_NUM,MEM_NUM_SELL,MEM_NUM_BUY,NICK_SELL,NICK_BUY,GOODS_TITLE,GOODS_IMG,CATEGORY_NUM,CATEGORY_NAME,PARENT_CATEGORY_NUM,PARENT_CATEGORY_NAME,
+				substr(CONTENT, 0, 20) content,
+				STAR,DELETE_FLAG,REVIEW_INPUT_DATE,GOODS_INPUT_DATE,SELL_DATE
+		from	(
+				select	row_number() over (order by review_input_date desc) rnum, GOODS_NUM,MEM_NUM_SELL,MEM_NUM_BUY,NICK_SELL,NICK_BUY,GOODS_TITLE,GOODS_IMG,CATEGORY_NUM,CATEGORY_NAME,PARENT_CATEGORY_NUM,PARENT_CATEGORY_NAME,CONTENT,STAR,DELETE_FLAG,REVIEW_INPUT_DATE,GOODS_INPUT_DATE,SELL_DATE
+				from	view_mgr_review
+				<where>
+					<choose>
+						<when test="field eq 0">
+							NICK_BUY like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 1">
+							CONTENT like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 2">
+							NICK_SELL like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 3">
+							GOODS_TITLE like '%' || #{keyword} || '%'
+						</when>
+						<otherwise>
+							1 = 1
+						</otherwise>
+					</choose> 
+					<choose>
+						<when test="categoryNum neq null">
+							and category_num = #{categoryNum}
+						</when>
+						<otherwise> 
+							<if test="parentCategoryNum neq null">
+								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+							</if>
+						</otherwise>
+					</choose>
+					<if test="startDate neq null">
+						and review_INPUT_DATE &gt;= #{startDate}
+					</if>
+					<if test="endDate neq null">
+						and review_INPUT_DATE &lt;= #{endDate}
+					</if>
+				</where>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 카테고리 이름과 번호 -->
+	<select id="selectListCategoryList" resultMap="mgrCategoryDomResult" parameterType="int">
+		select CATEGORY_NUM, CATEGORY_NAME from VIEW_MGR_GOODS_CATEGORY
+		where PARENT_CATEGORY_NUM = #{categoryNum}
+		order by CATEGORY_NUM
+	</select>
+	
+	<!-- 전체 관리자 이름 조회 -->
+<!-- 	<select id="selectListAllManagerName" resultMap="mgrManagerDomResult"> -->
+<!-- 		select	/*+ index(manager PK_MANAGER) */ name, manager_id -->
+<!-- 		from	manager -->
+<!-- 	</select> -->
+	
+	<!-- 게시판 목록 하나 조회 -->
+	<select id="selectOneReview" resultMap="mgrReviewDomResult" parameterType="com.store.meonggae.mgr.review.vo.MgrReviewVO">
+		select	GOODS_NUM,MEM_NUM_SELL,MEM_NUM_BUY,NICK_SELL,NICK_BUY,GOODS_TITLE,GOODS_IMG,CATEGORY_NUM,CATEGORY_NAME,PARENT_CATEGORY_NUM,PARENT_CATEGORY_NAME,CONTENT,STAR,DELETE_FLAG,REVIEW_INPUT_DATE,GOODS_INPUT_DATE,SELL_DATE
+		from	view_mgr_review
+		where	mem_num_buy = #{memNum} and goods_num = #{goodsNum}
+	</select>
+	
+	<!--  리뷰 삭제 -->
+	<delete id="deleteOneReview" parameterType="com.store.meonggae.mgr.review.vo.MgrReviewVO">
+		update	review
+		set		DELETE_FLAG = 'Y'
+		where	MEM_NUM = #{memNum} and GOODS_NUM = #{goodsNum}
+	</delete>
+	
+</mapper>

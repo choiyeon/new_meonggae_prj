@@ -2,11 +2,17 @@
 	pageEncoding="UTF-8"
 	info="관리자 - 후기 관리 - 리스트"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%request.setCharacterEncoding("UTF-8");%>
 <%/*
 작성자: 김동섭
 작성일: 2024-06-02
 */%>
+
+<c:set var="date" value="<%=new java.util.Date()%>" />
+<c:set var="dateLastMonth" value="<%=new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30L)%>"/>
+<c:set var="strDate"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd" /></c:set>
+<c:set var="strDateLastMonth"><fmt:formatDate value="${dateLastMonth}" pattern="yyyy-MM-dd"/></c:set>
 
 <!DOCTYPE html>
 <html>
@@ -30,16 +36,168 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
 
+<!-- datepicker 시작-->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+	$( function() {
+		// 기본 사용
+		//$( "#datepicker" ).datepicker();
+		
+		// 옵션 부여
+		$( ".datepicker" ).datepicker({
+			dayNamesMin: [ "일", "월", "화", "수", "목", "금", "토" ], 
+			dateFormat: "yy-mm-dd",
+			monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			maxDate: "${strDate}",
+			showMonthAfterYear: true
+		});
+	} );
+</script>
+<!-- datepicker 끝-->
+
+<!-- datepicker css 시작 -->
+<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<!-- datepicker css 끝 -->
+
 <style type="text/css">
 	
-	
+	/* datepicker 아이콘 가져오기 */
+   .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
-
+<!-- 후기를 삭제한 경우 -->
+<c:if test="${requestScope.flagDelete ne null}">
+	<script type="text/javascript">
+		$(function() {
+			if(${requestScope.flagDelete }) {
+				alert('후기 삭제에 성공하였습니다');
+			} else {
+				alert('후기 삭제에 실패하였습니다');
+			} // else
+		}); // $(document).ready(function() { })
+	</script>
+</c:if>
 <script type="text/javascript">
 	$(function() {
+		//callAjaxCategoryList(0, 0);
+		//$("#selCategoryLower").prop("disabled", "disabled");
+		
+		// 상위 거래 카테고리 선택시
+		$("#selCategoryUpper").change(function () {
+// 			console.log($("#selCategoryUpper").val());
+			if($("#selCategoryUpper").val() != null && $("#selCategoryUpper").val() != '') {
+				callAjaxCategoryList($("#selCategoryUpper").val(), 1);
+			}
+			if($("#selCategoryUpper").val() == 0) {
+				$("#selCategoryLower").html('<option value="">모든 하위 카테고리</option>');
+				$("#selCategoryLower").prop("disabled", "disabled");
+			} else {
+				$("#selCategoryLower").removeAttr("disabled");
+			}
+		}); // end change
+		
+		// 필터 적용 버튼
+		$("#btnFilter").click(function(){
+			if($("#keyword").val() == null || $("#keyword").val().trim() == '') {
+				$("#keyword").prop("disabled", "disabled");
+				$("#field").prop("disabled", "disabled");
+			} // end if
+			disableInput();
+			$("#frmBoard").submit();
+		}); // click
+		
+		// 검색
+		$("#btnSearch").click(function () {
+			chkNull();
+		}); // click
+		
+		// 검색
+		$("#keyword").keydown(function (evt) {
+			if(evt.which == 13) {
+				chkNull();
+			} // end if
+		}); // keydown
+		
+		// 필터 초기화
+		$("#resetFilter").click(function () {
+			let url = new URL(location.href);
+			url.searchParams.delete('parentCategoryNum');
+			url.searchParams.delete('categoryNum');
+			url.searchParams.delete('startDate');
+			url.searchParams.delete('endDate');
+			location.href = "${pageContext.request.contextPath}/mgr/review/mgr_review_list_frm.do" + url.search;
+		}); // click
+		
+		// 전체 조회
+		$("#btnAllSearch").click(function () {
+			location.href = "${pageContext.request.contextPath}/mgr/review/mgr_review_list_frm.do";
+		}); // click
 		
 	}); // $(document).ready(function() { })
+	
+	// 검색을 위한 null 체크
+	function chkNull() {
+		if($("#keyword").val().trim() != "") {
+// 			if($("#chkDeptAll").is(":checked")) {
+// 				$(".dept").prop("disabled", "disabled");
+// 			} // end if
+			disableInput();
+			$("#frmBoard").submit();
+		} // end if
+	} // chkNull
+	
+	// form submit시 null인 거 안 넘어가게
+	function disableInput() {
+		if($("#selCategoryUpper").val() == null || $("#selCategoryUpper").val() == '') {
+			$("#selCategoryUpper").prop("disabled", "disabled");
+			$("#selCategoryLower").prop("disabled", "disabled");
+		} // end if
+		if($("#startDate").val() == null || $("#startDate").val() == '') {
+			$("#startDate").prop("disabled", "disabled");
+		} // end if
+		if($("#endDate").val() == null || $("#endDate").val() == '') {
+			$("#endDate").prop("disabled", "disabled");
+		} // end if
+	} // disableInput
+	
+	// 동적으로 카테고리 상위 하위 변경
+	function callAjaxCategoryList(categoryNum, categoryType) {
+		var param = {
+				categoryNum: categoryNum
+		}
+		$.ajax({
+			url: "http://localhost${pageContext.request.contextPath}/mgr/review/mgr_review_category.do",
+			type: "GET",
+			data: param,
+			dataType: "JSON",
+			//async: false,
+			error: function(xhr) {
+				console.log(xhr.status + " / " + xhr.statusText);
+				alert("문제가 발생하였습니다. 잠시 후 다시 시도해주시기 바랍니다");
+			}, 
+			success: function(jsonObj) {
+				let output = '';
+				if(jsonObj.result){
+					if(categoryType == 0) {
+						output = '<option value="">모든 상위 카테고리</option>';
+					} else {
+						output = '<option value="">모든 하위 카테고리</option>';
+					} // end if
+					let arrCategory = JSON.parse(jsonObj.data);
+					for (let i = 0; i < arrCategory.length; i++) {
+						output += '<option value="' + arrCategory[i].categoryNum + '">' + arrCategory[i].categoryName + '</option>' 
+					} // end for
+					
+					if(categoryType == 0) {
+						$("#selCategoryUpper").html(output);
+					} else {
+						$("#selCategoryLower").html(output);
+					} // end else
+				} // end if
+			} // success
+		}); // ajax		
+	} // callAjaxCategoryList
 </script>
 
 </head>
@@ -70,404 +228,211 @@
 <div class="nk-block">
 	<div class="card card-bordered card-stretch">
 		<div class="card-inner-group">
-			<div class="card-inner position-relative card-tools-toggle">
-				<div class="card-title-group">
-					<div class="card-tools" data-select2-id="67">
-						<div class="form-inline flex-nowrap gx-3" data-select2-id="14">
-							<div class="form-wrap w-200px">
-								<div class="input-group-prepend" style="width:180px;">
-									<select class="form-select js-select2 select2-hidden-accessible" data-search="on" data-select2-id="6" tabindex="-1" aria-hidden="true">
-										<!-- data-select2-id="8" 같이 아이디를 주면 처음 두어번만 검색되고 이후엔 무한 searching 되면서 모든 옵션이 선택 안 되는 버그 있음 -->
-										<option value="0">모든 카테고리</option>
-										<option value="1">여성의류</option>
-										<option value="2">남성의류</option>
-										<option value="3">신발</option>
-										<option value="4">가방/지갑</option>
-										<option value="5">시계</option>
-										<option value="6">쥬얼리</option>
-										<option value="7">패션 악세서리</option>
-										<option value="8">디지털</option>
-										<option value="9">가전제품</option>
-										<option value="10">스포츠/레저</option>
-										<option value="11">차량/오토바이</option>
-									</select>
-								</div>	
-							</div>
-							<div class="btn-wrap">
-								<span class="d-none d-md-block">
-									<button class="btn btn-light">적용하기</button>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="card-tools me-n1">
-						<ul class="btn-toolbar gx-s1">
-							<li>
-								<div class="toggle-wrap">
-									<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
-										<em class="icon ni ni-menu-right"></em>
-									</a>
-									<div class="toggle-content" data-content="cardTools">
-										<ul class="btn-toolbar gx-1">
-											<li>
-												<div class="dropdown">
-													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-														<em class="icon ni ni-setting"></em>
-													</a>
-													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-														<ul class="link-check">
-															<li>
-																<span>리스트 수</span>
-															</li>
-															<li class="active">
-																<a href="#">10</a>
-															</li>
-															<li>
-																<a href="#">20</a>
-															</li>
-															<li>
-																<a href="#">50</a>
-															</li>
-														</ul>
-														<ul class="link-check">
-															<li>
-																<span>정렬</span>
-															</li>
-															<li class="active">
-																<a href="#">내림차순</a>
-															</li>
-															<li>
-																<a href="#">오름차순</a>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</li>
-										</ul>
+			<form name="frmBoard" id="frmBoard" action="mgr_review_list_frm.do"> 
+				<div class="card-inner position-relative card-tools-toggle">
+					<div class="card-title-group">
+						<div class="card-tools" data-select2-id="67">
+							<div class="form-inline flex-nowrap gx-5" data-select2-id="14">
+								<div class="btn-wrap">
+									<span class="d-none d-md-block">
+										<input type="button" class="btn btn-light" id="btnAllSearch" value="전체 조회"/>
+									</span>
+								</div>
+								<div class="form-wrap w-200px">
+									<div class="input-group-prepend" style="width:180px;">
+										<select id="selCategoryUpper" class="form-select js-select2" name="parentCategoryNum">
+											<option value=''>모든 상위 카테고리</option>
+											<c:forEach var="cate" items="${requestScope.listCategoryUpper}" varStatus="i">
+											<option value='${cate.categoryNum }'${param.parentCategoryNum eq cate.categoryNum ? " selected='selected'" : ""}><c:out value="${cate.categoryName}"/></option>
+											</c:forEach>
+										</select>
+									</div>	
+								</div>
+								<div class="form-wrap w-200px">
+									<div class="input-group-prepend" style="width:180px;">
+										<select id="selCategoryLower" class="form-select js-select2" name="categoryNum"${requestScope.listCategoryLower eq null ? " disabled='disabled'" : ""} >
+											<option value=''>모든 하위 카테고리</option>
+											<c:if test="${requestScope.listCategoryLower ne null}">
+											<c:forEach var="cate" items="${requestScope.listCategoryLower}" varStatus="i">
+											<option value='${cate.categoryNum }'${param.categoryNum eq cate.categoryNum ? " selected='selected'" : ""}><c:out value="${cate.categoryName}"/></option>
+											</c:forEach>
+											</c:if>
+										</select>
+									</div>	
+								</div>
+								<div class="form-control-wrap">
+									<div class="input-daterange date-picker-range input-group" style="float:left; width:300px;">
+										<div class="input-group-addon">시작일</div>
+										<div class="form-control-wrap">
+											<div class="form-icon form-icon-left"><em class="icon ni ni-calendar"></em></div>
+											<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}"/>
+										</div>
+									</div>
+									<div class="input-daterange date-picker-range input-group" style="float:left;width:300px;margin-left:10px;">
+										<div class="input-group-addon">종료일</div>
+										<div class="form-control-wrap">
+											<div class="form-icon form-icon-left"><em class="icon ni ni-calendar"></em></div>
+											<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}"/>
+										</div>
 									</div>
 								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="card-search search-wrap" data-search="search">
-					<div class="card-body">
-						<div class="search-content">
-							<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
-								<em class="icon ni ni-arrow-left"></em>
-							</a>
-							<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-							<button class="search-submit btn btn-icon">
-								<em class="icon ni ni-search"></em>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-inner p-0" style="margin:0px auto; text-align: center;">
-				<div class="nk-tb-list nk-tb-ulist">
-					<div class="nk-tb-item nk-tb-head">
-						<div class="nk-tb-col" style="width:8%;">
-							<span class="sub-text">번호</span>
-						</div>
-						<div class="nk-tb-col tb-col-sm">
-							<span class="sub-text">상품명</span>
-						</div>
-						<div class="nk-tb-col tb-col-sm">
-							<span class="sub-text">카테고리</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="sub-text">후기 작성자</span>
-						</div>
-						<div class="nk-tb-col tb-col-xl">
-							<span class="sub-text">내용</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span class="sub-text">별점</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span class="sub-text">작성일</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">1</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">상품명1</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-lead">김닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>2024.07.08 20:19:20</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">2</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명2</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">이닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:19</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">3</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명3</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">박닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:17</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">4</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명4</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">최닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:16</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">5</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명5</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">정닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:15</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">6</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명6</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">강닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:14</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">7</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명7</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">조닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:13</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">8</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명8</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">윤닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:12</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">9</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명9</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">장닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:11</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">10</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="tb-lead">상품명10</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">디지털</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">임닉네임</span>
-						</div>
-						<div class="nk-tb-col tb-col-md">
-							<span>후기 내용중 앞부분...</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>★★★★★</span>
-						</div>
-						<div class="nk-tb-col tb-col-lg">
-							<span>2024.07.08 20:19:10</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-inner">
-				<div class="nk-block-between-md g-3">
-					<div class="g" style="margin:0px auto;">
-						<ul class="pagination justify-content-center justify-content-md-start">
-							<li class="page-item">
-								<a class="page-link" href="#">처음 페이지로</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">&lt;&lt;</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">4</a>
-							</li>
-							<li class="page-item active">
-								<a class="page-link" href="#">5</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">6</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">&gt;&gt;</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">마지막 페이지로</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div style="margin:0px auto; width:650px; height:70px; text-align:center; padding-top:20px;">
-					<div class="form-group">
-						<div class="form-control-wrap">
-							<div class="input-group">
-								<div class="input-group-prepend" style="width:200px;">
-						 			<select class="form-select js-select2">
-										<option value="name">후기 작성자 닉네임</option>
-										<option value="id">후기 내용</option>
-										<option value="nick">판매자 닉네임</option>
-										<option value="dname">판매 상품명</option>
-									</select>
+								<div class="btn-wrap">
+									<span class="d-none d-md-block">
+										<input type="button" class="btn btn-light" id="btnFilter" value="적용하기"/>
+									</span>
 								</div>
-								<input type="text" class="form-control" aria-label="Text input with dropdown button">
-								<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색"/>
+								<div class="btn-wrap">
+									<span class="d-none d-md-block">
+										<input type="button" class="btn btn-outline-secondary" id="resetFilter" value="초기화"/>
+									</span>
+								</div>
 							</div>
 						</div>
-					</div>				
+						<div class="card-tools me-n1">
+							<ul class="btn-toolbar gx-s1">
+								<li>
+									<div class="toggle-wrap">
+										<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
+											<em class="icon ni ni-menu-right"></em>
+										</a>
+										<div class="toggle-content" data-content="cardTools">
+											<ul class="btn-toolbar gx-1">
+												<li>
+													<div class="dropdown">
+														<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
+															<em class="icon ni ni-setting"></em>
+														</a>
+														<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
+															<ul class="link-check">
+																<li>
+																	<span>리스트 수</span>
+																</li>
+																<li class="active">
+																	<a href="#">10</a>
+																</li>
+																<li>
+																	<a href="#">20</a>
+																</li>
+																<li>
+																	<a href="#">50</a>
+																</li>
+															</ul>
+															<ul class="link-check">
+																<li>
+																	<span>정렬</span>
+																</li>
+																<li class="active">
+																	<a href="#">내림차순</a>
+																</li>
+																<li>
+																	<a href="#">오름차순</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card-search search-wrap" data-search="search">
+						<div class="card-body">
+							<div class="search-content">
+								<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
+									<em class="icon ni ni-arrow-left"></em>
+								</a>
+								<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
+								<button class="search-submit btn btn-icon">
+									<em class="icon ni ni-search"></em>
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
+				<div class="card-inner p-0" style="margin:0px auto; text-align: center;">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th scope="col">번호</th>
+								<th scope="col">내용</th>
+								<th scope="col">후기 작성자</th>
+								<th scope="col">상품명</th>
+								<th scope="col">카테고리</th>
+								<th scope="col">별점</th>
+								<th scope="col">작성일</th>
+								<th scope="col">삭제</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:choose>
+								<c:when test="${requestScope.list eq null or requestScope.currentPage > requestScope.totalPage}">
+									<tr>
+										<td colspan="8">조회된 결과가 없습니다</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="reviewDomain" items="${requestScope.list}" varStatus="i">
+										<tr>
+											<th scope="row"><c:out value="${i.count}"/></th>
+											
+											<c:choose>
+												<c:when test="${pageContext.request.queryString eq null or pageContext.request.queryString eq ''}">
+													<td><a href="${pageContext.request.contextPath}/mgr/review/mgr_review_detail_frm.do?memNum=${reviewDomain.memNumBuy }&goodsNum=${reviewDomain.goodsNum}"><c:out value="${reviewDomain.content}"/></a></td>
+												</c:when>
+												<c:otherwise>
+													<td><a href="${pageContext.request.contextPath}/mgr/review/mgr_review_detail_frm.do?${pageContext.request.queryString }&memNum=${reviewDomain.memNumBuy }&goodsNum=${reviewDomain.goodsNum}"><c:out value="${reviewDomain.content}"/></a></td>
+												</c:otherwise>
+											</c:choose>
+											<td><c:out value="${reviewDomain.nickBuy}"/></td>
+											<td><c:out value="${reviewDomain.goodsTitle}"/></td>
+											<td><c:out value="${reviewDomain.categoryName}"/></td>
+											<td><c:out value="${reviewDomain.star}"/></td>
+											<td><c:out value="${reviewDomain.reviewInputDate}"/></td>
+											<c:choose>
+												<c:when test="${reviewDomain.deleteFlag }">
+													<td style="color:#ff0000;">삭제됨</td>
+												</c:when>
+												<c:otherwise>
+													<td>-</td>
+												</c:otherwise>
+											</c:choose>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</tbody>
+					</table>
+				
+				</div>
+				<div class="card-inner">
+					<div class="nk-block-between-md g-3">
+						<div class="g" style="margin:0px auto;">
+							${requestScope.pageNation }
+						</div>
+					</div>
+					<div style="margin:0px auto; width:650px; height:70px; text-align:center; padding-top:20px;">
+						<div class="form-group">
+							<div class="form-control-wrap">
+								<div class="input-group">
+									<div class="input-group-prepend" style="width:200px;">
+							 			<select class="form-select js-select2" id="field" name="field">
+											<option value="0"${param.field eq 0 ? " selected='selected'" : ""}>후기 작성자 닉네임</option>
+											<option value="1"${param.field eq 1 ? " selected='selected'" : ""}>후기 내용</option>
+											<option value="2"${param.field eq 2 ? " selected='selected'" : ""}>판매자 닉네임</option>
+											<option value="3"${param.field eq 3 ? " selected='selected'" : ""}>판매 상품명</option>
+										</select>
+									</div>
+									<input type="text" class="form-control" aria-label="Text input with dropdown button" id="keyword" name="keyword" value="${param.keyword }">
+									<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색" id="btnSearch"/>
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -484,11 +449,11 @@
 </div>
 </div>
 <!-- dashlite 시작-->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
 <!-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
 <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
 <!-- dashlite 끝-->
 <script type="text/javascript">

@@ -14,6 +14,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MgrManagerDomain {
-	private String managerId, dname, parentManagerId, name, birth, nick, permission;
+	private String managerId, dname, parentManagerId, parentManagerName, name, birth, nick, gender, email, addr1, addr2, tel, permission;
 	private Date inputDate;
+	private boolean deleteFlag;
+	private Date deleteDate;
 }
