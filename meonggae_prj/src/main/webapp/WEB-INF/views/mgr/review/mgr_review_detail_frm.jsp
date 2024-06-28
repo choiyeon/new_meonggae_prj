@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"
 	info="관리자 - 후기 관리 - 후기 상세 조회"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%request.setCharacterEncoding("UTF-8");%>
 <%/*
 작성자: 김동섭
@@ -39,7 +40,21 @@
 
 <script type="text/javascript">
 	$(function() {
+		// 닫기 -> 리스트로
+		$("#btnClose").click(function() {
+			let url = new URL(location.href);
+			url.searchParams.delete('memNum');
+			url.searchParams.delete('goodsNum');
+			location.href = "${pageContext.request.contextPath}/mgr/review/mgr_review_list_frm.do" + url.search;
+		}); // click
 		
+		// 삭제
+		$("#btnDelete").click(function() {
+			if(confirm('정말 삭제하시겠습니까?')) {
+				let url = new URL(location.href);
+				location.href = "${pageContext.request.contextPath}/mgr/review/mgr_review_delete_process.do" + url.search;
+			} // end if
+		}); // click
 	}); // $(document).ready(function() { })
 </script>
 
@@ -78,6 +93,11 @@
 						<div class="nk-block-head-content">
 							<h4 class="nk-block-title">후기 정보</h4>
 						</div>
+						<c:if test="${requestScope.reviewDomain.deleteFlag }">
+						<div class="nk-block-head-content">
+							<h5 class="nk-block-title" style="color:#ff0000;">삭제됨</h5>
+						</div>
+						</c:if>
 						<div class="nk-block-head-content align-self-start d-lg-none">
 							<a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside">
 								<em class="icon ni ni-menu-alt-r"></em>
@@ -93,7 +113,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">작성자</span>
-								<span class="data-value">김닉네임</span>
+								<span class="data-value"><c:out value="${requestScope.reviewDomain.nickBuy }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -101,7 +121,8 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">작성일</span>
-								<span class="data-value">2024.07.07 12:00:00</span>
+								<span class="data-value"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${requestScope.reviewDomain.reviewInputDate}"/></span>
+<%-- 								<span class="data-value"><c:out value="${requestScope.reviewDomain.reviewInputDate }"/></span> --%>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -112,7 +133,7 @@
 								<div class="col-md-12">
 									<div class="form-group">
 										<div class="form-control-wrap">
-											<textarea class="form-control" id="fv-message" name="fv-message" readonly="readonly">후기 내용이 여기 적혀있음</textarea>
+											<textarea class="form-control" id="fv-message" name="fv-message" readonly="readonly"><c:out value="${requestScope.reviewDomain.content }"/></textarea>
 										</div>
 									</div>
 								</div>
@@ -128,7 +149,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">판매자</span>
-								<span class="data-value">이닉네임</span>
+								<span class="data-value"><c:out value="${requestScope.reviewDomain.nickSell }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -136,8 +157,8 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">상품명</span>
-								<img src="http://192.168.10.214${pageContext.request.contextPath}/mgr/images/goods_000001.jpg" style="max-width:15%; height:auto;"/>
-								<span class="data-value">한 번 밖에 안 쓴 아메리카노</span>
+								<img src="http://192.168.10.214${pageContext.request.contextPath}/products-img/${requestScope.reviewDomain.goodsImg}" style="max-width:15%; height:auto;"/>
+								<span class="data-value"><c:out value="${requestScope.reviewDomain.goodsTitle }"/></span>
 							</div>
 							<div class="data-col data-col-end" style="width:1px;">
 							</div>
@@ -145,7 +166,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">상품 등록일</span>
-								<span class="data-value">2024.07.05 12:00:00</span>
+								<span class="data-value"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${requestScope.reviewDomain.goodsInputDate}"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -153,7 +174,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">상품 거래일</span>
-								<span class="data-value">2024.07.06 12:00:00</span>
+								<span class="data-value"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${requestScope.reviewDomain.sellDate}"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -162,8 +183,10 @@
 				</div>
 				<div class="col-md-6" style="margin:0px auto; padding-top:10px;">
 					<div class="form-group text-center">
-						<button type="button" class="btn btn-light">닫기</button>
-						<button type="button" class="btn btn-danger" style="margin-left:15%;">삭제</button>
+						<button type="button" class="btn btn-light" id="btnClose">닫기</button>
+						<c:if test="${ not requestScope.reviewDomain.deleteFlag}">
+						<button type="button" class="btn btn-danger" style="margin-left:15%;" id="btnDelete">삭제</button>
+						</c:if>
 					</div>
 				</div>
 			</div>
@@ -184,11 +207,11 @@
 </div>
 <!-- dashlite 시작-->
 <!-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> -->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
 <!-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
 <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
 <!-- dashlite 끝-->
 <script type="text/javascript">

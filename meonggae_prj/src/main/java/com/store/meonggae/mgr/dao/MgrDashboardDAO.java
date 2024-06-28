@@ -16,7 +16,6 @@ import com.store.meonggae.mgr.dashboard.domain.VisitorDomain;
 import com.store.meonggae.mgr.dashboard.domain.VisitorGraphDomain;
 import com.store.meonggae.mgr.dashboard.vo.SelOptionVO;
 import com.store.meonggae.mgr.dashboard.vo.VisitorDatepickVO;
-import com.store.meonggae.mgr.dashboard.domain.CategoryTopDomain;
 
 @Component
 public class MgrDashboardDAO {

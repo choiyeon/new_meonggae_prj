@@ -79,8 +79,8 @@
                         <span class="nk-menu-text my-menu-text">후기 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
-                      <a href="#void" class="nk-menu-link">
+                    <li class="nk-menu-item" id="sidebar-goods">
+                      <a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-text-rich"></em>
                         </span>

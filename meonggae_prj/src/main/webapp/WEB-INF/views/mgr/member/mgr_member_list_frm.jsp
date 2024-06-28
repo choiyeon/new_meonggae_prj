@@ -2,11 +2,15 @@
 	pageEncoding="UTF-8"
 	info="관리자 - 회원 관리 - 리스트"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%request.setCharacterEncoding("UTF-8");%>
 <%/*
 작성자: 김동섭
 작성일: 2024-06-01
 */%>
+
+<c:set var="date" value="<%=new java.util.Date()%>" />
+<c:set var="strDate"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd" /></c:set>
 
 <!DOCTYPE html>
 <html>
@@ -30,16 +34,132 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
 
+<!-- datepicker 시작-->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script>
+	$( function() {
+		// 기본 사용
+		//$( "#datepicker" ).datepicker();
+		
+		// 옵션 부여
+		$( ".datepicker" ).datepicker({
+			dayNamesMin: [ "일", "월", "화", "수", "목", "금", "토" ], 
+			dateFormat: "yy-mm-dd",
+			monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			maxDate: "${strDate}",
+			showMonthAfterYear: true
+		});
+	} );
+</script>
+<!-- datepicker 끝-->
+
+<!-- datepicker css 시작 -->
+<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<!-- datepicker css 끝 -->
+
 <style type="text/css">
 	
-	
+	/* datepicker 아이콘 가져오기 */
+   .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 
 <script type="text/javascript">
 	$(function() {
+		// 필터 적용 버튼
+		$("#btnFilter").click(function(){
+			if($("#keyword").val() == null || $("#keyword").val().trim() == '') {
+				$("#keyword").prop("disabled", "disabled");
+				$("#field").prop("disabled", "disabled");
+			} // end if
+			disableInput();
+			
+			$("#frmBoard").submit();
+		}); // click
 		
+		// 검색
+		$("#btnSearch").click(function () {
+			chkNull();
+		}); // click
+		
+		// 검색
+		$("#keyword").keydown(function (evt) {
+			if(evt.which == 13) {
+				chkNull();
+			} // end if
+		}); // keydown
+		
+		// 필터 초기화
+		$("#resetFilter").click(function () {
+			let url = new URL(location.href);
+			url.searchParams.delete('parentCategoryNum');
+			url.searchParams.delete('categoryNum');
+			url.searchParams.delete('startDate');
+			url.searchParams.delete('endDate');
+			
+			url.searchParams.delete('tradeMethodCode');
+			url.searchParams.delete('qualityCode');
+			url.searchParams.delete('location');
+			url.searchParams.delete('minPrice');
+			url.searchParams.delete('maxPrice');
+			url.searchParams.delete('sellStatusCode');
+			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do" + url.search;
+		}); // click
+		
+		// 전체 조회
+		$("#btnAllSearch").click(function () {
+			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do";
+		}); // click
 	}); // $(document).ready(function() { })
+	
+	// 검색을 위한 null 체크
+	function chkNull() {
+		if($("#keyword").val().trim() != "") {
+// 			if($("#chkDeptAll").is(":checked")) {
+// 				$(".dept").prop("disabled", "disabled");
+// 			} // end if
+			disableInput();
+			$("#frmBoard").submit();
+		} // end if
+	} // chkNull
+	
+	// form submit시 null인 거 안 넘어가게
+	function disableInput() {
+		if($("#selCategoryUpper").val() == null || $("#selCategoryUpper").val().trim() == '') {
+			$("#selCategoryUpper").prop("disabled", "disabled");
+			$("#selCategoryLower").prop("disabled", "disabled");
+		} // end if
+		if($("#selCategoryLower").val() == null || $("#selCategoryLower").val().trim() == '') {
+			$("#selCategoryLower").prop("disabled", "disabled");
+		} // end if
+		if($("#startDate").val() == null || $("#startDate").val().trim() == '') {
+			$("#startDate").prop("disabled", "disabled");
+		} // end if
+		if($("#endDate").val() == null || $("#endDate").val().trim() == '') {
+			$("#endDate").prop("disabled", "disabled");
+		} // end if
+		
+		if($("#tradeMethodCode").val() == null || $("#tradeMethodCode").val().trim() == '') {
+			$("#tradeMethodCode").prop("disabled", "disabled");
+		} // end if
+		if($("#qualityCode").val() == null || $("#qualityCode").val().trim() == '') {
+			$("#qualityCode").prop("disabled", "disabled");
+		} // end if
+		if($("#location").val() == null || $("#location").val().trim() == '') {
+			$("#location").prop("disabled", "disabled");
+		} // end if
+		if($("#minPrice").val() == null || $("#minPrice").val().trim() == '') {
+			$("#minPrice").prop("disabled", "disabled");
+		} // end if
+		if($("#maxPrice").val() == null || $("#maxPrice").val().trim() == '') {
+			$("#maxPrice").prop("disabled", "disabled");
+		} // end if
+		if($("#sellStatusCode").val() == null || $("#sellStatusCode").val().trim() == '') {
+			$("#sellStatusCode").prop("disabled", "disabled");
+		} // end if
+	} // disableInput
 </script>
 
 </head>
@@ -72,7 +192,80 @@
 		<div class="card-inner-group">
 			<div class="card-inner position-relative card-tools-toggle">
 				<div class="card-title-group">
-					<div class="card-tools" data-select2-id="67">
+					<div class="card-tools">
+						<div class="form-inline flex-nowrap gx-5">
+							<div class="row gy-4">
+								<div class="col-sm-1">
+									<div class="btn-wrap">
+										<span class="d-none d-md-block">
+											<input type="button" class="btn btn-light" id="btnAllSearch" value="전체 조회">
+										</span>
+									</div>
+								</div>
+								<hr style="color:#ffffff"/>
+								<div class="col-sm-2">
+									<div class="form-wrap">
+										<div class="input-group-prepend" style="width:180px;">
+											<select id="gender" class="form-select js-select2" name="gender">
+												<option value="">모든 성별</option>
+												<option value="M"${param.tradeMethodCode eq 'M' ? " selected='selected'" : ""}>남자</option>
+												<option value="F"${param.tradeMethodCode eq 'F' ? " selected='selected'" : ""}>여자</option>
+											</select>
+										</div>	
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-wrap">
+										<div class="input-group-prepend" style="width:180px;">
+											<select id="loginFlag" class="form-select js-select2" name="loginFlag">
+												<option value="">모든 로그인 타입</option>
+												<option value="N"${param.qualityCode eq 'N' ? " selected='selected'" : ""}>일반 회원</option>
+												<option value="S"${param.qualityCode eq 'S' ? " selected='selected'" : ""}>소셜 회원</option>
+											</select>
+										</div>	
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<div class="form-control-wrap">
+											<div class="input-daterange date-picker-range input-group">
+												<div class="input-group-addon">가입일</div>
+												<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}">
+												<div class="input-group-addon"> ~ </div>
+												<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-wrap">
+										<div class="input-group-prepend" style="width:180px;">
+											<select id="memStatus" class="form-select js-select2" name="memStatus">
+												<option value="">모든 회원 상태</option>
+												<option value="N"${param.sellStatusCode eq 'N' ? " selected='selected'" : ""}>일반</option>
+												<option value="S"${param.sellStatusCode eq 'S' ? " selected='selected'" : ""}>정지</option>
+												<option value="W"${param.sellStatusCode eq 'W' ? " selected='selected'" : ""}>탈퇴</option>
+											</select>
+										</div>	
+									</div>
+								</div>
+								<hr style="color:#ffffff"/>
+								<div class="col-sm-1">
+									<div class="btn-wrap">
+										<span class="d-none d-md-block">
+											<input type="button" class="btn btn-dim btn-primary" id="btnFilter" value="적용하기">
+										</span>
+									</div>
+								</div>
+								<div class="col-sm-1">
+									<div class="btn-wrap">
+										<span class="d-none d-md-block">
+											<input type="button" class="btn btn-outline-secondary" id="resetFilter" value="초기화">
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="card-tools me-n1">
 						<ul class="btn-toolbar gx-s1">
@@ -88,77 +281,77 @@
 													<em class="icon ni ni-arrow-left"></em>
 												</a>
 											</li>
-											<li>
-												<div class="dropdown">
-													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-														<div class="dot dot-primary"></div>
-														<em class="icon ni ni-filter-alt"></em>
-													</a>
-													<div class="filter-wg dropdown-menu dropdown-menu-end" style="min-width:200px;max-width:200px;">
-														<div class="dropdown-head">
-															<span class="sub-title dropdown-title">필터</span>
-														</div>
-														<div class="dropdown-body dropdown-body-rg">
-															<div class="row gx-6 gy-3">
-																<div class="col-12">
-																	<div class="form-group">
-																		<label class="overline-title overline-title-alt">상태 선택</label>
-																		<select class="form-select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true">
-																			<option value="any">모든 상태</option>
-																			<option value="n">일반</option>
-																			<option value="s">정지</option>
-																			<option value="w">탈퇴</option>
-																			<option value="sw">정지 + 탈퇴</option>
-																		</select>
-																	</div>
-																</div>
-																<div class="col-12">
-																	<div class="form-group">
-																		<button type="button" class="btn btn-secondary">Filter</button>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="dropdown-foot between">
-															<a class="clickable" href="#">초기화</a>
-														</div>
-													</div>
-												</div>
-											</li>
-											<li>
-												<div class="dropdown">
-													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-														<em class="icon ni ni-setting"></em>
-													</a>
-													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-														<ul class="link-check">
-															<li>
-																<span>리스트 수</span>
-															</li>
-															<li class="active">
-																<a href="#">10</a>
-															</li>
-															<li>
-																<a href="#">20</a>
-															</li>
-															<li>
-																<a href="#">50</a>
-															</li>
-														</ul>
-														<ul class="link-check">
-															<li>
-																<span>정렬</span>
-															</li>
-															<li class="active">
-																<a href="#">내림차순</a>
-															</li>
-															<li>
-																<a href="#">오름차순</a>
-															</li>
-														</ul>
-													</div>
-												</div>
-											</li>
+<!-- 											<li> -->
+<!-- 												<div class="dropdown"> -->
+<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
+<!-- 														<div class="dot dot-primary"></div> -->
+<!-- 														<em class="icon ni ni-filter-alt"></em> -->
+<!-- 													</a> -->
+<!-- 													<div class="filter-wg dropdown-menu dropdown-menu-end" style="min-width:200px;max-width:200px;"> -->
+<!-- 														<div class="dropdown-head"> -->
+<!-- 															<span class="sub-title dropdown-title">필터</span> -->
+<!-- 														</div> -->
+<!-- 														<div class="dropdown-body dropdown-body-rg"> -->
+<!-- 															<div class="row gx-6 gy-3"> -->
+<!-- 																<div class="col-12"> -->
+<!-- 																	<div class="form-group"> -->
+<!-- 																		<label class="overline-title overline-title-alt">상태 선택</label> -->
+<!-- 																		<select class="form-select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true"> -->
+<!-- 																			<option value="any">모든 상태</option> -->
+<!-- 																			<option value="n">일반</option> -->
+<!-- 																			<option value="s">정지</option> -->
+<!-- 																			<option value="w">탈퇴</option> -->
+<!-- 																			<option value="sw">정지 + 탈퇴</option> -->
+<!-- 																		</select> -->
+<!-- 																	</div> -->
+<!-- 																</div> -->
+<!-- 																<div class="col-12"> -->
+<!-- 																	<div class="form-group"> -->
+<!-- 																		<button type="button" class="btn btn-secondary">Filter</button> -->
+<!-- 																	</div> -->
+<!-- 																</div> -->
+<!-- 															</div> -->
+<!-- 														</div> -->
+<!-- 														<div class="dropdown-foot between"> -->
+<!-- 															<a class="clickable" href="#">초기화</a> -->
+<!-- 														</div> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 											</li> -->
+<!-- 											<li> -->
+<!-- 												<div class="dropdown"> -->
+<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
+<!-- 														<em class="icon ni ni-setting"></em> -->
+<!-- 													</a> -->
+<!-- 													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end"> -->
+<!-- 														<ul class="link-check"> -->
+<!-- 															<li> -->
+<!-- 																<span>리스트 수</span> -->
+<!-- 															</li> -->
+<!-- 															<li class="active"> -->
+<!-- 																<a href="#">10</a> -->
+<!-- 															</li> -->
+<!-- 															<li> -->
+<!-- 																<a href="#">20</a> -->
+<!-- 															</li> -->
+<!-- 															<li> -->
+<!-- 																<a href="#">50</a> -->
+<!-- 															</li> -->
+<!-- 														</ul> -->
+<!-- 														<ul class="link-check"> -->
+<!-- 															<li> -->
+<!-- 																<span>정렬</span> -->
+<!-- 															</li> -->
+<!-- 															<li class="active"> -->
+<!-- 																<a href="#">내림차순</a> -->
+<!-- 															</li> -->
+<!-- 															<li> -->
+<!-- 																<a href="#">오름차순</a> -->
+<!-- 															</li> -->
+<!-- 														</ul> -->
+<!-- 													</div> -->
+<!-- 												</div> -->
+<!-- 											</li> -->
 										</ul>
 									</div>
 								</div>
@@ -186,14 +379,14 @@
 						<div class="nk-tb-col" style="width:8%;">
 							<span class="sub-text">번호</span>
 						</div>
+						<div class="nk-tb-col tb-col-xs">
+							<span class="sub-text">닉네임</span>
+						</div>
 						<div class="nk-tb-col">
 							<span class="sub-text">아이디</span>
 						</div>
 						<div class="nk-tb-col">
 							<span class="sub-text">이름</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="sub-text">닉네임</span>
 						</div>
 						<div class="nk-tb-col tb-col-xs">
 							<span class="sub-text">최근 로그인</span>
@@ -213,17 +406,17 @@
 							<div class="user-card">
 								<div class="user-avatar bg-primary"><span></span></div>
 								<div class="user-info">
-									<span class="tb-lead">memberkim</span>
+									<span class="tb-amount"><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do">김닉</a></span>
 								</div>
 							</div>
 						</div>
 						<div class="nk-tb-col tb-col">
+							<span class="tb-lead">memberkim</span>
+						</div>
+						<div class="nk-tb-col tb-col-xs">
 							<span class="tb-lead">김회원</span>
 						</div>
 						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">김닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
 							<span>2024.07.05 11:12:13</span>
 						</div>
 						<div class="nk-tb-col tb-col-xs">
@@ -233,259 +426,6 @@
 							<span class="tb-status text-success">일반</span>
 						</div>
 					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">2</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-info"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberlee</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">이회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">이닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">3</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-warning"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberpark</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">박회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">박닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">4</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-success"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberchoi</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">최회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">최닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">5</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-primary"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberjung</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">정회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">정닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">6</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-success"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberkang</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">강회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">강닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">7</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-warning"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberjoe</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">조회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">조닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">8</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-info"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberyoon</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">윤회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">윤닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">9</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-light"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberjang</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">장회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">장닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-warning">정지</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">10</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-secondary"><span></span></div>
-								<div class="user-info">
-									<span class="tb-lead">memberlim</span>
-								</div>
-							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">임회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-amount">임닉</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-danger">탈퇴</span>
-						</div>
-					</div>
-					
 				</div>
 			</div>
 			<div class="card-inner">
@@ -522,7 +462,6 @@
 							<div class="input-group">
 								<div class="input-group-prepend" style="width:80px;">
 						 			<select class="form-select js-select2">
-										<option value="name">이름</option>
 										<option value="id">아이디</option>
 										<option value="nick">닉네임</option>
 									</select>
@@ -550,12 +489,12 @@
 </div>
 </div>
 <!-- dashlite 시작-->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
 <!-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script>
-<div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
+<!-- <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div> -->
 <!-- dashlite 끝-->
 <script type="text/javascript">
 	$(function() {

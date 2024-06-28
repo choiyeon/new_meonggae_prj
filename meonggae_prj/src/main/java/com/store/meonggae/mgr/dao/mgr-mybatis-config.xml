@@ -17,6 +17,8 @@
   	<typeAlias type="com.store.meonggae.mgr.dashboard.vo.VisitorDatepickVO" alias="visitorDateVO"/>
   	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.VisitorGraphDomain" alias="visitorGrpDomain"/>
   	<typeAlias type="com.store.meonggae.mgr.dashboard.domain.VisitorDomain" alias="visitorDomain"/>
+  	<typeAlias type="com.store.meonggae.mgr.manager.vo.ManagerSearchVO" alias="managerSearchVO"/>
+  	<typeAlias type="com.store.meonggae.mgr.manager.domain.MgrManagerDomain" alias="mgrManagerDomain"/>
   </typeAliases>
   <environments default="development">
     <environment id="development">
@@ -32,5 +34,8 @@
   <mappers>
     <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrLoginMapper.xml"/>
     <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrDashboardMapper.xml"/>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrManagerMapper.xml"/>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrReviewMapper.xml"/>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrGoodsMapper.xml"/>
   </mappers>
 </configuration>
