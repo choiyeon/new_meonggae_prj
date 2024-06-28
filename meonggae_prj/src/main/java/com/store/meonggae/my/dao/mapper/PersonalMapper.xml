@@ -11,9 +11,9 @@ from    MEMBER_DETAIL
 where   MEM_NUM='${memnum}'
 </select>
 
-<!-- 개인정보 -->
+<!-- 개인정보 조회 -->
 <select id="selectPersonal" resultType="personalDomain" parameterType="String">
-select	NAME, ADDR, ADDR_DETAIL addrDetail, TEL
+select	NAME, ADDR, ADDR_DETAIL addrDetail, TEL, ZIPCODE
 from    MEMBER_DETAIL
 where   MEM_NUM='${memnum}'
 </select>
@@ -23,6 +23,43 @@ where   MEM_NUM='${memnum}'
 update	MEMBER_DETAIL
 set		PASS='${pass}'
 where   MEM_NUM='${memNum}'
+</update>
+
+<!-- 닉네임 중복확인 -->
+<select id="selectNick" resultType="String" parameterType="String">
+select	nick
+from	member
+where	nick='${nick}'
+</select>
+
+<!-- 개인정보 수정 -->
+
+<!-- member_detail 테이블 -->
+<update id="updateMemberDetail" parameterType="piVO">
+update	MEMBER_DETAIL
+set     ADDR='${addr0}', ADDR_DETAIL='${addr1}', ZIPCODE='${zipcode}', TEL='${tel}'
+where   MEM_NUM='${memnun}'
+</update>
+
+<!-- member 테이블 : 닉네임O -->
+<update id="updateMemberNick" parameterType="piVO">
+update	MEMBER
+set     NICK='${nick}', IMG='${profile}'
+where   MEM_NUM='${memnun}'
+</update>
+
+<!-- member 테이블 : 닉네임X -->
+<update id="updateMember" parameterType="piVO">
+update	MEMBER
+set     NICK='${nick}'
+where   MEM_NUM='${memnun}'
+</update>
+
+<!-- 탈퇴 -->
+<update id="quitMember" parameterType="String">
+update	MEMBER
+set		MEM_STATUS='W'
+where   mem_num='${memnun}'
 </update>
 
 </mapper>

@@ -26,10 +26,30 @@
 <script type="text/javascript">
 	$(function(){
 		$("#quitMemberBtn").click(function(){
-			alert("탈퇴처리되었습니다.");
 			
-			//메인으로
-			location.href="";
+			if(!confirm("탈퇴하시겠습니까?")){
+				return;
+			}//if
+			
+			$.ajax({
+				url: "http://localhost/meonggae_prj/My/mypage/personal/quitProcess.do",
+				type: "GET",
+				dataType: "JSON",
+				error: function(xhr){
+					console.log(xhr.status);
+				},
+				success: function(data){
+					var result = data.result;
+					if(result == "success"){
+						alert("탈퇴 완료되었습니다.");
+						location.href="http://localhost//meonggae_prj/index.do";
+					}else{
+						alert("로그인이 필요한 서비스입니다.");
+						location.href="http://localhost//meonggae_prj/index.do";
+					}//else
+					
+				}//success
+			});//ajax
 		});
 		
 		$("#mainBtn").click(function(){
