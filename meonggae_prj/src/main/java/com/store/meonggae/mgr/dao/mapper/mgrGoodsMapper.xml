@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.goods">
+	<resultMap type="com.store.meonggae.mgr.goods.domain.MgrGoodsDomain" id="mgrGoodsDomResult">
+		<result column="GOODS_NUM" property="goodsNum"/>
+		<result column="TITLE" property="title"/>
+		<result column="DETAIL" property="detail"/>
+		<result column="PRICE" property="price"/>
+		<result column="LOCATION" property="location"/>
+		<result column="IMG" property="img"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="TIME_AGO" property="timeAgo"/>
+		<result column="CATEGORY_NUM" property="categoryNum"/>
+		<result column="PARENT_CATEGORY_NUM" property="parentCategoryNum"/>
+		<result column="TRADE_METHOD_CODE" property="tradeMethodCode"/>
+		<result column="QUALITY_CODE" property="qualityCode"/>
+		<result column="SELL_STATUS_CODE" property="sellStatusCode"/>
+		<result column="MEM_NUM_SELL" property="memNumSell"/>
+		<result column="NICK_SELL" property="nickSell"/>
+		<result column="MEM_NUM_BUY" property="memNumBuy"/>
+		<result column="NICK_BUY" property="nickBuy"/>
+		<result column="DELIVERY_FEE" property="deliveryFee"/>
+		<result column="STEAM_CNT" property="steamCnt"/>
+		<result column="CNT" property="cnt"/>
+		<result column="PROFILE_IMG" property="profileImg"/>
+		<result column="DELETE_FLAG" property="flagDelete"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.goods.domain.MgrOtherGoodsDomain" id="mgrOtherGoodsDomResult">
+		<result column="GOODS_NUM" property="goodsNum"/>
+		<result column="IMG" property="img"/>
+		<result column="PRICE" property="price"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.goods.domain.MgrSellerReviewDomain" id="mgrSellerReviewDomResult">
+		<result column="MEM_NUM_SELL" property="memNumSell"/>
+		<result column="STAR" property="star"/>
+		<result column="CONTENT" property="content"/>
+		<result column="IMG" property="img"/>
+		<result column="NICK" property="nick"/>
+		<result column="TIME_AGO" property="timeAgo"/>
+	</resultMap>
+	
+	<!-- 게시판 리스트의 수 -->
+	<select id="selectOneListCnt" resultType="int" parameterType="com.store.meonggae.mgr.goods.vo.MgrGoodsSearchVO">
+		select	count(*) cnt
+		from	(
+				select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy
+				from	(
+						select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+								case
+									when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+									else '오늘'
+								end time_ago,
+								gi.name img,
+								c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+								g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY
+						from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+						where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+						) j, member m
+				where	j.mem_num_buy = m.mem_num(+)
+				)
+		<where>
+			<choose>
+				<when test="field eq 0">
+					NICK_SELL like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 1">
+					title like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 2">
+					detail like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 3">
+					nick_buy like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose> 
+			<choose>
+				<when test="categoryNum neq null">
+					and category_num = #{categoryNum}
+				</when>
+				<otherwise> 
+					<if test="parentCategoryNum neq null">
+						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+					</if>
+				</otherwise>
+			</choose>
+			
+			<if test="startDate neq null">
+				and input_date &gt;= #{startDate} 
+			</if>
+			<if test="endDate neq null">
+				and input_date &lt;= #{endDate} 
+			</if>
+			
+			<if test="tradeMethodCode neq null">
+				and TRADE_METHOD_CODE = #{tradeMethodCode} 
+			</if>
+			
+			<if test="qualityCode neq null">
+				and QUALITY_CODE = #{qualityCode} 
+			</if>
+			
+			<if test="location neq null">
+				and location like '%' || #{location} || '%' 
+			</if>
+			
+			<if test="minPrice neq null">
+				and price &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice neq null">
+				and price &lt;= #{maxPrice}
+			</if>
+			
+			<if test="sellStatusCode neq null">
+				and SELL_STATUS_CODE = #{sellStatusCode} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- 게시판 리스트 목록 조회 -->
+	<select id="selectListGoods" resultMap="mgrGoodsDomResult" parameterType="com.store.meonggae.mgr.goods.vo.MgrGoodsSearchVO">
+		select	rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,
+				decode(delete_flag, 'Y', 1, 'N', 0, 0) delete_flag
+		from	(
+				select	row_number() over (order by input_date desc) rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,delete_flag
+				from	(
+						select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy,delete_flag
+						from	(
+								select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+										case
+											when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+											else '오늘'
+										end time_ago,
+										gi.name img,
+										c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+										g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY, g.delete_flag
+								from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+								where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+								) j, member m
+						where	j.mem_num_buy = m.mem_num(+)
+						)
+				<where>
+					<choose>
+						<when test="field eq 0">
+							NICK_SELL like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 1">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 2">
+							detail like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 3">
+							nick_buy like '%' || #{keyword} || '%'
+						</when>
+						<otherwise>
+							1 = 1
+						</otherwise>
+					</choose> 
+					<choose>
+						<when test="categoryNum neq null">
+							and category_num = #{categoryNum}
+						</when>
+						<otherwise> 
+							<if test="parentCategoryNum neq null">
+								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+							</if>
+						</otherwise>
+					</choose>
+					
+					<if test="startDate neq null">
+						and input_date &gt;= #{startDate} 
+					</if>
+					<if test="endDate neq null">
+						and input_date &lt;= #{endDate} 
+					</if>
+					
+					<if test="tradeMethodCode neq null">
+						and TRADE_METHOD_CODE = #{tradeMethodCode} 
+					</if>
+					
+					<if test="qualityCode neq null">
+						and QUALITY_CODE = #{qualityCode} 
+					</if>
+					
+					<if test="location neq null">
+						and location like '%' || #{location} || '%' 
+					</if>
+					
+					<if test="minPrice neq null">
+						and price &gt;= #{minPrice}
+					</if>
+					<if test="maxPrice neq null">
+						and price &lt;= #{maxPrice}
+					</if>
+					
+					<if test="sellStatusCode neq null">
+						and SELL_STATUS_CODE = #{sellStatusCode} 
+					</if>
+				</where>				
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 게시판 목록 하나 조회 -->
+	<select id="selectOneGoods" resultMap="mgrGoodsDomResult" parameterType="String">
+		select	GOODS_NUM,NAME title,DETAIL,PRICE,DELIVERY_FEE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,profile_Img,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy, nvl(steam_cnt, 0) steam_cnt,nvl(cnt, 0) cnt,
+				decode(delete_flag, 'Y', 1, 'N', 0, 0) delete_flag
+		from	(
+				select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.DELIVERY_FEE, g.LOCATION, g.INPUT_DATE,
+						case
+							when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+							else '오늘'
+						end time_ago,
+						gi.name img,
+						c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+						m.img profile_Img, g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY, st.steam_cnt, g.cnt, g.delete_flag
+				from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi,
+						(
+						select	goods_num, count(mem_num) steam_Cnt
+						from	steam
+						where	steam_flag='Y'
+						group by goods_num
+						) st
+				where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM and st.goods_num(+) = g.goods_num
+				) j, member m
+		where	j.mem_num_buy = m.mem_num(+) and goods_num = #{goodsNum}
+	</select>
+	
+	<!-- 물품 삭제 -->
+	<delete id="deleteOneGoods" parameterType="String">
+		update	goods
+		set		delete_flag = 'Y', delete_date = sysdate
+		where	goods_num=#{goodsNum}
+	</delete>
+	
+	<!-- 판매자의 추가 판매 물품 조회 -->
+	<select id="selectListOtherGoods" resultMap="mgrOtherGoodsDomResult" parameterType="int">
+		select	GOODS_NUM, img, price
+		from	(
+				select	row_number() over (order by g.input_date desc) rnum, g.GOODS_NUM, gi.name img, g.price
+				from	goods g, member m, goods_img gi
+				where	(g.mem_num_sell = m.mem_num and gi.GOODS_NUM = g.GOODS_NUM) and
+						m.mem_num = #{memNum}
+				)
+		where	rnum between 1 and 6
+	</select>
+	
+	<!-- 물품의 판매자에게 달린 후기 조회 -->
+	<select id="selectListSellerReview" resultMap="mgrSellerReviewDomResult" parameterType="int">
+		select	MEM_NUM_SELL,CONTENT,STAR,IMG,NICK,TIME_AGO
+		from	(
+				select	row_number() over (order by r.input_date desc) rnum, g.mem_num_Sell, r.content, s.star, m.img, m.nick,
+						case
+							when trunc(r.input_date) = trunc(sysdate) then '오늘'
+							else trunc(sysdate) - trunc(r.input_date) || '일 전'
+						end time_ago
+				from	review r, member m, star_rate s, goods g
+				where	r.GOODS_NUM = g.GOODS_NUM and s.GOODS_NUM(+) = g.GOODS_NUM and s.MEM_NUM(+) = g.MEM_NUM_BUY and r.MEM_NUM = m.MEM_NUM
+						and g.mem_num_sell = #{mem_num_sell}
+				)
+		where	rnum between 1 and 3
+	</select>
+</mapper>

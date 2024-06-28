@@ -38,8 +38,14 @@
 
 <script type="text/javascript">
 	$(function() {
-		
+		// 닫기 -> 리스트로
+		$("#btnClose").click(function() {
+			let url = new URL(location.href);
+			url.searchParams.delete('managerId');
+			location.href = "${pageContext.request.contextPath}/mgr/manager/mgr_manager_list_frm.do" + url.search;
+		}); // click
 	}); // $(document).ready(function() { })
+	
 </script>
 
 </head>
@@ -92,7 +98,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">이름</span>
-								<span class="data-value">김관리</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.name }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -100,7 +106,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">생년월일</span>
-								<span class="data-value">1999.12.31</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.birth }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -108,7 +114,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">전화번호</span>
-								<span class="data-value">010-1234-5678</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.tel }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -116,7 +122,16 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">성별</span>
-								<span class="data-value">남</span>
+								<span class="data-value">
+								<c:choose>
+									<c:when test="${requestScope.mgrManagerDomain.gender eq 'F' }">
+									여
+									</c:when>
+									<c:otherwise>
+									남
+									</c:otherwise>
+								</c:choose>
+								</span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -124,7 +139,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">주소</span>
-								<span class="data-value">서울시 강남구 테헤란로 132 한독약품빌딩 8층 (역삼동)</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.addr1} ${' '} ${requestScope.mgrManagerDomain.addr2 }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -137,7 +152,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">아이디</span>
-								<span class="data-value">managerkim</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.managerId }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -145,7 +160,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">닉네임</span>
-								<span class="data-value">김관리자</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.nick }"/></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -153,7 +168,22 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">권한</span>
-								<span class="data-value">사용자 관리의 모든 권한</span>
+								<span class="data-value">
+								<c:choose>
+									<c:when test="${requestScope.mgrManagerDomain.permission eq '11' }">
+										모든 권한
+									</c:when>
+									<c:when test="${requestScope.mgrManagerDomain.permission eq '10' }">
+										사용자 관리 권한
+									</c:when>
+									<c:when test="${requestScope.mgrManagerDomain.permission eq '01' }">
+										문의, 후기 권한
+									</c:when>
+									<c:otherwise>
+										대시보드 조회 권한
+									</c:otherwise>
+								</c:choose>
+								</span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -161,7 +191,24 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label">입사일</span>
-								<span class="data-value">2024.06.02</span>
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.inputDate }"/></span>
+							</div>
+							<div class="data-col data-col-end">
+							</div>
+						</div>
+						<div class="data-item">
+							<div class="data-col">
+								<span class="data-label">매니저명</span>
+								<span class="data-value">
+								<c:choose>
+									<c:when test="${requestScope.mgrManagerDomain.parentManagerName eq null or requestScope.mgrManagerDomain.parentManagerName eq ''}">
+										-
+									</c:when>
+									<c:otherwise>
+										<c:out value="${requestScope.mgrManagerDomain.parentManagerName }"/>
+									</c:otherwise>
+								</c:choose>
+								</span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -171,11 +218,10 @@
 				<div class="col-md-6" style="margin:0px auto; padding-top:10px;">
 					<div class="col-md-6" style="margin:0px auto;">
 						<div class="form-group text-center">
-							<button type="button" class="btn btn-lg btn-light">닫기</button>
+							<button type="button" class="btn btn-lg btn-light" id="btnClose">닫기</button>
 						</div>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	</div>	

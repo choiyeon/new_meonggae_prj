@@ -29,36 +29,27 @@
 
 <script type="text/javascript">
 	$(function(){
+		//확인버튼
 		$("#applyBtn").click(function(){
 			var ext = $("#upfile").val();
 			
-			if(ext ==""){
-				alert("파일을 선택 해 주세요!!!!!!!!");
-				return;
-			}//end if
+			if(ext == ""){ //파일이 없으면 파일이 없는채로 insert
+				chkNull();
+			}
+			if(ext != ""){ //파일이 있을 때
+				var fileExtension = ext.substring(ext.lastIndexOf(".")+1).toUpperCase();
+				if(!(fileExtension == "JPG" || fileExtension == "PNG" || fileExtension == "JPEG")){
+					alert("업로드 불가능한 파일입니다.");
+					return;
+				}//end if
+				chkNull();
+			}
 			
-			var fileExtension = ext.substring(ext.lastIndexOf(".")+1).toUpperCase();
-			
-			if(!(fileExtension == "JPG" || fileExtension == "PNG" || fileExtension == "JPEG")){
-				alert("업로드 불가능한 파일입니다.");
-				return;
-			}//end if
-			
-			
-			if(confirm("수정된 정보를 적용하시겠습니까?")){
-				$("#fileFrm").submit();
-				//alert("적용되었습니다.");
-			}//end if
 		});
 		
-		$("#applyBtn1").click(function(){
-			
-				$("#fileFrm").submit();
-		});
-		
-		// 취소버튼
-		$("#quitBtn").click(function(){
-			location.href="http://localhost/meonggae_prj/My/mypage/personal/quitMembership_frm.do";
+		// 닉네임 변경
+		$("#nickChkBtn").click(function(){
+			chkNick();
 		});
 		
 		// 비밀번호 변경
@@ -66,27 +57,108 @@
 			pwModify();
 		});
 		
+		// 회원탈퇴
+		$("#quitBtn").click(function(){
+			location.href = "quitMember.do";
+		});
+		
 		//우편번호 검색
 	    $("#zipcode").click(function(){
 	    	zipcodeApi();
 	    });
+		
 		//우편번호 추가 검색
 	    $("#addChk").click(function(){
 	    	zipcodeApi();
 	    });
 		
-		
-		
 	});//ready
 	
-	function pwModify(){
-		var option = "width=400, height=260, scrollbars=no";
+	function chkNull(){
 		
+		var nickname = $("#nickname").val();
+		var phoneNumber = $("#phoneNumber").val();
+		var zipcode = $("#zipcode").val();
+		var addr0 = $("#addr0").val();
+		var addr1 = $("#addr1").val();
+		
+		if(nickname == ""){
+			alert("닉네임을 입력해주세요.");
+			return;
+		}
+		if(phoneNumber == ""){
+			alert("전화번호를 입력해주세요.");
+			return;
+		}
+		if(zipcode == ""){
+			alert("우편번호를 입력해주세요.");
+			return;
+		}
+		if(addr0 == ""){
+			alert("주소를 입력해주세요.");
+			return;
+		}
+		if(addr1 == ""){
+			alert("상세주소를 입력해주세요.");
+			return;
+		}//else
+		
+		submit();
+	}//chkNull
+	
+	function submit(){
+		if(confirm("수정된 정보를 적용하시겠습니까?")){
+			//$("#personalFrm").submit();
+			//alert("적용되었습니다.");
+			
+			var form = $('#personalFrm')[0];
+			var formData = new FormData(form);
+			
+			$.ajax({
+				url: "http://localhost/meonggae_prj/My/mypage/personal/update_personal_info_process.do",
+				type: "POST",
+				data: formData,
+				dataType: "JSON",
+				contentType : false,
+				processData : false,
+				error: function(request, status, error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(data){
+					if(data.result == "success"){
+						alert("변경되었습니다.");
+						location.href = location.href;
+					}
+					if(data.result == "noSession"){
+						alert("로그인이 필요한 서비스입니다.");
+						location.href="http://localhost/meonggae_prj/index.do";
+					}
+					if(data.result == "tooBig"){
+						alert("업로드한 파일의 크기가 큽니다. 다른 이미지를 올려주세요.")
+					}
+				}//success
+			});//ajax    
+
+		}//end if
+	}//chkNull
+	
+	function chkNick(){
+		window.open("http://localhost/meonggae_prj/My/mypage/personal/chkNick.do",
+				"닉네임 중복확인",
+				"width=501, height=281");
+	}//pwModify
+	
+	function pwModify(){
 		window.open("http://localhost/meonggae_prj/My/mypage/personal/passwordModify.do",
 				"비밀번호 변경",
-				"width=401, height=261");
-				//"width=400, height=260, top="+(window.screenY+100)+", left="+(window.screenX+100)+", scrollbars=no");
+				"width=501, height=276");
 	}//pwModify
+	
+	const autoHyphen = (target) => {
+	    target.value = target.value
+	     .replace(/[^0-9]/g, '')
+	     .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+	}//자동하이픈
 	
 	//다음 우편번호 API 설정
 	function zipcodeApi() {
@@ -133,7 +205,7 @@
 		<!-- 메뉴목록 -->
 	</div>
 	
-	<form id="fileFrm" action="upload_profile_process.do" method="post" enctype="multipart/form-data" >
+	<form id="personalFrm" method="post" enctype="multipart/form-data" >
 	<table class="pTable" id="pTable">
 		<tr>
 			<td id="tableTitle1" class="tableTitle1">프로필 사진</td>
@@ -158,7 +230,7 @@
 		<tr>
 			<td id="tableTitle2" class="tableTitle2">닉네임</td>
 			<td>
-			<input type="text" id="nickname" class="nickname" name="nickname" value="${ user.nick }" maxlength="12"/>
+			<input type="text" id="nickname" class="nickname" name="nickname" value="${ user.nick }" readonly/>
 			<input type="button" value="닉네임 중복확인" id="nickChkBtn" class="btn btn-success"/>
 			</td>
 		</tr>
@@ -171,14 +243,13 @@
 		<tr>
 			<td id="tableTitle3" class="tableTitle3">전화번호</td>
 			<td>
-			<input type="text" value="${ pDomain.tel }" id="phoneNumber" name="phoneNumber" class="phoneNumber" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/><br/>
-			<div id="imgGuide">전화번호는 -를 제외하고 입력해주세요.</div>
+			<input type="tel" value="${ pDomain.tel }" id="phoneNumber" name="phoneNumber" class="phoneNumber" maxlength="13" onfocus="this.placeholder=''" oninput="autoHyphen(this)" pattern="010-[0-9]{3,4}-[0-9]{4}" autocomplete="off"/><br/>
 			</td>
 		</tr>
 		<tr>
 			<td id="tableTitle3" class="tableTitle3">우편번호</td>
 			<td>
-				<input data-value="우편번호를 입력해주세요." type="text" class="zipcode essential" id="zipcode" name="zipcode" value="" readonly="readonly" maxlength="100" />
+				<input data-value="우편번호를 입력해주세요." type="text" class="zipcode essential" id="zipcode" name="zipcode" value="${ pDomain.zipcode }" readonly="readonly" maxlength="100" />
 				<div class="space"></div>
 				<input type="button" value="우편번호검색" class="btn btn-outline-dark" id="addChk"/>
 			</td>
@@ -187,14 +258,13 @@
 			<td id="tableTitle3" class="tableTitle3">주소</td>
 			<td class="addr_td">
 				<input data-value="주소를 입력해주세요." type="text" id="addr0" class="addr essential" name="addr0" value="${ pDomain.addr }" readonly="readonly" maxlength="100" size="50"/><br />
-				<input data-value="상세주소를 입력해주세요." type="text" id="addr1" class="addr essential" name="addr1" value="${ pDomain.addrDetail }" style="margin-top:7px;" size="50"/>
+				<input data-value="상세주소를 입력해주세요." type="text" id="addr1" class="addr essential" name="addr1" value="${ pDomain.addrDetail }" style="margin-top:7px;" size="50" maxlength="100" />
 			</td>
 		</tr>
 	</table>
 	<br>
 	<div id="btnWrap">
 	<input type="button" value="적용" id="applyBtn" class="btn btn-danger btn-lg"/>
-	<input type="button" value="취소" id="cancleBtn" class="btn btn-secondary btn-lg"/>
 	</div>
 	</form>
 	

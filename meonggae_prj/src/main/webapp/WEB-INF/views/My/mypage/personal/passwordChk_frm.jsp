@@ -41,7 +41,10 @@
 						passwordChkSuccess();
 					}else{
 						passwordChkSuccess();
-						/* $("#chkFail").show(); */
+						/* for(var i=0; i<5 ; i++){
+							$("#chkFail").fadeToggle(500);
+						}//for
+							$("#chkFail").fadeIn(500); */
 					}//else
 				}//success
 			});//ajax

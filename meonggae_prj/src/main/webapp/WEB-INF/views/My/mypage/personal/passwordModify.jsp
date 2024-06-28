@@ -7,6 +7,7 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
+			location.href="http://localhost/meonggae_prj/My/mypage/personal/close.do";
 		</script>
 	</c:when>
 	<c:otherwise>
@@ -40,7 +41,7 @@
 				alert("입력하신 비밀번호가 다릅니다. 다시 확인하고 입력해주세요.")
 			}else{
 				if(confirm("비밀번호를 변경할까요?")){
-					$("#modiftPw").submit();
+					$("#modifyPw").submit();
 					alert("변경되었습니다");
 				}//end if
 			}//end else
@@ -54,7 +55,7 @@
 </script>
 </head>
 <body>
-<form id="modiftPw" action="http://localhost/meonggae_prj/My/mypage/personal/doPasswordModify.do" method="get">
+<form id="modifyPw" action="http://localhost/meonggae_prj/My/mypage/personal/doPasswordModify.do" method="get">
 	<div id="back">
 		<div id="title">비밀번호 변경</div>
 		<div id="subTitle">안전한 비밀번호로 내 정보를 보호하세요</div>

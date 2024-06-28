@@ -2,18 +2,24 @@ package com.store.meonggae.my.domain;
 
 public class PersonalDomain {
 	
-	private String name, addr, addrDetail, tel;
-
-	@Override
-	public String toString() {
-		return "PersonalDomain [name=" + name + ", addr=" + addr + ", addrDetail=" + addrDetail + ", tel=" + tel + "]";
+	private String name, addr, addrDetail, tel, zipcode;
+	
+	public PersonalDomain() {
 	}
 
-	public PersonalDomain(String name, String addr, String addrDetail, String tel) {
+	public PersonalDomain(String name, String addr, String addrDetail, String tel, String zipcode) {
+		super();
 		this.name = name;
 		this.addr = addr;
 		this.addrDetail = addrDetail;
 		this.tel = tel;
+		this.zipcode = zipcode;
+	}
+
+	@Override
+	public String toString() {
+		return "PersonalDomain [name=" + name + ", addr=" + addr + ", addrDetail=" + addrDetail + ", tel=" + tel
+				+ ", zipcode=" + zipcode + "]";
 	}
 
 	public String getName() {
@@ -46,6 +52,14 @@ public class PersonalDomain {
 
 	public void setTel(String tel) {
 		this.tel = tel;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
 	}
 	
 }
