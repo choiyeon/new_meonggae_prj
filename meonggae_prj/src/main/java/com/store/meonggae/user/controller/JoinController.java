@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.store.meonggae.user.join.service.JoinService;
 import com.store.meonggae.user.join.vo.JoinVO;
@@ -33,27 +34,17 @@ public class JoinController {
 
 	// 회원 등록
 	@RequestMapping(value = "memJoin.do", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
-	public String insertJoin(JoinVO joinVO) {
-		System.out.println(joinVO);
+	public RedirectView insertJoin(JoinVO joinVO) {
 		int memResult = joinService.insertMem(joinVO.getNick());
 		int detailResult = joinService.insertMemDetail(joinVO);
-		System.out.println("insertJoin 입장~");
+		System.out.println("insertJoin 입장~ : "+joinVO);
 
 		String result = "false";
 		if (memResult == 1 && detailResult == 1) {
 			result = "true";
 		}
-//		String redirectUrl = "join_page/mem_join_result.do?result=" + result;
-//		return new RedirectView(redirectUrl);
-		//링크 연결 다시 확인
-		return "join_page/mem_join.do?result=" + result;
+		String redirectUrl = "join_page/mem_join.do?result=" + result;
+		return new RedirectView(redirectUrl);
 	}// insertJoin
-
-	// 회원 등록 결과 페이지 이동
-//	@GetMapping("/main_page/search_contents.do")
-//	public String memJoinResult(@RequestParam(name = "result", required = false) String result, Model model) {
-//		model.addAttribute("result", result);
-//		return "/join_page/mem_join_result";
-//	}
 
 }
