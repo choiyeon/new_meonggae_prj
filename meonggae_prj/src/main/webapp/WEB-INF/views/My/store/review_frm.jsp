@@ -98,7 +98,7 @@ String nick = request.getParameter("nick");
 		</div>
 		<div id="userInfo" class="userInfo">
 			<div id="nick" class="nick"><%= nick %>님의 상점</div>
-			<a href="#void" id="userDeclaration"><i class="fa fa-exclamation"></i> 신고</a>
+			<!-- <a href="#void" id="userDeclaration"><i class="fa fa-exclamation"></i> 신고</a> -->
 		</div>
 	</div>
 	<div id="storeMenu" class="storeMenu">
@@ -120,9 +120,9 @@ String nick = request.getParameter("nick");
 			
 			<hr style="color: #606060;">
 			<c:forEach var="i" items="${listReview}">
-				<div class="reviewerName">${i.writer}</div>
-				<span class="stars">★</span><span class="scoreFont">${ i.starScore }점</span>
-				<div class="reviewContent">${i.content}</div>
+				<div class="reviewerName"><c:out value="${i.writer}"/></div>
+				<span class="stars">★</span><span class="scoreFont"><c:out value="${ i.starScore }점"/></span>
+				<div class="reviewContent"><c:out value="${i.content}"/></div>
 			<hr>
 			</c:forEach>
 			

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.Inquiry">
+
+<!-- 문의 카테고리 조회 -->
+<select id="category" resultType="inquiryCategoryDomain">
+select	inquiry_category_num categoryNum, name
+from    inquiry_category
+</select>
+
+<!-- 문의 insert/프로시저 -->
+<select id="insertInquiry" parameterType="iqVO" statementType="CALLABLE">
+{
+	call insert_inquiry(
+	#{ memnum, mode=IN, jdbcType=NUMERIC },
+	#{ category, mode=IN, jdbcType=VARCHAR },
+	#{ title, mode=IN, jdbcType=VARCHAR },
+	#{ content, mode=IN, jdbcType=CLOB },
+	#{ cntMem, mode=OUT, jdbcType=NUMERIC },
+	#{ cntMgr, mode=OUT, jdbcType=NUMERIC },
+	#{ errMsg, mode=OUT, jdbcType=VARCHAR }
+	)
+}
+</select>
+
+<!-- 문의 목록 -->
+<select id="selectInquiryList" parameterType="String" resultType="inquiryDomain">
+select	INQUIRY_NUM inquiryNum, TITLE, ANSWER_FLAG answerFlag, INPUT_DATE inputDate
+from    INQUIRY
+where   DELETE_FLAG='N'
+		and MEM_NUM='${memnum}'
+order by INPUT_DATE desc
+</select>
+
+<select id="selectInquiryOne" parameterType="String" resultType="inquiryDetailDomain">
+select	i.MEM_NUM writerNum, i.TITLE, ic.NAME category, i.CONTENTS, i.INPUT_DATE inputDate, 		i.ANSWER_FLAG answerFlag, i.ANSWER_CONTENTS answerContents, i.ANSWER_DATE answerDate, 		i.DELETE_FLAG deleteFlag
+from	INQUIRY i, INQUIRY_CATEGORY ic
+where	i.INQUIRY_CATEGORY_NUM=ic.INQUIRY_CATEGORY_NUM
+		and i.DELETE_FLAG='N'
+		and INQUIRY_NUM='${inquiryNum}'
+</select>
+
+</mapper>
+

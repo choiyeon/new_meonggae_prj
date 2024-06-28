@@ -25,8 +25,8 @@ public class DibsService {
 		try {
 			list = dsDAO.selectAllDibsList(memNum);
 		} catch (PersistenceException pe) {
-				pe.printStackTrace();
-			}//end catch
+			pe.printStackTrace();
+		}//end catch
 		
 		return list;
 	}//searchDibsList
