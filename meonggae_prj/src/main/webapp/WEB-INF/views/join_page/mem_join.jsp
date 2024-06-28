@@ -45,13 +45,21 @@
 <jsp:include page="../header/header.jsp" />
 <!-- header 끝 -->
 
+<c:choose>
+	<c:when test="${ not empty result && result == 'true' }">
+		<script>
+			alert("회원가입 되었습니다.");
+			location.href="http://localhost/meonggae_prj/index.do";
+		</script>
+	</c:when>
+	<c:when test="${ not empty result && result == 'false' }">
+		<script>
+			alert("회원가입에 실패했습니다. 잠시후 다시 시도해주세요.");
+			location.href="http://localhost/meonggae_prj/index.do";
+		</script>
+	</c:when>
+</c:choose>
 <div class="container" style="height:100%">
-<c:if test="${ not empty result && result == 'true' }">
-	<script>
-	alert("회원가입 되었습니다.");
-	location.href="http://localhost/meonggae_prj/index.do";
-	</script>
-</c:if>
 <!-- 회원가입 시작 -->
 <form name="frm" id="frm" action="http://localhost/meonggae_prj/memJoin.do" method="post">
         <!-- 이용약관 시작 -->
