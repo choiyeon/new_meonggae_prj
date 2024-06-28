@@ -24,35 +24,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
 
-<!-- DB연동으로 중복확인 -->
-<%--
-<% 
-String paramId = request.getParameter("id");
-if(paramId != null){
-// 	JoinMemDAO jmDAO = JoinMemDAO.getInstance();
-	try{
-		Boolean result = jmDAO.selectDupId(paramId);
-// 		true면 중복, false면 사용가능
-		if(result == false){
-			
-		} else{
-			pageContext.setAttribute("flag", result);
-		}
-	}catch(SQLException e){
-		e.printStackTrace();
-		out.println("죄송합니다. 잠시후 다시 시도해주세요.");
-	}//end catch
-}
-%>
---%>
-
 </head>
 <body onload="document.board.id.focus();">
 
 <div id="wrap">
 	<div id="member" class="idCheck_wrap">
 		<div id="mpop">
-			<form name="board" method="post" action="id_dup.jsp">
+			<form name="board" method="get" action="id_dup.do">
 					<h2>ID CHECK <span>아이디 중복확인</span></h2>
 					<p>사용하고자 하는 아이디를 입력해주세요. <br />아이디 중복확인 후 사용 가능한 아이디로 선택해주세요.</p>
 					<div class="bgBox">
@@ -71,7 +49,7 @@ if(paramId != null){
 						<c:if test="${ not empty param.id }">
 							입력하신 아이디 [<strong><c:out value="${ param.id }"/></strong>]는<br>
 						<c:choose>
-							<c:when test="${ pageScope.flag }">
+							<c:when test="${ result eq true }">
 								사용<strong style="color:#E53E30"> 불가능</strong>합니다.
 							</c:when>
 							<c:otherwise>

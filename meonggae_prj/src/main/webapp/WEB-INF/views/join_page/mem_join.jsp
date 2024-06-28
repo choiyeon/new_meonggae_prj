@@ -135,15 +135,15 @@
 						<input data-value="아이디를 입력해주세요." name="id" id="id" class="inputTxt inputIdtype essential" type="text" maxlength="20"  />
 						<div class="space"></div>
 						<input type="button" value="ID 중복확인"class="btn btn-outline-dark" id="idChk"/>
-						<span>*아이디를 영문, 숫자를 사용하여 5~12자 이내로 입력해주세요.</span>
+						<span>*아이디를 영문, 숫자를 모두 포함하여 5~12자 이내로 입력해주세요.</span>
 						<div class="error_text item_style" id="idMsg" style="display: none;"></div>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="password">비밀번호</label></th>
 					<td>
-						<input data-value="비밀번호를 입력해주세요." name="password" id="password" class="inputPass size02 essential" type="password"  />
-						<span>*영문, 숫자, 특수문자 3가지를 조합하여 6~12자 이내로 입력해주세요.</span>
+						<input data-value="비밀번호를 입력해주세요." name="password" id="password" class="inputPass size02 essential" type="password" />
+						<span>*영문, 숫자, 특수문자 3가지를 모두 포함하여 6~12자 이내로 입력해주세요.</span>
 						<div class="error_text item_style" id="passwordMsg" style="display: none;"></div>
 					</td>
 				</tr>
@@ -157,7 +157,7 @@
 				<tr>
 					<th><label for="name">이름</label></th>
 					<td>
-						<input data-value="이름을 입력해주세요." id="name" name="name" class="inputTxt inputName essential" type="text"/>
+						<input data-value="이름을 입력해주세요." id="name" name="name" class="inputTxt inputName essential" type="text" maxlength="15"/>
 						<div class="error_text item_style" id="nameMsg" style="display: none;"></div>
 					</td>
 				</tr>
@@ -174,8 +174,10 @@
 				<tr>
 					<th scope="row"><label for="">생년월일</label></th>
 					<td >
-						<input type="text" name="birthday" id="datepicker" class="essential">
-						<span id="CalregistdateIcon"></span>
+						<input type="text" name="birthday" id="datepicker" class="essential" readonly="readonly">
+						<span id="CalregistdateIcon"> 
+							<span class="fa fa-calendar" id="cReqDate"></span>
+						</span>
 						<div class="error_text item_style" id="datepickerMsg" style="display: none;"></div>
 					</td>
 				</tr>
@@ -197,7 +199,7 @@
 				<tr>
 					<th><label for="zipcode">우편번호</label></th>
 					<td>
-						<input data-value="우편번호를 입력해주세요." type="text" class="zipcode essential" id="zipcode" name="zipcode" value="" readonly="readonly"/>
+						<input data-value="우편번호를 입력해주세요." type="text" class="zipcode essential" id="zipcode" name="zipcode" value="" readonly="readonly" maxlength="5"/>
 						<div class="space"></div>
 						<input type="button" value="우편번호검색"class="btn btn-outline-dark" id="addChk"/>
 						<div class="error_text item_style" id="zipcodeMsg" style="display: none;"></div>
@@ -206,10 +208,10 @@
 				<tr>
 					<th><label for="addr0">주소</label></th>
 					<td class="addr_td">
-						<input data-value="주소를 입력해주세요." type="text" id="addr0" class="addr essential" name="addr0" value="" readonly="readonly" /><br />
-						<input data-value="상세주소를 입력해주세요." type="text" id="addr1" class="addr essential" name="addr1" value="" style="margin-top:7px;" />
+						<input data-value="주소를 입력해주세요." type="text" id="addr0" class="addr essential" name="addr0" value="" readonly="readonly" maxlength="100"/><br />
+						<input data-value="상세주소를 입력해주세요." type="text" id="addr1" class="addr essential" name="addr1" value="" style="margin-top:7px;" maxlength="100"/>
 						<div class="error_text item_style" id="addr0Msg" style="display: none;"></div>
-						<div class="error_text item_style" id="addr10Msg" style="display: none;"></div>
+						<div class="error_text item_style" id="addr1Msg" style="display: none;"></div>
 					</td>
 				</tr>
 			</table>
