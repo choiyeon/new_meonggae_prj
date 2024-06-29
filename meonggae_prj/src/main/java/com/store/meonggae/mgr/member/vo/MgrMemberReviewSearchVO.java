@@ -1,10 +1,11 @@
-package com.store.meonggae.mgr.member.domain;
-
-import java.sql.Date;
+package com.store.meonggae.mgr.member.vo;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
@@ -13,8 +14,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberDomain {
+public class MgrMemberReviewSearchVO {
+	private int startNum,endNum;
+	private String field, keyword, currentPage;
+	private String startDate, endDate;
 	private int memNum;
-	private String nick, memId, name, img, memStatus, loginFlag;
-	private Date recentLoginDate, joinDate;
 }

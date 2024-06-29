@@ -3,7 +3,7 @@
 	info="관리자 - 물품 관리 - 물품 상세 조회"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%request.setCharacterEncoding("UTF-8");%>
 <%/*
 작성자: 김동섭
@@ -183,14 +183,21 @@
 										</div> <c:out value="${goodsDomain.nickSell}"/>
 									</button>
 									<div class="seller-other-products">
-										<c:forEach var="otherGoodsDomain" items="#{requestScope.listOtherGoods }" varStatus="i">
-											<div class="other-product">
-												<a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?&goodsNum=${otherGoodsDomain.goodsNum}">
-													<img src="${pageContext.request.contextPath}/products-img/${ otherGoodsDomain.img }" alt="" class="other-product-thumbnail">
-													<span class="other-product-price"><fmt:formatNumber value="${otherGoodsDomain.price }" pattern="#,###" />원</span>
-												</a>
-											</div>
-										</c:forEach>
+										<c:choose>
+											<c:when test="${requestScope.listOtherGoods eq null or fn:length(requestScope.listOtherGoods) eq 0}">
+												<h6>판매자의 다른 상품이 없습니다</h6>
+											</c:when>
+											<c:otherwise>
+												<c:forEach var="otherGoodsDomain" items="#{requestScope.listOtherGoods }" varStatus="i">
+													<div class="other-product">
+														<a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?&goodsNum=${otherGoodsDomain.goodsNum}">
+															<img src="${pageContext.request.contextPath}/products-img/${ otherGoodsDomain.img }" alt="" class="other-product-thumbnail">
+															<span class="other-product-price"><fmt:formatNumber value="${otherGoodsDomain.price }" pattern="#,###" />원</span>
+														</a>
+													</div>
+												</c:forEach>
+											</c:otherwise>
+										</c:choose>
 									</div>
 									<div class="other-products-more">
 										<a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do?field=0&keyword=${goodsDomain.nickSell}">판매자의 상품 더보기 ></a>

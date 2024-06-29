@@ -1,6 +1,4 @@
-package com.store.meonggae.mgr.member.domain;
-
-import java.sql.Date;
+package com.store.meonggae.mgr.member.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberDomain {
+public class MgrMemberSuspendVO {
 	private int memNum;
-	private String nick, memId, name, img, memStatus, loginFlag;
-	private Date recentLoginDate, joinDate;
+	private String unsuspendDate, suspendPeriod;
 }
