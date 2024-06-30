@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
+import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
+import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO;
@@ -132,4 +136,46 @@ public class MgrMemberDAO {
 		return list;
 	} // selectListLoginLog
 	
+	// 검색된 회원의 문의 목록 수
+	public int selectOneInquiryListCnt(MgrMemberInquiySearchVO sVO) {
+		
+		int totalCnt = 0;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneInquiryCnt", sVO);
+		
+		return totalCnt;
+	} // selectOneMemberLoginLogCount
+	
+	// 검색된 회원의 리뷰 목록 리스트
+	public List<MgrMemberInqiryDomain> selectListInquiry(MgrMemberInquiySearchVO sVO) {
+		List<MgrMemberInqiryDomain> list = null;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		list = ss.selectList("com.store.meonggae.mgr.member.selectListInquiry", sVO);
+		
+		return list;
+	} // selectListLoginLog
+	
+	// 검색된 회원의 신고 목록 수
+	public int selectOneReportListCnt(MgrMemberReportSearchVO sVO) {
+		
+		int totalCnt = 0;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneReportCnt", sVO);
+		
+		return totalCnt;
+	} // selectOneReportListCnt
+	
+
+	// 검색된 회원의 신고 목록 리스트
+	public List<MgrMemberReportDomain> selectListReport(MgrMemberReportSearchVO sVO) {
+		List<MgrMemberReportDomain> list = null;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		list = ss.selectList("com.store.meonggae.mgr.member.selectListReport", sVO);
+		
+		return list;
+	} // selectListReport
 } // class

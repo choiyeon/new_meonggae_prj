@@ -37,9 +37,10 @@
 	$(function() {
 		// 닫기 -> 리스트로
 		$("#btnClose").click(function() {
-			let url = new URL(location.href);
-			url.searchParams.delete('goodsNum');
-			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do" + url.search;
+// 			let url = new URL(location.href);
+// 			url.searchParams.delete('goodsNum');
+// 			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do" + url.search;
+			history.back();
 		}); // click
 		
 		// 삭제

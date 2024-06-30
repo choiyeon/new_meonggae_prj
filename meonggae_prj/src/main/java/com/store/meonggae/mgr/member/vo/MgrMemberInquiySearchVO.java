@@ -1,13 +1,10 @@
 package com.store.meonggae.mgr.member.vo;
 
+import com.store.meonggae.mgr.common.vo.MgrSearchVO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-
-import com.store.meonggae.mgr.common.vo.MgrSearchVO;
-
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
@@ -16,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberReviewSearchVO extends MgrSearchVO {
-	private String startDate, endDate;
+public class MgrMemberInquiySearchVO extends MgrSearchVO{
+	private String startDate, endDate, answerFlag;
 	private int memNum;
 }

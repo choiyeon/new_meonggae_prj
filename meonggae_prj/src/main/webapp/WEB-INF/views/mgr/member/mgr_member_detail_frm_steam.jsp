@@ -13,7 +13,7 @@
 					<div class="tab-pane active show" id="tabItem6" role="tabpanel">
 						<div class="row g-gs">
 							<c:choose>
-								<c:when test="${requestScope.list ne null or fn:length(requestScope.list) eq 0}">
+								<c:when test="${requestScope.list eq null or fn:length(requestScope.list) eq 0}">
 									<h6>찜 목록이 없습니다</h6>
 								</c:when>
 								<c:otherwise>

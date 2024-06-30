@@ -50,6 +50,21 @@
 		<result column="TIME_AGO" property="timeAgo"/>
 		<result column="INPUT_DATE" property="inputDate"/>
 	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain" id="mgrMemberInquiryDomResult">
+		<result column="TITLE" property="title"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="ANSWER_FLAG" property="answerFlag"/>
+		<result column="ANSWER_DATE" property="answerDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberReportDomain" id="mgrMemberReportDomResult">
+		<result column="TITLE" property="title"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="NICK_SELL" property="nickSell"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="PROCESS_STATUS_CODE" property="processStatusCode"/>
+		<result column="PROCESS_DATE" property="processDate"/>
+	</resultMap>
 	
 	<!-- 게시판 리스트의 수 -->
 	<select id="selectOneListCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSearchVO">
@@ -267,12 +282,22 @@
 	</select>
 	
 	<!-- 리뷰 목록 게시판 리뷰 리스트 -->
-	<select id="selectListReview" resultMap="com.store.meonggae.mgr.dao.mapper.mgrReviewMapper.mgrReviewDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO">
-		select	GOODS_NUM,MEM_NUM_SELL,MEM_NUM_BUY,NICK_SELL,NICK_BUY,GOODS_TITLE,GOODS_IMG,CATEGORY_NUM,CATEGORY_NAME,PARENT_CATEGORY_NUM,PARENT_CATEGORY_NAME,CONTENT,STAR,DELETE_FLAG,REVIEW_INPUT_DATE,GOODS_INPUT_DATE,SELL_DATE
+	<select id="selectListReview" resultMap="com.store.meonggae.mgr.review.mgrReviewDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO">
+		select	GOODS_NUM,
+				case
+					when length(GOODS_TITLE) &gt; 20 then substr(GOODS_TITLE, 1, 17) || '...'
+					else GOODS_TITLE
+				end GOODS_TITLE,
+				GOODS_IMG, MEM_NUM_SELL, NICK_SELL,
+				case
+					when length(content) &gt; 15 then substr(CONTENT, 1, 12) || '...'
+					else content
+				end content, 
+				MEM_NUM_BUY, NICK_BUY, STAR, REVIEW_INPUT_DATE, DELETE_FLAG
 		from	(
-				select	row_number() over(order by REVIEW_INPUT_DATE desc) rnum, GOODS_NUM,MEM_NUM_SELL,MEM_NUM_BUY,NICK_SELL,NICK_BUY,GOODS_TITLE,GOODS_IMG,CATEGORY_NUM,CATEGORY_NAME,PARENT_CATEGORY_NUM,PARENT_CATEGORY_NAME,CONTENT,STAR,DELETE_FLAG,REVIEW_INPUT_DATE,GOODS_INPUT_DATE,SELL_DATE
+				select	row_number() over(order by REVIEW_INPUT_DATE desc) rnum, GOODS_NUM, GOODS_TITLE, GOODS_IMG, MEM_NUM_SELL, NICK_SELL, CONTENT, MEM_NUM_BUY, NICK_BUY, STAR, REVIEW_INPUT_DATE, DELETE_FLAG
 				from	VIEW_MGR_REVIEW
-				whee	mem_num_buy = #{memNum} 
+				where	mem_num_buy = #{memNum} 
 						<choose>
 							<when test="field eq 0">
 								and GOODS_TITLE like '%' || #{keyword} || '%'
@@ -289,6 +314,164 @@
 						</if>
 						<if test="endDate neq null">
 							and review_input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 문의 목록 게시판 리스트의 수 -->
+	<select id="selectOneInquiryCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO">
+		select	count(*)
+		from	inquiry
+		where	mem_num = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and TITLE like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and CONTENTS like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+				<if test="startDate neq null">
+					and input_date &gt;= #{startDate} 
+				</if>
+				<if test="endDate neq null">
+					and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+				</if>
+				<if test="answerFlag neq null">
+					<choose>
+						<when test="answerFlag eq 1">
+							and answer_Flag = 'N'
+						</when>
+						<when test="answerFlag eq 2">
+							and answer_Flag = 'Y'
+						</when>
+					</choose>
+				</if>
+	</select>
+	
+	<!-- 문의 목록 게시판 리스트 -->
+	<select id="selectListInquiry" resultMap="mgrMemberInquiryDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO">
+		select	rnum,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+		from	(
+				select	row_number() over(order by input_date desc) RNUM,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+				from	inquiry
+				where	mem_num = #{memNum} 
+						<choose>
+							<when test="field eq 0">
+								and TITLE like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and CONTENTS like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+						<if test="startDate neq null">
+							and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+						</if>
+						<if test="endDate neq null">
+							and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+						<if test="answerFlag neq null">
+							<choose>
+								<when test="answerFlag eq 1">
+									and answer_Flag = 'N'
+								</when>
+								<when test="answerFlag eq 2">
+									and answer_Flag = 'Y'
+								</when>
+							</choose>
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 신고 목록 게시판 리스트의 수 -->
+	<select id="selectOneReportCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO">
+		select	count(*)
+		from	report r, member m, goods g
+		where	r.goods_num = g.goods_num and g.MEM_NUM_SELL = m.mem_num
+				and r.MEM_NUM_REP = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and r.TITLE like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and r.CONTENTS like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 2">
+						and m.nick like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 3">
+						and g.name like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 4">
+						and g.detail like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+				<if test="startDate neq null">
+					and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+				</if>
+				<if test="endDate neq null">
+					and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+				</if>
+				<if test="processStatusCode neq null">
+					<choose>
+						<when test="processStatusCode eq 1">
+							and r.PROCESS_STATUS_CODE = '00'
+						</when>
+						<when test="processStatusCode eq 2">
+							and r.PROCESS_STATUS_CODE not in ('00', '11')
+						</when>
+						<when test="processStatusCode eq 3">
+							and r.PROCESS_STATUS_CODE = '11'
+						</when>
+					</choose>
+				</if>
+	</select>
+	
+	<!-- 신고 목록 게시판 리스트 -->
+	<select id="selectListReport" resultMap="mgrMemberReportDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO">
+		select	TITLE,CONTENTS,NICK_SELL,INPUT_DATE,PROCESS_STATUS_CODE,PROCESS_DATE
+		from	(
+				select	row_number() over(order by r.input_date desc) rnum, r.title, r.CONTENTS, m.nick nick_sell, r.INPUT_DATE, r.PROCESS_STATUS_CODE, r.PROCESS_DATE
+				from	report r, member m, goods g
+				where	r.goods_num = g.goods_num and g.MEM_NUM_SELL = m.mem_num
+						and r.MEM_NUM_REP = #{memNum} 
+						<choose>
+							<when test="field eq 0">
+								and r.TITLE like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and r.CONTENTS like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 2">
+								and m.nick like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 3">
+								and g.name like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 4">
+								and g.detail like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+						<if test="startDate neq null">
+							and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+						</if>
+						<if test="endDate neq null">
+							and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+						<if test="processStatusCode neq null">
+							<choose>
+								<when test="processStatusCode eq 1">
+									and r.PROCESS_STATUS_CODE = '00'
+								</when>
+								<when test="processStatusCode eq 2">
+									and r.PROCESS_STATUS_CODE not in ('00', '11')
+								</when>
+								<when test="processStatusCode eq 3">
+									and r.PROCESS_STATUS_CODE = '11'
+								</when>
+							</choose>
 						</if>
 				)
 		where	rnum between #{startNum} and #{endNum}

@@ -12,10 +12,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
 import com.store.meonggae.mgr.member.service.MgrMemberService;
+import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
+import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO;
@@ -134,13 +138,83 @@ public class MgrMemberController {
 	
 	@GetMapping("/mgr/member/mgr_member_detail_frm_report.do")
 	public String searchOneMemberReport(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
-			@RequestParam(required=false, defaultValue="0") int t) {
+			@RequestParam(required=false, defaultValue="2") int t, MgrMemberReportSearchVO sVO) {
+		
+		List<MgrMemberReportDomain> list = null;
+		
+		// 총 레코드의 수 얻기
+		int totalCount = mmService.getReportTotalCount(sVO);
+		// 한 화면에 보여줄 게시물의 수
+		int pageScale = mmService.getPageScale();
+		// 총 페이지수
+		int totalPage = mmService.getTotalPage(totalCount, pageScale);
+		// 현재 페이지
+		int currentPage = mmService.getCurrentPage(sVO);
+		
+		// 게시물의 시작 번호
+		int startNum = mmService.getStartNum(currentPage, pageScale);
+		// 게시물의 끝번호
+		int endNum = mmService.getEndNum(startNum, pageScale);
+
+		sVO.setStartNum(startNum);
+		sVO.setEndNum(endNum);
+		
+		list = mmService.searchListReport(sVO);
+
+		String param = "";
+		if(sVO.getKeyword() != null) {
+			param = "&t=2&memNum=" + memNum;
+		} // end if
+		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pageScale", pageScale);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageNation", pageNation);
+		model.addAttribute("list", list);
+		
 		return "mgr/member/mgr_member_detail_frm_report";
 	}
 	
 	@GetMapping("/mgr/member/mgr_member_detail_frm_inquiry.do")
 	public String searchOneMemberInquiry(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
-			@RequestParam(required=false, defaultValue="0") int t) {
+			@RequestParam(required=false, defaultValue="3") int t, MgrMemberInquiySearchVO sVO) {
+		
+		List<MgrMemberInqiryDomain> list = null;
+		
+		// 총 레코드의 수 얻기
+		int totalCount = mmService.getInquiryTotalCount(sVO);
+		// 한 화면에 보여줄 게시물의 수
+		int pageScale = mmService.getPageScale();
+		// 총 페이지수
+		int totalPage = mmService.getTotalPage(totalCount, pageScale);
+		// 현재 페이지
+		int currentPage = mmService.getCurrentPage(sVO);
+		
+		// 게시물의 시작 번호
+		int startNum = mmService.getStartNum(currentPage, pageScale);
+		// 게시물의 끝번호
+		int endNum = mmService.getEndNum(startNum, pageScale);
+
+		sVO.setStartNum(startNum);
+		sVO.setEndNum(endNum);
+		
+		list = mmService.searchListInquiry(sVO);
+
+		String param = "";
+		if(sVO.getKeyword() != null) {
+			param = "&t=3&memNum=" + memNum;
+		} // end if
+		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pageScale", pageScale);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageNation", pageNation);
+		model.addAttribute("list", list);
+		
 		return "mgr/member/mgr_member_detail_frm_inquiry";
 	}
 	
@@ -148,39 +222,39 @@ public class MgrMemberController {
 	@GetMapping("/mgr/member/mgr_member_detail_frm_review.do")
 	public String searchOneMemberReview(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
 			@RequestParam(required=false, defaultValue="4") int t, MgrMemberReviewSearchVO sVO) {
-//		List<MgrReviewDomain> list = null;
-//		
-//		// 총 레코드의 수 얻기
-//		int totalCount = mmService.getReviewTotalCount(sVO);
-//		// 한 화면에 보여줄 게시물의 수
-//		int pageScale = mmService.getPageScale();
-//		// 총 페이지수
-//		int totalPage = mmService.getTotalPage(totalCount, pageScale);
-//		// 현재 페이지
-//		int currentPage = mmService.getCurrentPage(sVO);
-//		
-//		// 게시물의 시작 번호
-//		int startNum = mmService.getStartNum(currentPage, pageScale);
-//		// 게시물의 끝번호
-//		int endNum = mmService.getEndNum(startNum, pageScale);
-//
-//		sVO.setStartNum(startNum);
-//		sVO.setEndNum(endNum);
-//		
-//		list = mmService.searchListSteam(sVO);
-//
-//		String param = "";
-//		if(sVO.getKeyword() != null) {
-//			param = "&t=5&memNum=" + memNum;
-//		} // end if
-//		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
-//		
-//		model.addAttribute("totalCount", totalCount);
-//		model.addAttribute("pageScale", pageScale);
-//		model.addAttribute("totalPage", totalPage);
-//		model.addAttribute("currentPage", currentPage);
-//		model.addAttribute("pageNation", pageNation);
-//		model.addAttribute("list", list);
+		List<MgrReviewDomain> list = null;
+		
+		// 총 레코드의 수 얻기
+		int totalCount = mmService.getReviewTotalCount(sVO);
+		// 한 화면에 보여줄 게시물의 수
+		int pageScale = mmService.getPageScale();
+		// 총 페이지수
+		int totalPage = mmService.getTotalPage(totalCount, pageScale);
+		// 현재 페이지
+		int currentPage = mmService.getCurrentPage(sVO);
+		
+		// 게시물의 시작 번호
+		int startNum = mmService.getStartNum(currentPage, pageScale);
+		// 게시물의 끝번호
+		int endNum = mmService.getEndNum(startNum, pageScale);
+
+		sVO.setStartNum(startNum);
+		sVO.setEndNum(endNum);
+		
+		list = mmService.searchListReview(sVO);
+
+		String param = "";
+		if(sVO.getKeyword() != null) {
+			param = "&t=4&memNum=" + memNum;
+		} // end if
+		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pageScale", pageScale);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageNation", pageNation);
+		model.addAttribute("list", list);
 		
 		return "mgr/member/mgr_member_detail_frm_review";
 	}

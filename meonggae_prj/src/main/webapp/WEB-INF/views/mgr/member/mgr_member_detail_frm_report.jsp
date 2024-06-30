@@ -9,430 +9,162 @@
 */%>
 <%@ include file="mgr_member_detail_frm_upper.jsp" %>
 					<!-- 탭3. 신고내역 시작 -->
+					<c:set var="flagIsList" value="${not (requestScope.list eq null or fn:length(requestScope.list) eq 0)}"/>
 					<div class="tab-pane active show" id="tabItem3" role="tabpanel">
 						<div class="card card-stretch">
 							<div class="card-inner-group">
-								<div class="card-inner position-relative card-tools-toggle">
-									<div class="card-title-group" data-select2-id="7">
-										<div class="card-tools" data-select2-id="67">
-											<div class="form-inline flex-nowrap gx-3" data-select2-id="14">
-												<div class="form-wrap w-200px">
-													<div class="input-group-prepend" style="width:180px;">
-														<div class="card-tools shrink-0 d-none d-sm-block">
-															<ul class="nav nav-switch-s2 nav-tabs bg-white">
-																<li class="nav-item">
-																	<div class="form-group">
-																		<div class="form-control-wrap">
-																			<div class="input-daterange date-picker-range input-group" style="float:left; width:300px;">
-																				<div class="input-group-addon">시작일</div>
-																				<div class="form-control-wrap">
-																					<div class="form-icon form-icon-left"><em class="icon ni ni-calendar"></em></div>
-																					<input type="text" class="form-control date-picker" data-date-format="yyyy-mm-dd" maxlength="10">
-																				</div>
+								<form name="frmBoard" id="frmBoard" action="mgr_member_detail_frm.do">
+									<input type="hidden" name="t" value="2"/>
+									<input type="hidden" name="memNum" value="${param.memNum }"/>
+									<div class="card-inner position-relative card-tools-toggle">
+										<div class="card-title-group" data-select2-id="7">
+											<div class="card-tools" data-select2-id="67">
+												<div class="form-inline flex-nowrap gx-3" data-select2-id="14">
+													<div class="form-wrap w-200px">
+														<div class="input-group-prepend" style="width:180px;">
+															<div class="card-tools shrink-0 d-none d-sm-block">
+																<ul class="nav nav-switch-s2 nav-tabs bg-white">
+																	<li class="nav-item">
+																		<div class="card-title-group pb-3 g-2">
+																			<div class="btn-wrap">
+																				<span class="d-none d-md-block">
+																					<input type="button" class="btn btn-light" id="btnAllSearch" value="전체 조회">
+																				</span>
 																			</div>
-																			<div class="input-daterange date-picker-range input-group" style="float:left;width:300px;">
-																				<div class="input-group-addon">종료일</div>
-																				<div class="form-control-wrap">
-																					<div class="form-icon form-icon-left"><em class="icon ni ni-calendar"></em></div>
-																					<input type="text" class="form-control date-picker" data-date-format="yyyy-mm-dd" maxlength="10">
+																		</div>								
+																	</li>
+																	<li class="nav-item" style="margin-left:20px;">
+																		<div class="form-group">
+																			<div class="form-control-wrap">
+																				<div class="input-daterange date-picker-range input-group">
+																					<div class="input-group-addon">신고 등록일</div>
+																					<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}">
+																					<div class="input-group-addon">~</div>
+																					<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}">
 																				</div>
 																			</div>
 																		</div>
-																	</div>
-																</li>
-																<li class="nav-item">
-																	<div class="card-title-group pb-3 g-2">
-																		<div class="card-title card-title-sm">
-																			<h6 class="title">처리상태</h6>
-																		</div>
-																		<div class="card-tools">
-																			<div class="drodown">
-																				<a href="#" class="dropdown-toggle dropdown-indicator btn btn-sm btn-outline-light btn-white" data-bs-toggle="dropdown" aria-expanded="false">전체</a>
-																				<div class="dropdown-menu dropdown-menu-end dropdown-menu-xs" style="">
-																					<ul class="link-list-opt no-bdr">
-																						<li>
-																							<a href="#">
-																								<span>전체</span>
-																							</a>
-																						</li>
-																						<li>
-																							<a href="#">
-																								<span>처리전</span>
-																							</a>
-																						</li>
-																						<li>
-																							<a href="#">
-																								<span>처리완료</span>
-																							</a>
-																						</li>
-																					</ul>
+																	</li>
+																	<li class="nav-item" style="margin-left:20px;">
+																		<div class="form-group">
+																			<div class="form-control-wrap">
+																				<div class="input-group">
+																					<div class="input-group-prepend" style="width:200px;">
+																			 			<select class="form-select js-select2" id="processStatusCode" name="processStatusCode">
+																							<option value="0"${param.processStatusCode eq 0 ? " selected='selected'" : ""}>처리 상태 전체</option>
+																							<option value="1"${param.processStatusCode eq 1 ? " selected='selected'" : ""}>처리 전</option>
+																							<option value="2"${param.processStatusCode eq 2 ? " selected='selected'" : ""}>처리 중</option>
+																							<option value="3"${param.processStatusCode eq 3 ? " selected='selected'" : ""}>처리 완료</option>
+																						</select>
+																					</div>
 																				</div>
 																			</div>
-																		</div>						
-																	</div>								
-																</li>
-																<li class="nav-item" style="margin-left:20px;">
-																	<div class="card-title-group pb-3 g-2">
-																		<div class="btn-wrap">
-																			<span class="d-none d-md-block">
-																				<button class="btn btn-light">적용하기</button>
-																			</span>
 																		</div>
-																	</div>								
-																</li>
-															</ul>
-														</div>								
-													</div>	
+																	</li>
+																	<li class="nav-item" style="margin-left:20px;">
+																		<div class="card-title-group pb-3 g-2">
+																			<div class="btn-wrap">
+																				<span class="d-none d-md-block">
+																					<input type="button" class="btn btn-dim btn-primary" id="btnFilter" value="적용하기">
+																				</span>
+																			</div>
+																		</div>								
+																	</li>
+																	<li class="nav-item" style="margin-left:20px;">
+																		<div class="card-title-group pb-3 g-2">
+																			<div class="btn-wrap">
+																				<span class="d-none d-md-block">
+																					<input type="button" class="btn btn-outline-secondary" id="resetFilter" value="초기화">
+																				</span>
+																			</div>
+																		</div>								
+																	</li>
+																</ul>
+															</div>								
+														</div>	
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="card-tools me-n1">
-											<ul class="btn-toolbar gx-s1">
-												<li>
-													<div class="toggle-wrap">
-														<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
-															<em class="icon ni ni-menu-right"></em>
-														</a>
-														<div class="toggle-content" data-content="cardTools">
-															<ul class="btn-toolbar gx-1">
-																<li>
-																	<div class="dropdown">
-																		<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-																			<em class="icon ni ni-setting"></em>
-																		</a>
-																		<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end" style="">
-																			<ul class="link-check">
-																				<li>
-																					<span>리스트 수</span>
-																				</li>
-																				<li class="active">
-																					<a href="#">10</a>
-																				</li>
-																				<li>
-																					<a href="#">20</a>
-																				</li>
-																				<li>
-																					<a href="#">50</a>
-																				</li>
-																			</ul>
-																			<ul class="link-check">
-																				<li>
-																					<span>정렬</span>
-																				</li>
-																				<li class="active">
-																					<a href="#">내림차순</a>
-																				</li>
-																				<li>
-																					<a href="#">오름차순</a>
-																				</li>
-																			</ul>
-																		</div>
-																	</div>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
 									</div>
-									<div class="card-search search-wrap" data-search="search">
-										<div class="card-body">
-											<div class="search-content">
-												<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
-													<em class="icon ni ni-arrow-left"></em>
-												</a>
-												<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-												<button class="search-submit btn btn-icon">
-													<em class="icon ni ni-search"></em>
-												</button>
+									<div class="card-inner p-0">
+										<div class="nk-tb-list nk-tb-ulist">
+											<div class="nk-tb-item nk-tb-head">
+												<div class="nk-tb-col" style="width:8%;">
+													<span class="sub-text">번호</span>
+												</div>
+												<div class="nk-tb-col tb-col-sm">
+													<span class="sub-text">제목</span>
+												</div>
+												<div class="nk-tb-col tb-col-sm">
+													<span class="sub-text">신고자</span>
+												</div>
+												<div class="nk-tb-col tb-col-mb">
+													<span class="sub-text">판매자</span>
+												</div>
+												<div class="nk-tb-col tb-col-xl">
+													<span class="sub-text">작성일</span>
+												</div>
+												<div class="nk-tb-col tb-col-lg">
+													<span class="sub-text">처리상태</span>
+												</div>
+												<div class="nk-tb-col tb-col-md">
+													<span class="sub-text">처리날짜</span>
+												</div>
 											</div>
+											<c:if test="${flagIsList}">
+											<c:forEach var="reportDomain" items="${requestScope.list }" varStatus="i">
+											<div class="nk-tb-item">
+												<div class="nk-tb-col tb-col-mb">
+													<span class="tb-amount">${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }</span>
+												</div>
+												<div class="nk-tb-col tb-col-mb">
+													<span class="tb-amount"><c:out value="${reportDomain.title }"/></span>
+												</div>
+												<div class="nk-tb-col tb-col-mb">
+													<span class="tb-amount"><c:out value="${requestScope.memberPersonalDomain.nick }"/></span>
+												</div>
+												<div class="nk-tb-col tb-col-mb">
+													<span class="tb-lead"><c:out value="${reportDomain.nickSell }"/></span>
+												</div>
+												<div class="nk-tb-col tb-col-md">
+													<span><fmt:formatDate value="${reportDomain.inputDate}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
+												</div>
+												<div class="nk-tb-col tb-col-md">
+												<c:choose>
+												<c:when test="${reportDomain.processStatusCode eq '00' }">
+													<span class="tb-status text-danger">처리전</span>
+												</c:when>
+												<c:when test="${reportDomain.processStatusCode eq '11' }">
+													<span class="tb-status text-primary">처리 완료</span>
+												</c:when>
+												<c:otherwise>
+													<span class="tb-status text-success">처리중</span>
+												</c:otherwise>
+												</c:choose>
+												</div>
+												<div class="nk-tb-col tb-col-md">
+													<c:choose>
+														<c:when test="${reportDomain.processDate eq null}">
+															<span>-</span>
+														</c:when>
+														<c:otherwise>
+															<span><fmt:formatDate value="${reportDomain.processDate}" pattern="yyyy-MM-dd HH:mm:ss" /></span>
+														</c:otherwise>
+													</c:choose>
+												</div>
+											</div>
+											</c:forEach>
+											</c:if>
 										</div>
+										<c:if test="${not flagIsList}">
+											<h6 style="text-align:center;margin:15px;">조회된 신고가 없습니다</h6>
+										</c:if>
 									</div>
-								</div>
-								<div class="card-inner p-0">
-									<div class="nk-tb-list nk-tb-ulist">
-										<div class="nk-tb-item nk-tb-head">
-											<div class="nk-tb-col" style="width:8%;">
-												<span class="sub-text">번호</span>
-											</div>
-											<div class="nk-tb-col tb-col-sm">
-												<span class="sub-text">제목</span>
-											</div>
-											<div class="nk-tb-col tb-col-sm">
-												<span class="sub-text">신고자</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="sub-text">판매자</span>
-											</div>
-											<div class="nk-tb-col tb-col-xl">
-												<span class="sub-text">작성일</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span class="sub-text">처리상태</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="sub-text">처리날짜</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">1</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">스팸홍보/도배글입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-lead">황닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span>2024.07.08 20:19:20</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span>2024.07.08 20:19:20</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">2</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">스팸홍보/도배글입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">이닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:19</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span>2024.07.08 20:19:20</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">3</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">음란물입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">박닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">4</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">불법 정보를 포함하고 있습니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">최닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:16</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">5</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">청소년에게 유해한 내용입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">정닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:15</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">6</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">욕설/생명경시/혐오/차별적 표현입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">강닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:14</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-danger">처리전</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">7</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">개인정보 노출 게시물입니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">조닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:13</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-success">처리 완료</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">8</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">불쾌한 표현이 있습니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">윤닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:12</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-success">처리 완료</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">9</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">명예훼손 또는 저작권이 침해되었습니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">장닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:11</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-success">처리 완료</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-										<div class="nk-tb-item">
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">10</span>
-											</div>
-											<div class="nk-tb-col">
-												<span class="tb-lead">불법 촬영물 등이 포함되어 있습니다</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">김닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-mb">
-												<span class="tb-amount">임닉</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:10</span>
-											</div>
-											<div class="nk-tb-col tb-col-md">
-												<span class="tb-status text-success">처리 완료</span>
-											</div>
-											<div class="nk-tb-col tb-col-lg">
-												<span>2024.07.08 20:19:17</span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-inner">
+									<div class="card-inner">
 									<div class="nk-block-between-md g-3">
 										<div class="g" style="margin:0px auto;">
-											<ul class="pagination justify-content-center justify-content-md-start">
-												<li class="page-item">
-													<a class="page-link" href="#">처음 페이지로</a>
-												</li>
-												<li class="page-item">
-													<a class="page-link" href="#">&lt;&lt;</a>
-												</li>
-												<li class="page-item">
-													<a class="page-link" href="#">4</a>
-												</li>
-												<li class="page-item active">
-													<a class="page-link" href="#">5</a>
-												</li>
-												<li class="page-item">
-													<a class="page-link" href="#">6</a>
-												</li>
-												<li class="page-item">
-													<a class="page-link" href="#">&gt;&gt;</a>
-												</li>
-												<li class="page-item">
-													<a class="page-link" href="#">마지막 페이지로</a>
-												</li>
-											</ul>
+											${requestScope.pageNation }
 										</div>
 									</div>
 									<div style="margin:0px auto; width:650px; height:70px; text-align:center; padding-top:20px;">
@@ -440,21 +172,116 @@
 											<div class="form-control-wrap">
 												<div class="input-group">
 													<div class="input-group-prepend" style="width:200px;">
-											 			<select class="form-select js-select2 select2-hidden-accessible" data-select2-id="3" tabindex="-1" aria-hidden="true">
-															<option value="title">신고 내용</option>
-															<option value="nick">판매자 닉네임</option>
-															<option value="name">판매 상품명</option>
+											 			<select class="form-select js-select2" id="field" name="field">
+															<option value="0"${param.field eq 0 ? " selected='selected'" : ""}>신고 제목</option>
+															<option value="1"${param.field eq 1 ? " selected='selected'" : ""}>신고 내용</option>
+															<option value="2"${param.field eq 2 ? " selected='selected'" : ""}>판매자 닉네임</option>
+															<option value="3"${param.field eq 3 ? " selected='selected'" : ""}>판매 상품명</option>
+															<option value="4"${param.field eq 4 ? " selected='selected'" : ""}>판매 상품 설명</option>
 														</select>
 													</div>
-													<input type="text" class="form-control" aria-label="Text input with dropdown button">
-													<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색">
+													<input type="text" class="form-control" aria-label="Text input with dropdown button" id="keyword" name="keyword" value="${param.keyword }">
+													<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색" id="btnSearch">
 												</div>
 											</div>
 										</div>				
 									</div>
 								</div>
+								</form>
 							</div>
 						</div>
 					</div>
 					<!-- 탭3. 신고내역 끝 -->
 <%@ include file="mgr_member_detail_frm_lower.jsp" %>
+
+<!-- datepicker 시작-->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script>
+	$( function() {
+		// 기본 사용
+		//$( "#datepicker" ).datepicker();
+		
+		// 옵션 부여
+		$( ".datepicker" ).datepicker({
+			dayNamesMin: [ "일", "월", "화", "수", "목", "금", "토" ], 
+			dateFormat: "yy-mm-dd",
+			monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+			maxDate: "${strDate}",
+			showMonthAfterYear: true
+		});
+	} );
+</script>
+<!-- datepicker 끝-->
+
+<!-- datepicker css 시작 -->
+<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<!-- datepicker css 끝 -->
+
+<style type="text/css">
+	
+	/* datepicker 아이콘 가져오기 */
+   .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+	
+</style>
+
+<script type="text/javascript">
+	$(function() {
+		// 필터 적용 버튼
+		$("#btnFilter").click(function(){
+			if($("#keyword").val() == null || $("#keyword").val().trim() == '') {
+				$("#keyword").prop("disabled", "disabled");
+				$("#field").prop("disabled", "disabled");
+			} // end if
+			disableInput();
+			$("#frmBoard").submit();
+		}); // click
+		
+		// 검색
+		$("#btnSearch").click(function () {
+			chkNull();
+		}); // click
+		
+		// 검색
+		$("#keyword").keydown(function (evt) {
+			if(evt.which == 13) {
+				chkNull();
+			} // end if
+		}); // keydown
+		
+		// 필터 초기화
+		$("#resetFilter").click(function () {
+			let url = new URL(location.href);
+			url.searchParams.delete('startDate');
+			url.searchParams.delete('endDate');
+			url.searchParams.delete('processStatusCode');
+			location.href = "${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do" + url.search;
+		}); // click
+		
+		// 전체 조회
+		$("#btnAllSearch").click(function () {
+			location.href = "${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do?t=2&memNum=${param.memNum}";
+		}); // click
+	}); // $(document).ready(function() { })
+	// 검색을 위한 null 체크
+	function chkNull() {
+		if($("#keyword").val().trim() != "") {
+			disableInput();
+			$("#frmBoard").submit();
+		} // end if
+	} // chkNull
+	
+	// form submit시 null인 거 안 넘어가게
+	function disableInput() {
+		if($("#startDate").val() == null || $("#startDate").val() == '') {
+			$("#startDate").prop("disabled", "disabled");
+		} // end if
+		if($("#endDate").val() == null || $("#endDate").val() == '') {
+			$("#endDate").prop("disabled", "disabled");
+		} // end if
+		if($("#processStatusCode").val() == 0) {
+			$("#processStatusCode").prop("disabled", "disabled");
+		} // end if
+	} // disableInput
+</script>

@@ -9,11 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.meonggae.mgr.common.service.MaskingService;
+import com.store.meonggae.mgr.common.vo.MgrSearchVO;
 import com.store.meonggae.mgr.dao.MgrMemberDAO;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
+import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
+import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
+import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO;
@@ -58,6 +63,20 @@ public class MgrMemberService {
 	
 	// 현재 페이지
 	public int getCurrentPage(MgrMemberSearchVO sVO) {
+		int currentPage = 1;
+		
+		String tempPage = sVO.getCurrentPage();
+		if(tempPage != null) {
+			try {
+				currentPage = Integer.parseInt(tempPage); 
+			} catch (NumberFormatException nfe) {
+			} // end catch
+		} // end if
+		return currentPage;
+	} // getCurrentPage
+	
+	// 현재 페이지
+	public int getCurrentPage(MgrSearchVO sVO) {
 		int currentPage = 1;
 		
 		String tempPage = sVO.getCurrentPage();
@@ -208,7 +227,6 @@ public class MgrMemberService {
 		return currentPage;
 	} // getCurrentPage
 	
-
 	// 검색된 회원의 리뷰 수
 	public int getReviewTotalCount(MgrMemberReviewSearchVO sVO) {
 		int totalCount = 0;
@@ -223,10 +241,60 @@ public class MgrMemberService {
 	} // getLoginLogTotalCount
 	
 	// 검색된 회원의 리뷰 리스트 조회
-	public List<MgrReviewDomain> searchListSteam(MgrMemberReviewSearchVO sVO) {
+	public List<MgrReviewDomain> searchListReview(MgrMemberReviewSearchVO sVO) {
 		List<MgrReviewDomain> list = null;
 		try {
 			list = mmDAO.selectListReview(sVO);
+		} catch(PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return list;
+	} // searchListLoginLog
+	
+	// 검색된 회원의 문의 수
+	public int getInquiryTotalCount(MgrMemberInquiySearchVO sVO) {
+		int totalCount = 0;
+		
+		try {
+			totalCount = mmDAO.selectOneInquiryListCnt(sVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return totalCount;
+	} // getLoginLogTotalCount
+	
+	// 검색된 회원의 문의 리스트 조회
+	public List<MgrMemberInqiryDomain> searchListInquiry(MgrMemberInquiySearchVO sVO) {
+		List<MgrMemberInqiryDomain> list = null;
+		try {
+			list = mmDAO.selectListInquiry(sVO);
+		} catch(PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return list;
+	} // searchListLoginLog
+	
+	// 검색된 회원의 신고 수
+	public int getReportTotalCount(MgrMemberReportSearchVO sVO) {
+		int totalCount = 0;
+		
+		try {
+			totalCount = mmDAO.selectOneReportListCnt(sVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return totalCount;
+	} // getLoginLogTotalCount
+	
+	// 검색된 회원의 신고 리스트 조회
+	public List<MgrMemberReportDomain> searchListReport(MgrMemberReportSearchVO sVO) {
+		List<MgrMemberReportDomain> list = null;
+		try {
+			list = mmDAO.selectListReport(sVO);
 		} catch(PersistenceException pe) {
 			pe.printStackTrace();
 		} // end catch
