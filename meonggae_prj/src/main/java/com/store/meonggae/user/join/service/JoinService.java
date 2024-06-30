@@ -15,13 +15,23 @@ public class JoinService {
 	private JoinDAO joinDAO;
 	
 	//아이디 중복 조회
-	public String chkIdDup(String memId) {
-		return joinDAO.chkIdDup(memId);
+	public boolean chkIdDup(String memId) {
+		boolean flag = false;
+		String result = joinDAO.chkIdDup(memId);
+		if(result != null) {
+			flag=true;
+		}
+		return flag;
 	}//chkIdDup
 	
 	//닉네임 중복 조회
-	public String chkNickDup(String nick) {
-		return joinDAO.chkNickDup(nick);
+	public boolean chkNickDup(String nick) {
+		boolean flag = false;
+		String result = joinDAO.chkNickDup(nick);
+		if(result != null) {
+			flag=true;
+		}
+		return flag;
 	}//chkIdDup
 	
 	//MEMBER insert

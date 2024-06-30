@@ -5,13 +5,8 @@
 function nickChk() { 
 	var obj = document.board;
 	var nick= obj.nick.value;
-	var ko_reg = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,12}$/; //nick: 한글가능할 때
-	if( nick == "" ){
-		alert("닉네임을 한글, 영문, 숫자를 사용하여 1~12자 이내로 입력해주세요.");
-		obj.nick.value="";
-		obj.nick.focus();
-		return;
-	} else if( !ko_reg.test(nick) ){
+    var ko_reg = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]\S{1,12}$/;//한글/영문/숫자 1~12자 이내인지 확인
+	if( !ko_reg.test(nick) ){
 		alert("닉네임을 한글, 영문, 숫자를 사용하여 1~12자 이내로 입력해주세요.");
 		obj.nick.value="";
 		obj.nick.focus();

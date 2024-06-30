@@ -24,33 +24,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <!--jQuery CDN 끝-->
 
-
-<!-- DB연동으로 중복확인 -->
-<%--
-<% 
-
-request.setCharacterEncoding("UTF-8");
-String paramnick = request.getParameter("nick");
-if(paramnick != null){
-	JoinMemDAO jmDAO = JoinMemDAO.getInstance();
-	try{
-		Boolean result = jmDAO.selectDupNick(paramnick);
-// 		true면 중복, false면 사용가능
-		if(result == false){
-		} else{
-			pageContext.setAttribute("flag", result);
-		}
-	}catch(SQLException e){
-		e.printStackTrace();
-	}//end catch
-}
-%>
---%>
-
-
-
-</script>
-
 </head>
 <body onload="document.board.nick.focus();">
 
@@ -58,7 +31,7 @@ if(paramnick != null){
 
 	<div id="member" class="idCheck_wrap">
 		<div id="mpop">
-			<form name="board" method="post" action="nick_dup.jsp">
+			<form name="board" method="get" action="nick_dup.do">
 					<h2>NickName CHECK<br> <span>닉네임 중복확인</span></h2>
 					<p>사용하고자 하는 닉네임를 입력해주세요. <br />닉네임 중복확인 후 사용 가능한 닉네임로 선택해주세요.</p>
 					<div class="bgBox">
@@ -77,7 +50,7 @@ if(paramnick != null){
 						<c:if test="${ not empty param.nick }">
 							입력하신 닉네임 [<strong><c:out value="${ param.nick }"/></strong>]는<br>
 						<c:choose>
-							<c:when test="${ pageScope.flag }">
+							<c:when test="${ result eq true }">
 								사용<strong style="color:#E53E30"> 불가능</strong>합니다.
 							</c:when>
 							<c:otherwise>

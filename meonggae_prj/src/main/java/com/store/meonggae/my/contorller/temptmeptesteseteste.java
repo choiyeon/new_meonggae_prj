@@ -1,5 +1,7 @@
 package com.store.meonggae.my.contorller;
 
+import java.io.File;
+
 import org.apache.logging.log4j.core.util.PasswordDecryptor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -32,15 +34,24 @@ public class temptmeptesteseteste {
 //		String temp1 = "143cd7937d467988b533bfbb75db724c68f31f5351ca198019bf2a823b7318c7";
 //		String temp2 = "qwer1234!";
 		
-		//암호화
-		PasswordEncoder pe = new BCryptPasswordEncoder();
-		String input = "444";
-		String output = pe.encode(input);
-		System.out.println(output);
-		System.out.println(pe.matches(input, output));
+//		//암호화
+//		PasswordEncoder pe = new BCryptPasswordEncoder();
+//		String input = "444";
+//		String output = pe.encode(input);
+//		System.out.println(output);
+//		System.out.println(pe.matches(input, output));
+//		
+//		//복호화
+//		System.out.println(pe.matches("444", output));
 		
-		//복호화
-		System.out.println(pe.matches("444", output));
+		String fileDir = "D:/meonggae_store_prj/meonggae_prj/src/main/webapp/profile-img";
+		
+		File old = new File(fileDir + "/3.jpg");
+		File newFile = new File(fileDir + "/3.png");
+		newFile.delete();
+		old.renameTo(newFile);
+		
+	
 		
 	}
 

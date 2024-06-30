@@ -1,20 +1,14 @@
 package com.store.meonggae.my.service;
 
-import java.util.List;
-
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.store.meonggae.my.dao.DibsDAO;
-import com.store.meonggae.my.dao.MypageMainDAO;
 import com.store.meonggae.my.dao.PersonalDAO;
-import com.store.meonggae.my.domain.GoodsDomain;
 import com.store.meonggae.my.domain.PersonalDomain;
+import com.store.meonggae.my.vo.PersonalInfoVO;
 import com.store.meonggae.my.vo.PwVO;
 
 @Service
@@ -39,7 +33,7 @@ public class PersonalService {
 	}//searchPw
 	
 	/**
-	 * 비번 검색
+	 * 유저 정보 검색
 	 */
 	public PersonalDomain searchPersonal(String memNum){
 		PersonalDomain pDomain = null;
@@ -68,5 +62,34 @@ public class PersonalService {
 		
 		return cnt;
 	}//modifyPw
+	
+	/**
+	 * 닉네임 중복검색
+	 */
+	public boolean searchNick(String inputData) {
+		Boolean flag = false;
+		
+		if(pDAO.selectNick(inputData)) { //사용가능하면
+			flag = true;
+		}//end if
+		
+		return flag; 
+	}//searchNick
+	
+	/**
+	 * 개인정보 수정
+	 */
+	public int modifyPersonalInfo(PersonalInfoVO piVO) {
+		int cnt = pDAO.updatePersonalInfo(piVO);
+		return cnt;
+	}//modifyPersonalInfo
+	
+	/**
+	 * 회원탈퇴
+	 */
+	public int modfiyMemberStatus(String memnum) {
+		int cnt = pDAO.updateMemberStatus(memnum);
+		return cnt;
+	}//modfiyMemberStatus
 	
 }//class

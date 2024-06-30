@@ -2,6 +2,7 @@ package com.store.meonggae.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,15 +20,17 @@ public class JoinController {
 
 	// 아이디 중복확인
 	@GetMapping("/join_page/id_dup.do")
-	public String idDup(@RequestParam("id") String id) {
-		System.err.println(id);
+	public String idDup(@RequestParam("id") String id, Model model) {
+		boolean result = joinService.chkIdDup(id);
+		model.addAttribute("result",result);
 
 		return "join_page/id_dup";
 	}
 
 	@GetMapping("/join_page/nick_dup.do")
-	public String nickDup(@RequestParam("nick") String nick) {
-		System.err.println(nick);
+	public String nickDup(@RequestParam("nick") String nick, Model model) {
+		boolean result = joinService.chkNickDup(nick);
+		model.addAttribute("result",result);
 
 		return "join_page/nick_dup";
 	}
@@ -37,7 +40,6 @@ public class JoinController {
 	public RedirectView insertJoin(JoinVO joinVO) {
 		int memResult = joinService.insertMem(joinVO.getNick());
 		int detailResult = joinService.insertMemDetail(joinVO);
-		System.out.println("insertJoin 입장~ : "+joinVO);
 
 		String result = "false";
 		if (memResult == 1 && detailResult == 1) {
