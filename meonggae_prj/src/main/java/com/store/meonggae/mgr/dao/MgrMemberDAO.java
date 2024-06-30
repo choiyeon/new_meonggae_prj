@@ -6,12 +6,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.store.meonggae.mgr.goods.domain.MgrGoodsDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
+import com.store.meonggae.mgr.member.vo.MgrMemberGoodsSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
@@ -167,7 +169,6 @@ public class MgrMemberDAO {
 		
 		return totalCnt;
 	} // selectOneReportListCnt
-	
 
 	// 검색된 회원의 신고 목록 리스트
 	public List<MgrMemberReportDomain> selectListReport(MgrMemberReportSearchVO sVO) {
@@ -175,6 +176,27 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListReport", sVO);
+		
+		return list;
+	} // selectListReport
+	
+	// 검색된 회원의 거래내역 목록 수
+	public int selectOneTradeListCnt(MgrMemberGoodsSearchVO sVO) {
+		
+		int totalCnt = 0;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneTradeCnt", sVO);
+		
+		return totalCnt;
+	} // selectOneReportListCnt
+	
+	// 검색된 회원의 거래내역 목록 리스트
+	public List<MgrGoodsDomain> selectListTrade(MgrMemberGoodsSearchVO sVO) {
+		List<MgrGoodsDomain> list = null;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		list = ss.selectList("com.store.meonggae.mgr.member.selectListTrade", sVO);
 		
 		return list;
 	} // selectListReport

@@ -90,6 +90,21 @@
 			url.searchParams.set('t', $(this).index());
 			location.href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do" + url.search;
 		}); // click
+		
+		// 목록으로
+		$("#backToList").click(function() {
+		    let url = new URL(location.href);
+		    let searchParams = new URLSearchParams(url.search);
+		    let param = '';
+		    let arrParamToKeep = ['gender', 'loginFlag', 'startDate', 'endDate', 'memStatus'];
+		    for (param of searchParams.keys()) {
+		        if (!arrParamToKeep.includes(param)) {
+		            searchParams.delete(param);
+		        } // end if
+		    } // end for
+			
+			location.href="${pageContext.request.contextPath}/mgr/member/mgr_member_list_frm.do" + searchParams;
+		}); // click
 	}); // $(document).ready(function() { })
 </script>
 
@@ -128,13 +143,10 @@
 			</div>
 		</div>
 		<div class="nk-block-head-content">
-			<a href="/demo1/user-list-regular.html" class="btn btn-outline-light bg-white d-none d-sm-inline-flex">
+			<div class="btn btn-outline-light bg-white d-none d-sm-inline-flex">
 				<em class="icon ni ni-arrow-left"></em>
-				<span>Back</span>
-			</a>
-			<a href="/demo1/user-list-regular.html" class="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none">
-				<em class="icon ni ni-arrow-left"></em>
-			</a>
+				<span id="backToList">목록으로</span>
+			</div>
 		</div>
 	</div>
 </div>

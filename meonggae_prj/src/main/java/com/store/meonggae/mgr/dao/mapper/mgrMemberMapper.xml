@@ -476,4 +476,199 @@
 				)
 		where	rnum between #{startNum} and #{endNum}
 	</select>
+	
+	<!-- 거래내역 목록 게시판 리스트의 수 -->
+	<select id="selectOneTradeCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberGoodsSearchVO">
+		select	count(*) cnt
+		from	(
+				select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy
+				from	(
+						select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+								case
+									when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+									else '오늘'
+								end time_ago,
+								gi.name img,
+								c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+								g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY
+						from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+						where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+						) j, member m
+				where	j.mem_num_buy = m.mem_num(+)
+						<choose>
+							<when test='trade eq null or trade.equals("S")'>
+								and j.mem_num_sell = #{memNum}
+							</when>
+							<otherwise>
+								and j.mem_num_buy = #{memNum}
+							</otherwise>
+						</choose>
+				)
+		<where>
+			<choose>
+				<when test="field eq 0">
+					NICK_SELL like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 1">
+					title like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 2">
+					detail like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 3">
+					nick_buy like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose> 
+			<choose>
+				<when test="categoryNum neq null">
+					and category_num = #{categoryNum}
+				</when>
+				<otherwise> 
+					<if test="parentCategoryNum neq null">
+						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+					</if>
+				</otherwise>
+			</choose>
+			
+			<if test="startDate neq null">
+				and input_date &gt;= #{startDate} 
+			</if>
+			<if test="endDate neq null">
+				and input_date &lt;= #{endDate} 
+			</if>
+			
+			<if test="tradeMethodCode neq null">
+				<choose>
+					<when test='tradeMethodCode.equals("D")'>
+						and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
+					</when>
+					<when test='tradeMethodCode.equals("P")'>
+						and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode} , 'B')
+					</when>
+				</choose>
+			</if>
+			
+			<if test="qualityCode neq null">
+				and QUALITY_CODE = #{qualityCode} 
+			</if>
+			
+			<if test="location neq null">
+				and location like '%' || #{location} || '%' 
+			</if>
+			
+			<if test="minPrice neq null">
+				and price &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice neq null">
+				and price &lt;= #{maxPrice}
+			</if>
+			
+			<if test="sellStatusCode neq null">
+				and SELL_STATUS_CODE = #{sellStatusCode} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- 거래내역 게시판 리스트 -->
+	<select id="selectListTrade" resultMap="com.store.meonggae.mgr.goods.mgrGoodsDomResult" parameterType="com.store.meonggae.mgr.goods.vo.MgrGoodsSearchVO">
+		select	rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,
+				decode(delete_flag, 'Y', 1, 'N', 0, 0) delete_flag
+		from	(
+				select	row_number() over (order by input_date desc) rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,delete_flag
+				from	(
+						select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy,delete_flag
+						from	(
+								select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+										case
+											when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+											else '오늘'
+										end time_ago,
+										gi.name img,
+										c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+										g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY, g.delete_flag
+								from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+								where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+								) j, member m
+						where	j.mem_num_buy = m.mem_num(+)
+								<choose>
+									<when test='trade eq null or trade.equals("S")'>
+										and j.mem_num_sell = #{memNum}
+									</when>
+									<otherwise>
+										and j.mem_num_buy = #{memNum}
+									</otherwise>
+								</choose>
+						)
+				<where>
+					<choose>
+						<when test="field eq 0">
+							NICK_SELL like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 1">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 2">
+							detail like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 3">
+							nick_buy like '%' || #{keyword} || '%'
+						</when>
+						<otherwise>
+							1 = 1
+						</otherwise>
+					</choose> 
+					<choose>
+						<when test="categoryNum neq null">
+							and category_num = #{categoryNum}
+						</when>
+						<otherwise> 
+							<if test="parentCategoryNum neq null">
+								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+							</if>
+						</otherwise>
+					</choose>
+					
+					<if test="startDate neq null">
+						and input_date &gt;= #{startDate} 
+					</if>
+					<if test="endDate neq null">
+						and input_date &lt;= #{endDate} 
+					</if>
+					
+					<if test="tradeMethodCode neq null">
+						<choose>
+							<when test='tradeMethodCode.equals("D")'>
+								and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
+							</when>
+							<when test='tradeMethodCode.equals("P")'>
+								and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode} , 'B')
+							</when>
+						</choose>
+					</if>
+					
+					<if test="qualityCode neq null">
+						and QUALITY_CODE = #{qualityCode} 
+					</if>
+					
+					<if test="location neq null">
+						and location like '%' || #{location} || '%' 
+					</if>
+					
+					<if test="minPrice neq null">
+						and price &gt;= #{minPrice}
+					</if>
+					<if test="maxPrice neq null">
+						and price &lt;= #{maxPrice}
+					</if>
+					
+					<if test="sellStatusCode neq null">
+						and SELL_STATUS_CODE = #{sellStatusCode} 
+					</if>
+				</where>				
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
 </mapper>

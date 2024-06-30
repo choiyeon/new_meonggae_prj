@@ -1,8 +1,6 @@
 package com.store.meonggae.mgr.member.service;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +9,14 @@ import org.springframework.stereotype.Service;
 import com.store.meonggae.mgr.common.service.MaskingService;
 import com.store.meonggae.mgr.common.vo.MgrSearchVO;
 import com.store.meonggae.mgr.dao.MgrMemberDAO;
+import com.store.meonggae.mgr.goods.domain.MgrGoodsDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
+import com.store.meonggae.mgr.member.vo.MgrMemberGoodsSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
@@ -295,6 +295,31 @@ public class MgrMemberService {
 		List<MgrMemberReportDomain> list = null;
 		try {
 			list = mmDAO.selectListReport(sVO);
+		} catch(PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return list;
+	} // searchListLoginLog
+	
+	// 검색된 회원의 거래내역 수
+	public int getTradeTotalCount(MgrMemberGoodsSearchVO sVO) {
+		int totalCount = 0;
+		
+		try {
+			totalCount = mmDAO.selectOneTradeListCnt(sVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+		
+		return totalCount;
+	} // getLoginLogTotalCount
+
+	// 검색된 회원의 거래내역 리스트 조회
+	public List<MgrGoodsDomain> searchListTrade(MgrMemberGoodsSearchVO sVO) {
+		List<MgrGoodsDomain> list = null;
+		try {
+			list = mmDAO.selectListTrade(sVO);
 		} catch(PersistenceException pe) {
 			pe.printStackTrace();
 		} // end catch

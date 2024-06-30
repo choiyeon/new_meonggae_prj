@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
+import com.store.meonggae.mgr.goods.domain.MgrGoodsDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain;
@@ -18,13 +19,16 @@ import com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberReportDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain;
 import com.store.meonggae.mgr.member.service.MgrMemberService;
+import com.store.meonggae.mgr.member.vo.MgrMemberGoodsSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO;
 import com.store.meonggae.mgr.member.vo.MgrMemberSuspendVO;
+import com.store.meonggae.mgr.review.domain.MgrCategoryDomain;
 import com.store.meonggae.mgr.review.domain.MgrReviewDomain;
+import com.store.meonggae.mgr.review.service.MgrReviewService;
 
 @Controller
 public class MgrMemberController {
@@ -33,6 +37,8 @@ public class MgrMemberController {
 	private MgrMemberService mmService;
 	@Autowired(required = false)
 	private BoardUtilService boardUtilService;
+	@Autowired(required = false)
+	private MgrReviewService mrService;
 	
 	// 회원 관리 리스트 조회
 	@GetMapping("/mgr/member/mgr_member_list_frm.do")
@@ -132,7 +138,53 @@ public class MgrMemberController {
 	
 	@GetMapping("/mgr/member/mgr_member_detail_frm_trade.do")
 	public String searchOneMemberTrade(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
-			@RequestParam(required=false, defaultValue="0") int t) {
+			@RequestParam(required=false, defaultValue="1") int t, MgrMemberGoodsSearchVO sVO) {
+		
+		List<MgrGoodsDomain> list = null;
+		
+		// 총 레코드의 수 얻기
+		int totalCount = mmService.getTradeTotalCount(sVO);
+		// 한 화면에 보여줄 게시물의 수
+		int pageScale = mmService.getPageScale(12);
+		// 총 페이지수
+		int totalPage = mmService.getTotalPage(totalCount, pageScale);
+		// 현재 페이지
+		int currentPage = mmService.getCurrentPage(sVO);
+		
+		// 게시물의 시작 번호
+		int startNum = mmService.getStartNum(currentPage, pageScale);
+		// 게시물의 끝번호
+		int endNum = mmService.getEndNum(startNum, pageScale);
+
+		sVO.setStartNum(startNum);
+		sVO.setEndNum(endNum);
+		
+		list = mmService.searchListTrade(sVO);
+
+		String param = "";
+		if(sVO.getKeyword() != null) {
+			param = "&t=1&memNum=" + memNum;
+		} // end if
+		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
+		
+		List<MgrCategoryDomain> listCategoryUpper = mrService.searchListCategoryList(0); 
+		List<MgrCategoryDomain> listCategoryLower = null; 
+		try {
+			if(sVO.getParentCategoryNum() != null && sVO.getParentCategoryNum() != "") {
+				listCategoryLower = mrService.searchListCategoryList(Integer.parseInt(sVO.getParentCategoryNum()));
+			} // end if
+		} catch (NumberFormatException nfe) {
+		}
+		
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pageScale", pageScale);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageNation", pageNation);
+		model.addAttribute("list", list);
+		model.addAttribute("listCategoryUpper", listCategoryUpper);
+		model.addAttribute("listCategoryLower", listCategoryLower);
+		
 		return "mgr/member/mgr_member_detail_frm_trade";
 	}
 	
