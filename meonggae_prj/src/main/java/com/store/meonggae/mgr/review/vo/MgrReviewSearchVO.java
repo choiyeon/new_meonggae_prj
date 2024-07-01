@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import com.store.meonggae.mgr.common.vo.MgrSearchVO;
+
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
@@ -14,9 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrReviewSearchVO {
-	private int startNum,endNum;
-	private String field, keyword, currentPage;
+public class MgrReviewSearchVO extends MgrSearchVO{
 	private String startDate, endDate;
 	private String categoryNum, parentCategoryNum;
 }

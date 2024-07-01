@@ -34,6 +34,11 @@
 	<typeAlias type="com.store.meonggae.my.domain.PersonalDomain" alias="personalDomain"/>
 	<typeAlias type="com.store.meonggae.my.vo.PwVO" alias="pwVO"/>
 	<typeAlias type="com.store.meonggae.my.vo.PersonalInfoVO" alias="piVO"/>
+	
+	<typeAlias type="com.store.meonggae.my.domain.InquiryCategoryDomain" alias="inquiryCategoryDomain"/>
+	<typeAlias type="com.store.meonggae.my.domain.InquiryDomain" alias="inquiryDomain"/>
+	<typeAlias type="com.store.meonggae.my.domain.InquiryDetailDomain" alias="inquiryDetailDomain"/>
+	<typeAlias type="com.store.meonggae.my.vo.InquiryVO" alias="iqVO"/>
 <!-- store,my -->
 
 </typeAliases>
@@ -66,6 +71,7 @@
     <mapper resource="com/store/meonggae/my/dao/mapper/DibsMapper.xml"/>
     <mapper resource="com/store/meonggae/my/dao/mapper/SalesListMapper.xml"/>
     <mapper resource="com/store/meonggae/my/dao/mapper/PersonalMapper.xml"/>
+    <mapper resource="com/store/meonggae/my/dao/mapper/InquiryMapper.xml"/>
     <!-- 내상점, 마이페이지 끝 -->
   </mappers>
 </configuration>

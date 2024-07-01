@@ -32,7 +32,61 @@
 
 <script type="text/javascript">
 	$(function(){
-		$('#summernote').summernote({
+		
+		
+		
+		$("#submitBtn").click(function(){
+			
+			if($("#title").val().trim() == ""){
+				alert("제목은 필수 입력사항입니다.");
+				return;
+			}else if($("#category").val() == "N/A"){
+				alert("문의 종류를 선택해주세요.");
+				return;
+			}else if($("#content").val().trim() == ""){
+				alert("내용은 필수 입력사항입니다.");
+				return;
+			}//else
+				
+			if(!confirm("문의를 작성하시겠습니까?")){
+				return;
+			}//if
+			
+			var form = $('#inquiryFrm')[0];
+			var formData = new FormData(form);
+			
+			$.ajax({
+				url: "/meonggae_prj/My/mypage/inquiry/inquiry_process.do",
+				type: "POST",
+				data: {
+					title: $("#title").val(),
+					category: $("#category option:selected").val(),
+					content: $("#content").val()
+				},
+				dataType: "JSON",
+				error: function(request, status, error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				},
+				success: function(data){
+					var result = data.result;
+					
+					if(result == "success"){
+						alert("문의가 정상적으로 등록되었습니다.");
+						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+					}else if(result == "noSession"){
+						alert("로그인이 필요한 서비스입니다.");
+						location.href="http://localhost/meonggae_prj/index.do";
+					}else{
+						alert("오류가 발생하였습니다. 잠시 후에 다시 시도해주세요.");
+						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+					}
+				}//success
+			});//ajax    
+			
+			
+		});//click
+		
+		$('#content').summernote({
 			height: 500,
 			width: 820,
 			focus: true,
@@ -42,8 +96,7 @@
 				['style', ['bold', 'italic', 'underline', 'clear']],
 				['fontsize', ['fontsize']],
 				['color', ['color']],
-				['para', ['ul', 'ol']],
-				['insert', ['picture']]
+				['para', ['ul', 'ol']]
 			]
 		});
 	});//ready
@@ -62,14 +115,22 @@
 		<hr id="menuBottonLine">
 	</div>
 		<!-- 메뉴목록 -->
+		<form method="post" action="inquiry_process.do" name="inquiryFrm" id="inquiryFrm">
+		<div class="inquiryStyle1">제목<br/>
+		<input type="text" id="title" class="inquiryStyle2" placeholder="제목" maxlength="20"/><br/></div>
 		
-		<form method="post" id="postFrm">
-		<div class="inquiryStyle1">문의 제목<br/>
-		<input type="text" id="inquiryStyle2" class="inquiryStyle2" placeholder="제목" maxlength="20"/><br/></div>
+		<div class="inquiryStyle1">문의 종류<br/></div>
+		<div style="width: 600px;">
+		<select name="category" id="category" class="form-control">
+			<option value="N/A">-- 문의 종류를 선택해주세요 --</option>
+			<c:forEach items="${ categoryList }" var="cl">
+			<option value="${ cl.categoryNum }">${ cl.name }</option>
+			</c:forEach>
+		</select><br/>
+		</div>
 		
 		<div class="inquiryStyle1">문의 내용</div>
-		<textarea id="summernote" class="ta"></textarea>
-		
+		<textarea id="content" class="ta"></textarea>
 		<input type="button" value="글 작성" id="submitBtn" class="btn btn-primary btn-lg"/>
 		</form>
 		

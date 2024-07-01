@@ -37,5 +37,6 @@
     <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrManagerMapper.xml"/>
     <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrReviewMapper.xml"/>
     <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrGoodsMapper.xml"/>
+    <mapper resource="com/store/meonggae/mgr/dao/mapper/mgrMemberMapper.xml"/>
   </mappers>
 </configuration>

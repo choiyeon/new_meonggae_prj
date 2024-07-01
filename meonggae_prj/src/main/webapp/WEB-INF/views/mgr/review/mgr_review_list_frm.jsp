@@ -250,7 +250,7 @@
 								</div>
 								<div class="form-wrap w-200px">
 									<div class="input-group-prepend" style="width:180px;">
-										<select id="selCategoryLower" class="form-select js-select2" name="categoryNum"${requestScope.listCategoryLower eq null ? " disabled='disabled'" : ""} >
+										<select id="selCategoryLower" class="form-select js-select2" name="categoryNum"${param.parentCategoryNum eq null ? " disabled='disabled'" : ""} >
 											<option value=''>모든 하위 카테고리</option>
 											<c:if test="${requestScope.listCategoryLower ne null}">
 											<c:forEach var="cate" items="${requestScope.listCategoryLower}" varStatus="i">

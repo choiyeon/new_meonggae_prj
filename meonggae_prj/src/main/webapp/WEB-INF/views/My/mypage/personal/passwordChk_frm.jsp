@@ -39,12 +39,14 @@
 					var result = data.result;
 					if(result == "true"){
 						passwordChkSuccess();
+					}else if(result == "noSession"){
+						alert("로그인이 필요한 서비스입니다.");
+						location.href="http://localhost/meonggae_prj/index.do";
 					}else{
-						passwordChkSuccess();
-						/* for(var i=0; i<5 ; i++){
+						for(var i=0; i<5 ; i++){
 							$("#chkFail").fadeToggle(500);
 						}//for
-							$("#chkFail").fadeIn(500); */
+							$("#chkFail").fadeIn(500);
 					}//else
 				}//success
 			});//ajax

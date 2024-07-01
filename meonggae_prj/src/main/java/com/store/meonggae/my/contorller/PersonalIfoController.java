@@ -62,7 +62,7 @@ public class PersonalIfoController {
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
 		if(userSession == null) {
-			jsonObj.put("result", "false");
+			jsonObj.put("result", "noSession");
 	        return jsonObj;
 		}//end if
 		
@@ -126,7 +126,7 @@ public class PersonalIfoController {
 		//view에서 받은 비밀번호
 		String inputPw = request.getParameter("pw1");
 		
-		int cnt = ps.modifyPw(memNum, inputPw);
+		ps.modifyPw(memNum, inputPw);
 		
 		return "/My/mypage/personal/close";
 	}//passwordModify

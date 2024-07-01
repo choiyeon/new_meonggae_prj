@@ -225,10 +225,8 @@
 }
 
 #postDetail{
-	background-color: #D9D9D9 ;
-	padding-top: 10px;
-	padding-left: 10px;
-	height: 110px;
+	background-color: #D9D9D9;
+	padding: 15px;
 }
 
 .postTitle{
@@ -242,20 +240,23 @@
 }
 
 #content{
-	background-color: #F2F2F2;
 	font-size: 18px;
-	padding: 10px;
+	padding: 25px;
+	
 }
 
-#answerContent{
-	margin-top: 20px;
-	font-size: 18px;
+#answerTitle{
+	background-color: #E6E6E6;
+	padding: 15px;
 }
 
 #answer{
-	background-color: #F2F2F2;
-	padding: 10px;
+	padding: 25px;
 	border-bottom: 1px solid #333;
+}
+
+#answerContent{
+	font-size: 18px;
 }
 
 .inquiryStyle1{

@@ -43,7 +43,12 @@
 
 <script type="text/javascript">
 	$(function() {
-		
+		// 탭 누르면 parameter에 담아서 이동하는 방식
+// 		$(".memTab").click(function(){
+// 			let url = new URL(location.href);
+// 			url.searchParams.set('t', $(this).index());
+// 			location.href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do" + url.search;
+// 		}); // click
 	}); // $(document).ready(function() { })
 </script>
 
@@ -67,11 +72,16 @@
 <div class="nk-block-head nk-block-head-sm">
 	<div class="nk-block-between g-3">
 		<div class="nk-block-head-content">
-			<h3 class="nk-block-title page-title">회원 관리 / <strong class="text-primary small">memberkim</strong>
+			<h3 class="nk-block-title page-title">회원 관리 / <strong class="text-primary small"><c:out value="${requestScope.memberPersonalDomain.nick }"/></strong>
 			</h3>
 			<div class="nk-block-des text-soft">
 				<ul class="list-inline">
-					<li>최근 로그인: <span class="text-base">2024.07.03 18:19:20</span>
+					<li>최근 로그인: <span class="text-base">
+					<c:choose>
+						<c:when test="${requestScope.memberPersonalDomain.recentLoginDate eq null}">-</c:when>
+						<c:otherwise><fmt:formatDate value="${requestScope.memberPersonalDomain.recentLoginDate}" pattern="yyyy-MM-dd HH:mm:ss"/></c:otherwise>
+					</c:choose>
+					</span>
 					</li>
 				</ul>
 			</div>
@@ -105,31 +115,41 @@
 								<div class="profile-balance-sub">
 									<div class="profile-balance-subtitle">회원번호</div>
 									<div class="profile-balance-amount">
-										<div class="number">1234567</div>
+										<div class="number"><c:out value="${requestScope.memberPersonalDomain.memNum}"/></div>
 									</div>
 								</div>							
+<!-- 								<div class="profile-balance-sub"> -->
+<!-- 									<div class="profile-balance-subtitle">이름</div> -->
+<!-- 									<div class="profile-balance-amount"> -->
+<!-- 										<div class="number">김회원</div> -->
+<!-- 									</div> -->
+<!-- 								</div>							 -->
+<!-- 								<div class="profile-balance-sub"> -->
+<!-- 									<div class="profile-balance-subtitle">아이디</div> -->
+<!-- 									<div class="profile-balance-amount"> -->
+<!-- 										<div class="number">memberkim</div> -->
+<!-- 									</div> -->
+<!-- 								</div>							 -->
 								<div class="profile-balance-sub">
-									<div class="profile-balance-subtitle">이름</div>
+									<div class="profile-balance-subtitle">닉네임</div>
 									<div class="profile-balance-amount">
-										<div class="number">김회원</div>
-									</div>
-								</div>							
-								<div class="profile-balance-sub">
-									<div class="profile-balance-subtitle">아이디</div>
-									<div class="profile-balance-amount">
-										<div class="number">memberkim</div>
-									</div>
-								</div>							
-								<div class="profile-balance-sub">
-									<div class="profile-balance-subtitle">닉</div>
-									<div class="profile-balance-amount">
-										<div class="number">김닉</div>
+										<div class="number"><c:out value="${requestScope.memberPersonalDomain.nick}"/></div>
 									</div>
 								</div>							
 								<div class="profile-balance-sub">
 									<div class="profile-balance-subtitle">상태</div>
 									<div class="profile-balance-amount">
-										<span class="text-success number">일반</span>
+										<c:choose>
+											<c:when test="${requestScope.memberPersonalDomain.memStatus eq 'N'}">
+												<span class="text-success number">일반</span>
+											</c:when>
+											<c:when test="${requestScope.memberPersonalDomain.memStatus eq 'S'}">
+												<span class="text-warning number">정지</span>
+											</c:when>
+											<c:when test="${requestScope.memberPersonalDomain.memStatus eq 'W'}">
+												<span class="text-danger number">탈퇴</span>
+											</c:when>
+										</c:choose>
 									</div>
 								</div>							
 							</div>
@@ -144,49 +164,49 @@
 			<div class="card-inner">
 				<!-- 탭 목록 시작 -->
 				<ul class="nav nav-tabs nav-tabs-mb-icon nav-tabs-card" role="tablist">
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link active" href="#tabItem1" data-bs-toggle="tab" aria-selected="true" role="tab">
 							<em class="icon ni ni-user-circle"></em>
 							<span>개인정보</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem2" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-repeat"></em>
 							<span>거래내역</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem3" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-file-text"></em>
 							<span>신고내역</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem4" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-bell"></em>
 							<span>문의내역</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem5" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-activity"></em>
 							<span>후기내역</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem6" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-activity"></em>
 							<span>찜목록</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem7" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-activity"></em>
 							<span>로그인 로그</span>
 						</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item memTab">
 						<a class="nav-link" href="#tabItem8" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
 							<em class="icon ni ni-activity"></em>
 							<span>회원 정지</span>
@@ -209,61 +229,97 @@
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">이름</span>
-											<span class="profile-ud-value">김회원</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.name}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">아이디</span>
-											<span class="profile-ud-value">memberkim</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.memId}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
-											<span class="profile-ud-label">닉</span>
-											<span class="profile-ud-value">김닉</span>
+											<span class="profile-ud-label">닉네임</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.nick}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
-											<span class="profile-ud-label">생년월일</span>
-											<span class="profile-ud-value">1999.12.31</span>
+											<span class="profile-ud-label">연령대</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.ageRange}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">주소</span>
-											<span class="profile-ud-value">서울시 강남구 역삼동 한독빌딩</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.addr}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">전화번호</span>
-											<span class="profile-ud-value">010-1212-2323</span>
+											<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.tel}"/></span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">성별</span>
-											<span class="profile-ud-value">남자</span>
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.gender eq null or requestScope.memberPersonalDomain.gender eq ''}">
+													<span class="profile-ud-value">-</span>
+												</c:when>
+												<c:when test="${requestScope.memberPersonalDomain.gender eq 'M'}">
+													<span class="profile-ud-value">남자</span>
+												</c:when>
+												<c:when test="${requestScope.memberPersonalDomain.gender eq 'F'}">
+													<span class="profile-ud-value">여자</span>
+												</c:when>
+											</c:choose>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">로그인</span>
-											<span class="profile-ud-value">카카오</span>
+											
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.loginFlag eq 'N'}">
+													<span class="profile-ud-value">일반</span>
+												</c:when>
+												<c:otherwise>
+													<span class="profile-ud-value"><c:out value="${requestScope.memberPersonalDomain.social}"/></span>
+												</c:otherwise>
+											</c:choose>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">가입일</span>
-											<span class="profile-ud-value">2024.06.04</span>
+											<span class="profile-ud-value">
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.joinDate eq null or requestScope.memberPersonalDomain.joinDate eq ''}">
+												-
+												</c:when>
+												<c:otherwise>
+												<c:out value="${requestScope.memberPersonalDomain.joinDate}"/>
+												</c:otherwise>
+											</c:choose>
+											</span>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">최근 로그인</span>
-											<span class="profile-ud-value">2024.07.03 18:19:20</span>
+											<span class="profile-ud-value">
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.recentLoginDate eq null or requestScope.memberPersonalDomain.recentLoginDate eq ''}">
+												-
+												</c:when>
+												<c:otherwise>
+												<fmt:formatDate value="${requestScope.memberPersonalDomain.recentLoginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+												</c:otherwise>
+											</c:choose>
+											</span>
 										</div>
 									</div>
 								</div>
@@ -277,19 +333,40 @@
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">정지일</span>
-											<span class="profile-ud-value">2024.06.08 12:00:00</span>
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.suspendDate eq null}">
+													<span class="profile-ud-value">-</span>
+												</c:when>
+												<c:otherwise>
+													<span class="profile-ud-value"><fmt:formatDate value="${requestScope.memberPersonalDomain.suspendDate}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+												</c:otherwise>
+											</c:choose>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">정지 해제일</span>
-											<span class="profile-ud-value">2024.06.15</span>
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.unsuspendDate eq null}">
+													<span class="profile-ud-value">-</span>
+												</c:when>
+												<c:otherwise>
+													<span class="profile-ud-value"><fmt:formatDate value="${requestScope.memberPersonalDomain.unsuspendDate}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+												</c:otherwise>
+											</c:choose>
 										</div>
 									</div>
 									<div class="profile-ud-item">
 										<div class="profile-ud wider">
 											<span class="profile-ud-label">탈퇴일</span>
-											<span class="profile-ud-value">-</span>
+											<c:choose>
+												<c:when test="${requestScope.memberPersonalDomain.withdrawDate eq null}">
+													<span class="profile-ud-value">-</span>
+												</c:when>
+												<c:otherwise>
+													<span class="profile-ud-value"><fmt:formatDate value="${requestScope.memberPersonalDomain.withdrawDate}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+												</c:otherwise>
+											</c:choose>
 										</div>
 									</div>
 								</div>

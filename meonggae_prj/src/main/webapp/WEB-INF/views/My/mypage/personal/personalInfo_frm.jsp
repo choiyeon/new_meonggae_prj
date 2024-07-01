@@ -108,8 +108,6 @@
 	
 	function submit(){
 		if(confirm("수정된 정보를 적용하시겠습니까?")){
-			//$("#personalFrm").submit();
-			//alert("적용되었습니다.");
 			
 			var form = $('#personalFrm')[0];
 			var formData = new FormData(form);
@@ -218,13 +216,13 @@
 		<tr>
 			<td id="tableTitle2" class="tableTitle2">이름</td>
 			<td>
-			<label>${ pDomain.name }</label>
+			<label><c:out value="${ pDomain.name }"/></label>
 			</td>
 		</tr>
 		<tr>
 			<td id="tableTitle2" class="tableTitle2">아이디</td>
 			<td>
-			<label>${ user.id }</label>
+			<label><c:out value="${ user.id }"/></label>
 			</td>
 		</tr>
 		<tr>
