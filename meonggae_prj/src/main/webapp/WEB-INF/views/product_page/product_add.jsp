@@ -64,6 +64,7 @@ function previewImage(event) {
         output.src = reader.result;
     }
     reader.readAsDataURL(event.target.files[0]);
+    alert(reader.readAsDataURL(event.target.files[0]));
 }
 
 function loadTabContent(tabId, url) {
@@ -90,7 +91,31 @@ $(document).on('click', '#add', function() {
         alert("업로드 불가능한 파일입니다.");
         return;
     }
-    $("#newProduct").submit();
+//     NAME, DETAIL, PRICE, TRADE_METHOD_CODE, QUALITY_CODE
+    var name = $("#name").val();
+    var categoryNum = $("#category_num").val();
+    var price = $("#price").val();
+    var qualityCode = $("input[name='quality_code']:checked").val();
+    var detail = $("#detail").val();
+    var tradeMethodCode = $("input[name='trade_method_code']:checked").val();
+	if(name == ""){
+		alert("상품명은 필수 입력입니다.");
+	}else if(categoryNum == 0){
+		alert("상품 카테고리를 선택해주세요");
+	}else if(price == ""){
+		alert("가격은 필수 입력입니다.");
+	}else if (isNaN(price) || parseFloat(price) <= 0) {
+        alert("가격은 0보다 큰 숫자여야 합니다.");
+        $("#price").val('');
+    }else if(qualityCode == null){
+		alert("물품 상태를 선택해주세요.");
+	}else if(detail == ""){
+		alert("상품설명은 필수 입력입니다.");
+	}else if(tradeMethodCode == null){
+		alert("거래방식을 선택해주세요.");
+	}else{
+    	$("#newProduct").submit();
+	}
 });
 </script>
 <link rel="stylesheet"
@@ -100,7 +125,20 @@ $(document).on('click', '#add', function() {
 <link rel="stylesheet"
     href="http://localhost/meonggae_prj/common/CSS/product_add.css?v=1.0">
 </head>
-
+<c:choose>
+	<c:when test="${ not empty uploadFlag && uploadFlag == true }">
+		<script>
+			alert("상품이 등록되었습니다.");
+			location.href="http://localhost/meonggae_prj/index.do";
+		</script>
+	</c:when>
+	<c:when test="${ not empty uploadFlag && uploadFlag == false }">
+		<script>
+			alert("상품 등록에 실패했습니다. 잠시후 다시 시도해주세요.");
+			location.href="http://localhost/meonggae_prj/index.do";
+		</script>
+	</c:when>
+</c:choose>
 <body>
     <!-- header 시작 -->
     <jsp:include page="../header/header.jsp" />

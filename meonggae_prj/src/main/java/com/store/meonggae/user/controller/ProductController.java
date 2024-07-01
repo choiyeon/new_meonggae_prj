@@ -2,7 +2,10 @@ package com.store.meonggae.user.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,13 +13,16 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.Files;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.store.meonggae.product.domain.ProductDomain;
 import com.store.meonggae.product.service.ProductAddService;
 import com.store.meonggae.user.login.domain.LoginDomain;
@@ -35,7 +41,7 @@ public class ProductController {
         if (loginUser != null) {
             int memNum = loginUser.getMemNum();
             List<ProductDomain> productList = productAddService.selectProductByUser(memNum);
-            System.out.println(productList);
+            //System.out.println(productList);
             model.addAttribute("productList", productList);
             model.addAttribute("user", loginUser);
             model.addAttribute("memNum", loginUser.getMemNum());
@@ -46,8 +52,8 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/product_page/product_add.do")
-    public String handleProductAdd(Model model, ProductDomain product, MultipartFile img, HttpSession session, RedirectAttributes redirectAttributes) throws IOException {
+    @RequestMapping(value = "/product_page/product_add.do", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    public String handleProductAdd(Model model, ProductDomain product, HttpSession session, RedirectAttributes redirectAttributes, HttpServletRequest request) throws IOException {
         // 사용자 정보를 세션에서 가져옴
         LoginDomain loginUser = (LoginDomain) session.getAttribute("user");
 
@@ -56,24 +62,55 @@ public class ProductController {
             return "redirect:/index.do";
         }
 
+        
+        
+        File saveDir = new File("C:/Users/user/git/new_meonggae_prj/meonggae_prj/src/main/webapp/products-img");
+        int maxSize = 10*1024*1024;
+        MultipartRequest mr = new MultipartRequest(request, saveDir.getAbsolutePath(), maxSize, "UTF-8", new DefaultFileRenamePolicy());
+        
         // 사용자 정보 설정
-        System.out.println("memNum "+loginUser.getMemNum());
-        product.setmem_num_sell(loginUser.getMemNum());
-        if (img == null || img.isEmpty()) {
-            model.addAttribute("uploadFlag", false);
-            model.addAttribute("message", "이미지 파일이 필요합니다.");
-            return "product_page/product_add";
-        }
+        product.setMem_num_sell(loginUser.getMemNum());
+        product.setName(mr.getParameter("name"));
+        product.setDetail(mr.getParameter("detail"));
+        product.setQuality_code(mr.getParameter("quality_code"));
+        product.setCategory_num(mr.getParameter("category_num"));
+        product.setPrice(mr.getParameter("price"));
+        product.setTrade_method_code(mr.getParameter("trade_method_code"));
+        product.setLocation(mr.getParameter("location"));
+        product.setSell_status_code(mr.getParameter("sell_status_code"));
+        product.setDelivery_fee(Integer.parseInt( mr.getParameter("deliver_fee")));
+    
+        // 파일 업로드 처리
+        	// 파일의 원본 이름 가져오기
+            String originalFilename = mr.getOriginalFileName("img");
+            // 파일 확장자 추출
+            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            // 고유한 파일 이름 생성
+            String storedFilename = UUID.randomUUID().toString() + fileExtension;
+            // 파일 저장 경로 설정
+            Path filePath = Paths.get("C:/Users/user/git/new_meonggae_prj/meonggae_prj/src/main/webapp/products-img", storedFilename);
+
+//          디렉토리가 없으면 생성
+          if (!Files.exists(filePath.getParent())) {
+              Files.createDirectories(filePath.getParent());
+          }
+
+          // 파일 저장
+          Files.copy(mr.getFile("img").toPath(), filePath);
+          
+          product.setImg(storedFilename);
 
         // 상품 등록 서비스 호출
-        System.out.println(product.toString());
-        productAddService.insertProduct(product, img);
-
+        String userIp = productAddService.getUerIp(request);
+        //System.out.println("사용자IP : " + userIp);
+        product.setIp(userIp);
+        boolean uploadFlag = productAddService.insertProduct(product);
+        
         // 모델에 필요한 정보 추가
-        model.addAttribute("uploadFlag", true);
+        model.addAttribute("uploadFlag", uploadFlag);
 
         return "product_page/product_add";
-    }
+    }//handleProductAdd
     
 	
 	  @GetMapping("/product_page/tab01.do") public String productAdd() { // 사용자 정보를
@@ -91,7 +128,6 @@ public class ProductController {
         if (loginUser != null) {
             int memNum = loginUser.getMemNum();
             List<ProductDomain> productList = productAddService.selectProductByUser(memNum);
-            System.out.println(productList);
             model.addAttribute("productList", productList);
             model.addAttribute("user", loginUser);
             model.addAttribute("memNum", loginUser.getMemNum());
@@ -120,12 +156,12 @@ public class ProductController {
             return "redirect:/index.do";
         }
 
-        System.out.println("Received update request: goodsNum=" + goodsNum + ", sellStatusCode=" + sell_status_code
-                + ", name=" + name + ", price=" + price + ", location=" + location);
+        //System.out.println("Received update request: goodsNum=" + goodsNum + ", sellStatusCode=" + sell_status_code
+                //+ ", name=" + name + ", price=" + price + ", location=" + location);
 
         ProductDomain product = new ProductDomain();
         product.setGoodsNum(goodsNum);
-        product.setsell_status_code(sell_status_code);
+        product.setSell_status_code(sell_status_code);
         product.setName(name);
         product.setPrice(price);
         product.setLocation(location);
