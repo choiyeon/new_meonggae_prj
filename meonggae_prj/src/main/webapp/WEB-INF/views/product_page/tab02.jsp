@@ -18,7 +18,7 @@ $(function() {
         var location = row.find(".location").val();
         var goodsNum = $(this).data("value");
 
-        alert("판매 상태 코드: " + sell_status_code + "\n이름: " + name + "\n가격: " + price + "\n위치: " + location + "\n상품 번호: " + goodsNum);
+        //alert("판매 상태 코드: " + sell_status_code + "\n이름: " + name + "\n가격: " + price + "\n위치: " + location + "\n상품 번호: " + goodsNum);
 
         $.ajax({
             url: "${pageContext.request.contextPath}/product_page/product_update.do",
@@ -60,7 +60,7 @@ $(function() {
             <c:forEach var="product" items="${productList}">
                 <tr>
                     <td><img alt="상품 정보"
-                        src="http://localhost/meonggae_prj/products-img/${product.imgFileName}"></td>
+                        src="http://localhost/meonggae_prj/products-img/${product.img}"></td>
                     <td><select name="sellStatus" class="sellStatus">
                             <option value="N"
                                 <c:if test="${product.sell_status_code == 'N'}">selected</c:if>>판매중</option>

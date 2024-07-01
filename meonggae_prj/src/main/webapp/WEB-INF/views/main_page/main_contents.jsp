@@ -72,12 +72,12 @@
 
                     	<div class="single-products">
 							<c:forEach var="pd" items="${requestScope.prdAllList}" varStatus="i">
-                            	<div class="single-product">
+                            	<div class="single-product prevent-overflow">
                             		<div class="product-block">
                             			<a href="main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
                             				<!-- 상세페이지로 이동 -->
 											<img src="http://localhost/meonggae_prj/products-img/${ pd.imgName }" alt="" class="thumbnail">
-											<div class="product-description ">
+											<div class="product-description">
 												<p class="title">${ pd.goodsName }</p>
 												<div style="overflow: hidden;">
 													<p class="price" style="float: left;">${ pd.priceFm }원</p>

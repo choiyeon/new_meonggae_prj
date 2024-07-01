@@ -191,8 +191,8 @@
 				<tr>
 					<th><label for="gender">성별</label></th>
 		 			<td> 
-						<input data-value="성별을 선택하세요." name="gender" type="radio" id="radio_check01" value="1" /><label for="radio_check01">남자</label>
-		 				<input name="gender" type="radio" id="radio_check02"  value="2"/><label for="radio_check02">여자</label>
+						<input data-value="성별을 선택하세요." name="gender" type="radio" id="radio_check01" value="M" /><label for="radio_check01">남자</label>
+		 				<input name="gender" type="radio" id="radio_check02"  value="F"/><label for="radio_check02">여자</label>
 		 				<div class="error_text item_style" id="genderMsg" style="display: none;"></div>
 		 			</td> 
 				</tr> 

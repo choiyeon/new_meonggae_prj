@@ -5,9 +5,9 @@
 <mapper namespace="com.store.meonggae.product">
 	<!-- 상품을 사용자별로 선택 -->
 	<select id="selectProductByUser"
-		resultType="com.store.meonggae.product.domain.ProductDomain"
+		resultType="productDomain"
 		parameterType="int">
-		select gi.name as imgFileName, g.goods_num as goodsNum,
+		select gi.name as img, g.goods_num as goodsNum,
 		g.mem_num_sell as memNumSell, g.mem_num_buy,
 		g.category_num, gc.name as
 		category,
@@ -26,9 +26,9 @@
 	</select>
 
 	<select id="selectProductByGoodsNum"
-		resultType="com.store.meonggae.product.domain.ProductDomain"
+		resultType="productDomain"
 		parameterType="String">
-		select gi.name as imgFileName, g.goods_num as goodsNum,
+		select gi.name as img, g.goods_num as goodsNum,
 		g.mem_num_sell, g.mem_num_buy,
 		g.category_num, gc.name as
 		category,
@@ -45,13 +45,8 @@
 		g.goods_num = #{goodsNum, jdbcType=VARCHAR}
 	</select>
 	<!-- 상품 추가 -->
-	<insert id="insertProduct"
-		parameterType="com.store.meonggae.product.domain.ProductDomain"
-		useGeneratedKeys="true" keyProperty="goodsNum">
-		<selectKey keyProperty="goodsNum" resultType="String"
-			order="BEFORE">
-			select seq_goods.nextval from dual
-		</selectKey>
+	<insert id="insertProduct" parameterType="productDomain">
+	
 		insert into goods (
 		goods_num,
 		mem_num_sell,
@@ -59,7 +54,7 @@
 		detail,
 		price,
 		delivery_fee,
-		cnt,
+		CNT,
 		trade_method_code,
 		input_date,
 		category_num,
@@ -68,7 +63,7 @@
 		sell_status_code
 		)
 		values(
-		#{goodsNum},
+		MEONGAE.SEQ_GOODS.NEXTVAL,
 		#{mem_num_sell, jdbcType=INTEGER},
 		#{name},
 		#{detail},
@@ -76,7 +71,7 @@
 		#{delivery_fee, jdbcType=INTEGER},
 		0,
 		#{trade_method_code, jdbcType=CHAR},
-		sysdate,
+		SYSDATE,
 		#{category_num, jdbcType=VARCHAR},
 		#{location, jdbcType=VARCHAR},
 		#{quality_code,
@@ -87,15 +82,13 @@
 
 	<!-- 상품 이미지 추가 -->
 	<insert id="insertProductImg"
-		parameterType="com.store.meonggae.product.domain.ProductDomain">
-		insert into goods_img (goods_img_num, goods_num, name,
-		input_date)
-		values(seq_goods_img.nextval, #{goodsNum}, #{imgFileName},
-		sysdate)
+		parameterType="productDomain">
+		insert into goods_img (goods_img_num, goods_num, name, IP, input_date)
+		values(MEONGAE.SEQ_GOODS_IMG.NEXTVAL, MEONGAE.SEQ_GOODS.CURRVAL, #{img}, #{ip}, SYSDATE)
 	</insert>
 
 	<!-- 상품 업데이트 -->
-	<update id="updateProduct" parameterType="com.store.meonggae.product.domain.ProductDomain">
+	<update id="updateProduct" parameterType="productDomain">
     update goods
     set
     name = #{name, jdbcType=VARCHAR},

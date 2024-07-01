@@ -332,6 +332,12 @@ form.navbar-form button {
     position: relative;
     transition: .2s all ease-in-out;
 }
+.prevent-overflow {
+  overflow-x: auto;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
 .product-block :hover{
 	cursor: pointer;
 }

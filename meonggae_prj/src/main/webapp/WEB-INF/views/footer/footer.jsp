@@ -18,10 +18,10 @@
                     <div class="social">
 
                         <ul>
-                            <li><a href=""><i class="fa fa-wrench"></i></a></li>
+                            <li><a href=""><i class="fa fa-instagram"></i></a></li>
                             <li><a href=""><i class="fa fa-twitter"></i></a></li>
-                            <li><a href=""><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href="https://github.com/KimByeongNyeon/meonggae_store_prj.git" target="blank"><i class="fa fa-github"></i></a></li>
+                            <li><a href=""><i class="fa fa-firefox"></i></a></li>
+                            <li><a href="https://github.com/choiyeon/new_meonggae_prj" target="blank"><i class="fa fa-github"></i></a></li>
                         </ul>
 
                     </div>
