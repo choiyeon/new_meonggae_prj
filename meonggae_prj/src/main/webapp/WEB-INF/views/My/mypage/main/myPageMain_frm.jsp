@@ -60,10 +60,10 @@
 								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
 									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
-										<p class="title">${ is.name }</p>
+										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
-										<p class="price" style="float: left;">${ is.price }원</p>
-										<p class="time-ago" style="float: right;">${ is.inputDate }</p>
+										<p class="price" style="float: left;"><c:out value="${ is.price }"/>원</p>
+										<p class="time-ago" style="float: right;"><c:out value="${ is.inputDate }"/></p>
 										</div>
 									</div>
 								</a>
@@ -101,10 +101,10 @@
 								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
 									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
-										<p class="title">${ is.name }</p>
+										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
-										<p class="price" style="float: left;">${ is.price }원</p>
-										<p class="time-ago" style="float: right;">${ is.inputDate }</p>
+										<p class="price" style="float: left;"><c:out value="${ is.price }"/>원</p>
+										<p class="time-ago" style="float: right;"><c:out value="${ is.inputDate }"/></p>
 										</div>
 									</div>
 								</a>
@@ -142,10 +142,10 @@
 								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
 									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
-										<p class="title">${ is.name }</p>
+										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
-										<p class="price" style="float: left;">${ is.price }원</p>
-										<p class="time-ago" style="float: right;">${ is.inputDate }</p>
+										<p class="price" style="float: left;"><c:out value="${ is.price }"/>원</p>
+										<p class="time-ago" style="float: right;"><c:out value="${ is.inputDate }"/></p>
 										</div>
 									</div>
 								</a>

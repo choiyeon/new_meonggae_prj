@@ -26,8 +26,8 @@ public class SalesListService {
 		try {
 			list = dsDAO.selectAllSalesList(memNum);
 		} catch (PersistenceException pe) {
-				pe.printStackTrace();
-			}//end catch
+			pe.printStackTrace();
+		}//end catch
 		
 		return list;
 	}//searchAllSalesList

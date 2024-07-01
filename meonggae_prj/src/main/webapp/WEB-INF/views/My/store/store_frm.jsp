@@ -58,13 +58,12 @@ String nick = request.getParameter("nick");
 		</div>
 		<div id="userInfo" class="userInfo">
 			<div id="nick" class="nick"><%= nick %>님의 상점</div>
-			<a href="#void" id="userDeclaration"><i class="fa fa-exclamation"></i> 신고</a>
+			<!-- <a href="#void" id="userDeclaration"><i class="fa fa-exclamation"></i> 신고</a> -->
 		</div>
 	</div>
 		<span id="storeMenu" class="storeMenu">
 			<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
 			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>　　　
-			<a href="http://localhost/meonggae_prj/My/mypage/main/myPageMain_frm.do" id="unSelected">@@마이페이지진입/임시@@</a>
 		</span>
 	<hr>
 	
@@ -82,10 +81,10 @@ String nick = request.getParameter("nick");
 						<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
 							<img src="../../products-img/${ is.img }" class="thumbnail">
 							<div class="product-description text-left">
-								<p class="title">${ is.name }</p>
+								<p class="title"><c:out value="${ is.name }"/></p>
 								<div style="overflow: hidden;">
-								<p class="price" style="float: left;">${ is.price }원</p>
-								<p class="time-ago" style="float: right;">${ is.inputDate }</p>
+								<p class="price" style="float: left;"><c:out value="${ is.price }원"/></p>
+								<p class="time-ago" style="float: right;"><c:out value="${ is.inputDate }"/></p>
 								</div>
 							</div>
 						</a>

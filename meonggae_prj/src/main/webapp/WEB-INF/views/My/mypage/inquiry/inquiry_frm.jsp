@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"
     info="1:1 문의"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- 로그인 세션 설정 시작 -->
 <c:choose>
 	<c:when test="${ empty user }">
@@ -34,6 +35,7 @@
 <!-- 내용 시작 -->
 <div class="container">
 	<div id="mypageMenu" class="mypageMenu">
+		
 		<!-- 메뉴목록 -->
 		<%
 		String pageName = "inquiry";
@@ -51,27 +53,23 @@
 		<table id="inquiryTable" class="table table-hover">
 			<thead>
 				<tr>
-					<td style="width: 45%">제목</td>
-					<td style="width: 20%">글쓴이</td>
+					<td style="width: 60%">제목</td>
 					<td style="width: 20%">상태</td>
-					<td style="width: 15%">작성일</td>
+					<td style="width: 20%">작성일</td>
 				</tr>
 			</thead>
 			<tbody>
+			<c:forEach items="${ inquiryList }" var="il">
 				<tr>
-					<td>출근안하고싶어요</td>
-					<td>ㄱㄴㄷ</td>
-					<td>답변 대기중</td>
-					<td>2024-05-29</td>
-				</tr>
-				<tr>
-					<td scope="row">
-					<a href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_detail_frm.do"><div>ㅃㄹ퇴근하고십어요</div></a>
+					<td>
+					<a href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_detail.do?inquiryNum=${ il.inquiryNum }">
+					<c:out value="${ il.title }"/>
+					</a>
 					</td>
-					<td>제발</td>
-					<td>답변 완료</td>
-					<td>2024-05-22</td>
+					<td>${ il.answerFlag eq 'N'?'답변 대기중':'답변 완료' }</td>
+					<td><fmt:formatDate value="${ il.inputDate }" pattern="yyyy-MM-dd"/></td>
 				</tr>
+			</c:forEach>
 			</tbody>
 		</table>
 		<input type="button" value="문의쓰기" id="inquiryWriteBtn" class="btn btn-primary btn-sm"/>

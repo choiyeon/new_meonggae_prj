@@ -26,8 +26,8 @@ public class PersonalService {
 		try {
 			pw = pDAO.selectPw(memNum);
 		} catch (PersistenceException pe) {
-				pe.printStackTrace();
-			}//end catch
+			pe.printStackTrace();
+		}//end catch
 		
 		return pw;
 	}//searchPw
@@ -53,12 +53,15 @@ public class PersonalService {
 	public int modifyPw(String memNum, String pw) {
 		int cnt = 0;
 		
-		PasswordEncoder pe = new BCryptPasswordEncoder();
-		
-		String encryptionPw = pe.encode(pw);
-		
-		PwVO pwVO = new PwVO(memNum, encryptionPw);
-		cnt = pDAO.updatePw(pwVO);
+		try {
+			PasswordEncoder pe = new BCryptPasswordEncoder();
+			String encryptionPw = pe.encode(pw);
+			
+			PwVO pwVO = new PwVO(memNum, encryptionPw);
+			cnt = pDAO.updatePw(pwVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
 		
 		return cnt;
 	}//modifyPw
@@ -69,9 +72,13 @@ public class PersonalService {
 	public boolean searchNick(String inputData) {
 		Boolean flag = false;
 		
-		if(pDAO.selectNick(inputData)) { //사용가능하면
-			flag = true;
-		}//end if
+		try {
+			if(pDAO.selectNick(inputData)) { //사용가능하면
+				flag = true;
+			}//end if
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
 		
 		return flag; 
 	}//searchNick
@@ -80,7 +87,13 @@ public class PersonalService {
 	 * 개인정보 수정
 	 */
 	public int modifyPersonalInfo(PersonalInfoVO piVO) {
-		int cnt = pDAO.updatePersonalInfo(piVO);
+		int cnt = 0;
+		try {
+			cnt = pDAO.updatePersonalInfo(piVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
 		return cnt;
 	}//modifyPersonalInfo
 	
@@ -88,7 +101,14 @@ public class PersonalService {
 	 * 회원탈퇴
 	 */
 	public int modfiyMemberStatus(String memnum) {
-		int cnt = pDAO.updateMemberStatus(memnum);
+		int cnt = 0;
+		
+		try {
+			cnt = pDAO.updateMemberStatus(memnum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
 		return cnt;
 	}//modfiyMemberStatus
 	
