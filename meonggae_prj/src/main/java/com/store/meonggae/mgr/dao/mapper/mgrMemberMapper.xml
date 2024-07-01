@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.member">
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberDomain" id="mgrMemberDomResult">
+		<result column="MEM_NUM" property="memNum"/>
+		<result column="NICK" property="nick"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="NAME" property="name"/>
+		<result column="IMG" property="img"/>
+		<result column="LOGIN_FLAG" property="loginFlag"/>
+		<result column="RECENT_LOGIN_DATE" property="recentLoginDate"/>
+		<result column="JOIN_DATE" property="joinDate"/>
+		<result column="MEM_STATUS" property="memStatus"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberPersonalDomain" id="mgrMemberPersonalDomResult">
+		<result column="MEM_NUM" property="memNum"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="NAME" property="name"/>
+		<result column="NICK" property="nick"/>
+		<result column="MEM_STATUS" property="memStatus"/>
+		<result column="BIRTH" property="birth"/>
+		<result column="IMG" property="img"/>
+		<result column="AGE_RANGE" property="ageRange"/>
+		<result column="ADDR" property="addr"/>
+		<result column="TEL" property="tel"/>
+		<result column="GENDER" property="gender"/>
+		<result column="LOGIN_FLAG" property="loginFlag"/>
+		<result column="SOCIAL" property="social"/>
+		<result column="JOIN_DATE" property="joinDate"/>
+		<result column="RECENT_LOGIN_DATE" property="recentLoginDate"/>
+		<result column="SUSPEND_DATE" property="suspendDate"/>
+		<result column="UNSUSPEND_DATE" property="unsuspendDate"/>
+		<result column="WITHDRAW_DATE" property="withdrawDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberLoginLogDomain" id="mgrMemberLogDomResult">
+		<result column="IP" property="ip"/>
+		<result column="OS" property="os"/>
+		<result column="BROWSER" property="browser"/>
+		<result column="MEM_STATUS" property="memStatus"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberSteamDomain" id="mgrMemberSteamDomResult">
+		<result column="GOODS_NUM" property="goodsNum"/>
+		<result column="TITLE" property="title"/>
+		<result column="PRICE" property="price"/>
+		<result column="IMG" property="img"/>
+		<result column="STEAM_FLAG" property="steamFlag"/>
+		<result column="TIME_AGO" property="timeAgo"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain" id="mgrMemberInquiryDomResult">
+		<result column="TITLE" property="title"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="ANSWER_FLAG" property="answerFlag"/>
+		<result column="ANSWER_DATE" property="answerDate"/>
+	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberReportDomain" id="mgrMemberReportDomResult">
+		<result column="TITLE" property="title"/>
+		<result column="CONTENTS" property="contents"/>
+		<result column="NICK_SELL" property="nickSell"/>
+		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="PROCESS_STATUS_CODE" property="processStatusCode"/>
+		<result column="PROCESS_DATE" property="processDate"/>
+	</resultMap>
+	
+	<!-- 게시판 리스트의 수 -->
+	<select id="selectOneListCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSearchVO">
+		select	count(*) cnt
+		from	member m, member_detail md,
+				(
+				select	mem_num, max(input_date) recent_login_date
+				from	MEMBER_LOGIN_LOG
+				where	input_date &lt;= sysdate
+				group by mem_num
+				) ml
+		where	md.mem_num(+) = m.mem_num and ml.MEM_NUM(+) = m.MEM_NUM
+		<choose>
+			<when test="field eq 0">
+				and md.MEM_ID like '%' || #{keyword} || '%'
+			</when>
+			<when test="field eq 1">
+				and nick like '%' || #{keyword} || '%'
+			</when>
+		</choose> 
+		<if test="startDate neq null">
+			and m.join_date &gt;= #{startDate} 
+		</if>
+		<if test="endDate neq null">
+			and m.join_date &lt;= #{endDate} 
+		</if>
+		
+		<if test="gender neq null">
+			and md.gender = #{gender} 
+		</if>
+		
+		<if test="loginFlag neq null">
+			and m.LOGIN_FLAG = #{loginFlag} 
+		</if>
+		
+		<if test="memStatus neq null">
+			and MEM_STATUS like '%' || #{memStatus} || '%' 
+		</if>
+	</select>
+	
+	<!-- 게시판 리스트 목록 조회 -->
+	<select id="selectListMember" resultMap="mgrMemberDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSearchVO">
+		select	RNUM,MEM_NUM,NICK,MEM_ID,NAME,IMG,LOGIN_FLAG,RECENT_LOGIN_DATE,JOIN_DATE,MEM_STATUS
+		from	(
+				select	row_number() over(order by m.nick) rnum, m.MEM_NUM, m.nick, md.MEM_ID, md.name, m.img, m.LOGIN_FLAG, ml.recent_login_date, m.JOIN_DATE, m.MEM_STATUS
+				from	member m, member_detail md,
+						(
+						select	mem_num, max(input_date) recent_login_date
+						from	MEMBER_LOGIN_LOG
+						where	input_date &lt;= sysdate
+						group by mem_num
+						) ml
+				where	md.mem_num(+) = m.mem_num and ml.MEM_NUM(+) = m.MEM_NUM
+						<choose>
+							<when test="field eq 0">
+								and md.MEM_ID like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and nick like '%' || #{keyword} || '%'
+							</when>
+						</choose> 
+						<if test="startDate neq null">
+							and m.join_date &gt;= #{startDate} 
+						</if>
+						<if test="endDate neq null">
+							and m.join_date &lt;= #{endDate} 
+						</if>
+						
+						<if test="gender neq null">
+							and md.gender = #{gender} 
+						</if>
+						
+						<if test="loginFlag neq null">
+							and m.LOGIN_FLAG = #{loginFlag} 
+						</if>
+						
+						<if test="memStatus neq null">
+							and MEM_STATUS like '%' || #{memStatus} || '%' 
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 게시판 목록 하나 조회 - 개인정보 -->
+	<select id="selectOneMemberPersonal" resultMap="mgrMemberPersonalDomResult" parameterType="int">
+		select	m.mem_num, md.name, md.mem_id, m.nick, m.MEM_STATUS, md.birth, m.img, 
+				case
+					when TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(md.birth,'YYYY-MM-DD')) / 12) &gt;= 10 then
+						case
+							when mod(TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(md.birth,'YYYY-MM-DD')) / 12), 10) &lt; 5 then TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(md.birth,'YYYY-MM-DD')) / 12 / 10) ||'0대 초반'
+							else TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TO_DATE(md.birth,'YYYY-MM-DD')) / 12 / 10) ||'0대 후반'
+						end
+					else '어린이'
+				end age_range,
+				md.addr || ' ' || md.addr_detail addr, md.tel, md.gender, m.LOGIN_FLAG, st.name social,
+				m.join_date, ml.recent_login_date, m.SUSPEND_DATE, m.UNSUSPEND_DATE, m.WITHDRAW_DATE
+		from	member m, member_detail md, SOCIAL_LOGIN sl, SOCIAL_TYPE st,
+				(
+				select	mem_num, max(input_date) recent_login_date
+				from	MEMBER_LOGIN_LOG
+				where	input_date &lt;= sysdate
+				group by mem_num
+				) ml
+		where	md.mem_num(+) = m.mem_num and sl.mem_num(+) = m.mem_num and st.SOCIAL_NUM(+) = sl.SOCIAL_NUM and ml.mem_num(+) = m.mem_num	
+				and m.mem_num = #{memNum}
+	</select>
+	
+	<!-- 회원 정지 -->
+	<update id="updateOneMemberSuspend" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSuspendVO">
+		update	member
+		set		SUSPEND_DATE=sysdate, MEM_STATUS='S'
+				<choose>
+					<when test="unsuspendDate neq null">
+						, UNSUSPEND_DATE = to_date(#{unsuspendDate}, 'yyyy-mm-dd') + 1 - 1/24/60/60
+					</when>
+					<when test="suspendPeriod neq null">
+						, UNSUSPEND_DATE = trunc(sysdate + to_number(#{suspendPeriod}) + 1) - 1/24/60/60
+					</when>
+				</choose>
+		where	mem_num = #{memNum} and MEM_STATUS = 'N'
+	</update>
+	
+	<!-- 회원 정지 해제 -->
+	<update id="updateOneMemberUnSuspend" parameterType="int">
+		update	member
+		set		UNSUSPEND_DATE = sysdate, MEM_STATUS='N'
+		where	mem_num=#{memNum} and MEM_STATUS='S'
+	</update>
+	
+	<!-- 회원 로그인 로그 게시판 리스트의 수 -->
+	<select id="selectOneLoginLogListCnt" resultType="int" parameterType="int">
+		select	count(*) cnt
+		from	MEMBER_LOGIN_LOG
+		where	mem_num = #{memNum} and input_date &lt;= sysdate
+	</select>
+	<!-- 회원 로그인 로그 리스트 -->
+	<select id="selectListLoginLog" resultMap="mgrMemberLogDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSearchVO">
+		select	IP,OS,BROWSER,MEM_STATUS,INPUT_DATE
+		from	(
+				select	row_number() over(order by input_date desc) rnum, ip, os, browser, mem_status, input_date
+				from	MEMBER_LOGIN_LOG
+				where	mem_num = #{keyword} and input_date &lt;= sysdate
+				)
+		where 	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 찜목록 게시판 리스트의 수 -->
+	<select id="selectOneSteamListCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO">
+		select	count(*)
+		from	steam s, goods g, GOODS_IMG gi, member m
+		where	s.GOODS_NUM = g.GOODS_NUM and gi.GOODS_NUM = g.GOODS_NUM and g.mem_num_sell = m.mem_num and
+				s.mem_num = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and g.name like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and g.detail like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 2">
+						and m.nick like '%' || #{keyword} || '%'
+					</when>
+				</choose> 
+	</select>
+	
+	<!-- 찜목록 게시판 리스트 목록 조회 -->
+	<select id="selectListSteam" resultMap="mgrMemberSteamDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSteamSearchVO">
+		select	GOODS_NUM,TITLE,PRICE,IMG,STEAM_FLAG,TIME_AGO, input_date
+		from	(
+				select	row_number() over(order by s.input_date desc) rnum, g.goods_num, g.name title, g.price, gi.name img, s.steam_flag, s.input_date,
+						case
+							when trunc(g.input_date) = trunc(sysdate) then '오늘'
+							else trunc(sysdate) - trunc(g.input_date) || ' 일 전'
+						end time_ago, g.detail, m.nick
+				from	steam s, goods g, GOODS_IMG gi, member m
+				where	s.GOODS_NUM = g.GOODS_NUM and gi.GOODS_NUM = g.GOODS_NUM and g.mem_num_sell = m.mem_num and
+						s.mem_num = #{memNum}
+						<choose>
+							<when test="field eq 0">
+								and g.name like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and g.detail like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 2">
+								and m.nick like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 리뷰 목록 게시판 리스트의 수 -->
+	<select id="selectOneReviewCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO">
+		select	count(*)
+		from	VIEW_MGR_REVIEW
+		where	mem_num_buy = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and GOODS_TITLE like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and NICK_SELL like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 2">
+						and CONTENT like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+				<if test="startDate neq null">
+					and review_input_date &gt;= #{startDate} 
+				</if>
+				<if test="endDate neq null">
+					and review_input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+				</if>
+	</select>
+	
+	<!-- 리뷰 목록 게시판 리뷰 리스트 -->
+	<select id="selectListReview" resultMap="com.store.meonggae.mgr.review.mgrReviewDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReviewSearchVO">
+		select	GOODS_NUM,
+				case
+					when length(GOODS_TITLE) &gt; 20 then substr(GOODS_TITLE, 1, 17) || '...'
+					else GOODS_TITLE
+				end GOODS_TITLE,
+				GOODS_IMG, MEM_NUM_SELL, NICK_SELL,
+				case
+					when length(content) &gt; 15 then substr(CONTENT, 1, 12) || '...'
+					else content
+				end content, 
+				MEM_NUM_BUY, NICK_BUY, STAR, REVIEW_INPUT_DATE, DELETE_FLAG
+		from	(
+				select	row_number() over(order by REVIEW_INPUT_DATE desc) rnum, GOODS_NUM, GOODS_TITLE, GOODS_IMG, MEM_NUM_SELL, NICK_SELL, CONTENT, MEM_NUM_BUY, NICK_BUY, STAR, REVIEW_INPUT_DATE, DELETE_FLAG
+				from	VIEW_MGR_REVIEW
+				where	mem_num_buy = #{memNum} 
+						<choose>
+							<when test="field eq 0">
+								and GOODS_TITLE like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and NICK_SELL like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 2">
+								and CONTENT like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+						<if test="startDate neq null">
+							and review_input_date &gt;= #{startDate} 
+						</if>
+						<if test="endDate neq null">
+							and review_input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 문의 목록 게시판 리스트의 수 -->
+	<select id="selectOneInquiryCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO">
+		select	count(*)
+		from	inquiry
+		where	mem_num = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and TITLE like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and CONTENTS like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+				<if test="startDate neq null">
+					and input_date &gt;= #{startDate} 
+				</if>
+				<if test="endDate neq null">
+					and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+				</if>
+				<if test="answerFlag neq null">
+					<choose>
+						<when test="answerFlag eq 1">
+							and answer_Flag = 'N'
+						</when>
+						<when test="answerFlag eq 2">
+							and answer_Flag = 'Y'
+						</when>
+					</choose>
+				</if>
+	</select>
+	
+	<!-- 문의 목록 게시판 리스트 -->
+	<select id="selectListInquiry" resultMap="mgrMemberInquiryDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO">
+		select	rnum,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+		from	(
+				select	row_number() over(order by input_date desc) RNUM,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+				from	inquiry
+				where	mem_num = #{memNum} 
+						<choose>
+							<when test="field eq 0">
+								and TITLE like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and CONTENTS like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+						<if test="startDate neq null">
+							and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+						</if>
+						<if test="endDate neq null">
+							and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+						<if test="answerFlag neq null">
+							<choose>
+								<when test="answerFlag eq 1">
+									and answer_Flag = 'N'
+								</when>
+								<when test="answerFlag eq 2">
+									and answer_Flag = 'Y'
+								</when>
+							</choose>
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 신고 목록 게시판 리스트의 수 -->
+	<select id="selectOneReportCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO">
+		select	count(*)
+		from	report r, member m, goods g
+		where	r.goods_num = g.goods_num and g.MEM_NUM_SELL = m.mem_num
+				and r.MEM_NUM_REP = #{memNum} 
+				<choose>
+					<when test="field eq 0">
+						and r.TITLE like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 1">
+						and r.CONTENTS like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 2">
+						and m.nick like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 3">
+						and g.name like '%' || #{keyword} || '%'
+					</when>
+					<when test="field eq 4">
+						and g.detail like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+				<if test="startDate neq null">
+					and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+				</if>
+				<if test="endDate neq null">
+					and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+				</if>
+				<if test="processStatusCode neq null">
+					<choose>
+						<when test="processStatusCode eq 1">
+							and r.PROCESS_STATUS_CODE = '00'
+						</when>
+						<when test="processStatusCode eq 2">
+							and r.PROCESS_STATUS_CODE not in ('00', '11')
+						</when>
+						<when test="processStatusCode eq 3">
+							and r.PROCESS_STATUS_CODE = '11'
+						</when>
+					</choose>
+				</if>
+	</select>
+	
+	<!-- 신고 목록 게시판 리스트 -->
+	<select id="selectListReport" resultMap="mgrMemberReportDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberReportSearchVO">
+		select	TITLE,CONTENTS,NICK_SELL,INPUT_DATE,PROCESS_STATUS_CODE,PROCESS_DATE
+		from	(
+				select	row_number() over(order by r.input_date desc) rnum, r.title, r.CONTENTS, m.nick nick_sell, r.INPUT_DATE, r.PROCESS_STATUS_CODE, r.PROCESS_DATE
+				from	report r, member m, goods g
+				where	r.goods_num = g.goods_num and g.MEM_NUM_SELL = m.mem_num
+						and r.MEM_NUM_REP = #{memNum} 
+						<choose>
+							<when test="field eq 0">
+								and r.TITLE like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 1">
+								and r.CONTENTS like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 2">
+								and m.nick like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 3">
+								and g.name like '%' || #{keyword} || '%'
+							</when>
+							<when test="field eq 4">
+								and g.detail like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+						<if test="startDate neq null">
+							and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
+						</if>
+						<if test="endDate neq null">
+							and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
+						</if>
+						<if test="processStatusCode neq null">
+							<choose>
+								<when test="processStatusCode eq 1">
+									and r.PROCESS_STATUS_CODE = '00'
+								</when>
+								<when test="processStatusCode eq 2">
+									and r.PROCESS_STATUS_CODE not in ('00', '11')
+								</when>
+								<when test="processStatusCode eq 3">
+									and r.PROCESS_STATUS_CODE = '11'
+								</when>
+							</choose>
+						</if>
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<!-- 거래내역 목록 게시판 리스트의 수 -->
+	<select id="selectOneTradeCnt" resultType="int" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberGoodsSearchVO">
+		select	count(*) cnt
+		from	(
+				select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy
+				from	(
+						select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+								case
+									when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+									else '오늘'
+								end time_ago,
+								gi.name img,
+								c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+								g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY
+						from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+						where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+						) j, member m
+				where	j.mem_num_buy = m.mem_num(+)
+						<choose>
+							<when test='trade eq null or trade.equals("S")'>
+								and j.mem_num_sell = #{memNum}
+							</when>
+							<otherwise>
+								and j.mem_num_buy = #{memNum}
+							</otherwise>
+						</choose>
+				)
+		<where>
+			<choose>
+				<when test="field eq 0">
+					NICK_SELL like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 1">
+					title like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 2">
+					detail like '%' || #{keyword} || '%'
+				</when>
+				<when test="field eq 3">
+					nick_buy like '%' || #{keyword} || '%'
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+			</choose> 
+			<choose>
+				<when test="categoryNum neq null">
+					and category_num = #{categoryNum}
+				</when>
+				<otherwise> 
+					<if test="parentCategoryNum neq null">
+						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+					</if>
+				</otherwise>
+			</choose>
+			
+			<if test="startDate neq null">
+				and input_date &gt;= #{startDate} 
+			</if>
+			<if test="endDate neq null">
+				and input_date &lt;= #{endDate} 
+			</if>
+			
+			<if test="tradeMethodCode neq null">
+				<choose>
+					<when test='tradeMethodCode.equals("D")'>
+						and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
+					</when>
+					<when test='tradeMethodCode.equals("P")'>
+						and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode} , 'B')
+					</when>
+				</choose>
+			</if>
+			
+			<if test="qualityCode neq null">
+				and QUALITY_CODE = #{qualityCode} 
+			</if>
+			
+			<if test="location neq null">
+				and location like '%' || #{location} || '%' 
+			</if>
+			
+			<if test="minPrice neq null">
+				and price &gt;= #{minPrice}
+			</if>
+			<if test="maxPrice neq null">
+				and price &lt;= #{maxPrice}
+			</if>
+			
+			<if test="sellStatusCode neq null">
+				and SELL_STATUS_CODE = #{sellStatusCode} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- 거래내역 게시판 리스트 -->
+	<select id="selectListTrade" resultMap="com.store.meonggae.mgr.goods.mgrGoodsDomResult" parameterType="com.store.meonggae.mgr.goods.vo.MgrGoodsSearchVO">
+		select	rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,
+				decode(delete_flag, 'Y', 1, 'N', 0, 0) delete_flag
+		from	(
+				select	row_number() over (order by input_date desc) rnum, GOODS_NUM,title,DETAIL,PRICE,LOCATION,img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY,nick_buy,delete_flag
+				from	(
+						select	GOODS_NUM,NAME title,DETAIL,PRICE,LOCATION,j.img,INPUT_DATE,TIME_AGO,CATEGORY_NUM,PARENT_CATEGORY_NUM,upper(TRADE_METHOD_CODE) TRADE_METHOD_CODE,QUALITY_CODE,SELL_STATUS_CODE,MEM_NUM_SELL,NICK_SELL,MEM_NUM_BUY, m.nick nick_buy,delete_flag
+						from	(
+								select	g.GOODS_NUM, g.NAME, g.DETAIL, g.PRICE, g.LOCATION, g.INPUT_DATE,
+										case
+											when trunc(sysdate) != trunc(g.input_date) then trunc(sysdate - g.input_date) || ' 일전'
+											else '오늘'
+										end time_ago,
+										gi.name img,
+										c.CATEGORY_NUM, c.PARENT_CATEGORY_NUM, g.TRADE_METHOD_CODE, g.QUALITY_CODE, g.SELL_STATUS_CODE,
+										g.MEM_NUM_SELL, m.nick nick_sell, g.MEM_NUM_BUY, g.delete_flag
+								from	GOODS g, VIEW_MGR_GOODS_CATEGORY c, MEMBER m, GOODS_IMG gi
+								where	g.category_num = c.CATEGORY_NUM and g.MEM_NUM_SELL = m.MEM_NUM and gi.GOODS_NUM = g.GOODS_NUM
+								) j, member m
+						where	j.mem_num_buy = m.mem_num(+)
+								<choose>
+									<when test='trade eq null or trade.equals("S")'>
+										and j.mem_num_sell = #{memNum}
+									</when>
+									<otherwise>
+										and j.mem_num_buy = #{memNum}
+									</otherwise>
+								</choose>
+						)
+				<where>
+					<choose>
+						<when test="field eq 0">
+							NICK_SELL like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 1">
+							title like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 2">
+							detail like '%' || #{keyword} || '%'
+						</when>
+						<when test="field eq 3">
+							nick_buy like '%' || #{keyword} || '%'
+						</when>
+						<otherwise>
+							1 = 1
+						</otherwise>
+					</choose> 
+					<choose>
+						<when test="categoryNum neq null">
+							and category_num = #{categoryNum}
+						</when>
+						<otherwise> 
+							<if test="parentCategoryNum neq null">
+								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
+							</if>
+						</otherwise>
+					</choose>
+					
+					<if test="startDate neq null">
+						and input_date &gt;= #{startDate} 
+					</if>
+					<if test="endDate neq null">
+						and input_date &lt;= #{endDate} 
+					</if>
+					
+					<if test="tradeMethodCode neq null">
+						<choose>
+							<when test='tradeMethodCode.equals("D")'>
+								and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
+							</when>
+							<when test='tradeMethodCode.equals("P")'>
+								and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode} , 'B')
+							</when>
+						</choose>
+					</if>
+					
+					<if test="qualityCode neq null">
+						and QUALITY_CODE = #{qualityCode} 
+					</if>
+					
+					<if test="location neq null">
+						and location like '%' || #{location} || '%' 
+					</if>
+					
+					<if test="minPrice neq null">
+						and price &gt;= #{minPrice}
+					</if>
+					<if test="maxPrice neq null">
+						and price &lt;= #{maxPrice}
+					</if>
+					
+					<if test="sellStatusCode neq null">
+						and SELL_STATUS_CODE = #{sellStatusCode} 
+					</if>
+				</where>				
+				)
+		where	rnum between #{startNum} and #{endNum}
+	</select>
+</mapper>

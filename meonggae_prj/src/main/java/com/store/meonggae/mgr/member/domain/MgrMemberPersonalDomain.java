@@ -1,10 +1,11 @@
 package com.store.meonggae.mgr.member.domain;
 
-import java.sql.Date;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
@@ -13,8 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberDomain {
+public class MgrMemberPersonalDomain {
 	private int memNum;
-	private String nick, memId, name, img, memStatus, loginFlag;
-	private Date recentLoginDate, joinDate;
+	private String memId, name, nick, memStatus, birth, img, ageRange, addr, tel, gender, loginFlag, social;
+	private Date joinDate, recentLoginDate, suspendDate, unsuspendDate, withdrawDate;
 }

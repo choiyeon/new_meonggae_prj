@@ -1,4 +1,4 @@
-package com.store.meonggae.mgr.review.vo;
+package com.store.meonggae.mgr.member.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrReviewSearchVO extends MgrSearchVO{
+public class MgrMemberReviewSearchVO extends MgrSearchVO {
 	private String startDate, endDate;
-	private String categoryNum, parentCategoryNum;
+	private int memNum;
 }

@@ -1,6 +1,6 @@
-package com.store.meonggae.mgr.member.domain;
+package com.store.meonggae.mgr.member.vo;
 
-import java.sql.Date;
+import com.store.meonggae.mgr.common.vo.MgrSearchVO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberDomain {
+public class MgrMemberInquiySearchVO extends MgrSearchVO{
+	private String startDate, endDate, answerFlag;
 	private int memNum;
-	private String nick, memId, name, img, memStatus, loginFlag;
-	private Date recentLoginDate, joinDate;
 }

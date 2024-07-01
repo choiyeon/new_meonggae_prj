@@ -13,8 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrMemberDomain {
-	private int memNum;
-	private String nick, memId, name, img, memStatus, loginFlag;
-	private Date recentLoginDate, joinDate;
+public class MgrMemberInqiryDomain {
+	private String title, contents, answerFlag;
+	private Date inputDate, answerDate;
 }

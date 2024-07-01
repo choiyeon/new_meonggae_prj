@@ -141,9 +141,6 @@
 	// 검색을 위한 null 체크
 	function chkNull() {
 		if($("#keyword").val().trim() != "") {
-// 			if($("#chkDeptAll").is(":checked")) {
-// 				$(".dept").prop("disabled", "disabled");
-// 			} // end if
 			disableInput();
 			$("#frmBoard").submit();
 		} // end if
@@ -401,68 +398,6 @@
 									</div>
 								</div>
 							</div>	
-						</div>
-						<div class="card-tools me-n1">
-							<ul class="btn-toolbar gx-s1">
-								<li>
-									<div class="toggle-wrap">
-										<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
-											<em class="icon ni ni-menu-right"></em>
-										</a>
-										<div class="toggle-content" data-content="cardTools">
-											<ul class="btn-toolbar gx-1">
-												<li>
-													<div class="dropdown">
-														<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-															<em class="icon ni ni-setting"></em>
-														</a>
-														<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-															<ul class="link-check">
-																<li>
-																	<span>리스트 수</span>
-																</li>
-																<li class="active">
-																	<a href="#">10</a>
-																</li>
-																<li>
-																	<a href="#">20</a>
-																</li>
-																<li>
-																	<a href="#">50</a>
-																</li>
-															</ul>
-															<ul class="link-check">
-																<li>
-																	<span>정렬</span>
-																</li>
-																<li class="active">
-																	<a href="#">내림차순</a>
-																</li>
-																<li>
-																	<a href="#">오름차순</a>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="card-search search-wrap" data-search="search">
-						<div class="card-body">
-							<div class="search-content">
-								<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
-									<em class="icon ni ni-arrow-left"></em>
-								</a>
-								<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-								<button class="search-submit btn btn-icon">
-									<em class="icon ni ni-search"></em>
-								</button>
-							</div>
 						</div>
 					</div>
 				</div>

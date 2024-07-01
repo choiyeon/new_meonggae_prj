@@ -3,6 +3,7 @@
 	info="관리자 - 회원 관리 - 리스트"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%request.setCharacterEncoding("UTF-8");%>
 <%/*
 작성자: 김동섭
@@ -10,7 +11,7 @@
 */%>
 
 <c:set var="date" value="<%=new java.util.Date()%>" />
-<c:set var="strDate"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd" /></c:set>
+<c:set var="strDate"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/></c:set>
 
 <!DOCTYPE html>
 <html>
@@ -62,8 +63,22 @@
 <style type="text/css">
 	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+	.ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
+	.user-avatar2{
+	    border-radius:50%;
+	    height:40px;
+	    width:40px;
+	    display:flex;
+	    justify-content:center;
+	    align-items:center;
+	    color:#fff;
+	    font-size:14px;
+	    font-weight:500;
+	    letter-spacing:.06em;
+	    flex-shrink:0;
+	    position:relative
+	}
 </style>
 
 <script type="text/javascript">
@@ -94,23 +109,17 @@
 		// 필터 초기화
 		$("#resetFilter").click(function () {
 			let url = new URL(location.href);
-			url.searchParams.delete('parentCategoryNum');
-			url.searchParams.delete('categoryNum');
 			url.searchParams.delete('startDate');
 			url.searchParams.delete('endDate');
-			
-			url.searchParams.delete('tradeMethodCode');
-			url.searchParams.delete('qualityCode');
-			url.searchParams.delete('location');
-			url.searchParams.delete('minPrice');
-			url.searchParams.delete('maxPrice');
-			url.searchParams.delete('sellStatusCode');
-			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do" + url.search;
+			url.searchParams.delete('gender');
+			url.searchParams.delete('loginFlag');
+			url.searchParams.delete('memStatus');
+			location.href = "${pageContext.request.contextPath}/mgr/member/mgr_member_list_frm.do" + url.search;
 		}); // click
 		
 		// 전체 조회
 		$("#btnAllSearch").click(function () {
-			location.href = "${pageContext.request.contextPath}/mgr/goods/mgr_goods_list_frm.do";
+			location.href = "${pageContext.request.contextPath}/mgr/member/mgr_member_list_frm.do";
 		}); // click
 	}); // $(document).ready(function() { })
 	
@@ -127,13 +136,6 @@
 	
 	// form submit시 null인 거 안 넘어가게
 	function disableInput() {
-		if($("#selCategoryUpper").val() == null || $("#selCategoryUpper").val().trim() == '') {
-			$("#selCategoryUpper").prop("disabled", "disabled");
-			$("#selCategoryLower").prop("disabled", "disabled");
-		} // end if
-		if($("#selCategoryLower").val() == null || $("#selCategoryLower").val().trim() == '') {
-			$("#selCategoryLower").prop("disabled", "disabled");
-		} // end if
 		if($("#startDate").val() == null || $("#startDate").val().trim() == '') {
 			$("#startDate").prop("disabled", "disabled");
 		} // end if
@@ -141,24 +143,12 @@
 			$("#endDate").prop("disabled", "disabled");
 		} // end if
 		
-		if($("#tradeMethodCode").val() == null || $("#tradeMethodCode").val().trim() == '') {
-			$("#tradeMethodCode").prop("disabled", "disabled");
-		} // end if
-		if($("#qualityCode").val() == null || $("#qualityCode").val().trim() == '') {
-			$("#qualityCode").prop("disabled", "disabled");
-		} // end if
-		if($("#location").val() == null || $("#location").val().trim() == '') {
-			$("#location").prop("disabled", "disabled");
-		} // end if
-		if($("#minPrice").val() == null || $("#minPrice").val().trim() == '') {
-			$("#minPrice").prop("disabled", "disabled");
-		} // end if
-		if($("#maxPrice").val() == null || $("#maxPrice").val().trim() == '') {
-			$("#maxPrice").prop("disabled", "disabled");
-		} // end if
-		if($("#sellStatusCode").val() == null || $("#sellStatusCode").val().trim() == '') {
-			$("#sellStatusCode").prop("disabled", "disabled");
-		} // end if
+		let arrFilter = $(".filter");
+		for(let i = 0; i < arrFilter.length; i++) {
+			if($(arrFilter[i]).val() == null || $(arrFilter[i]).val().trim() == '') {
+				$(arrFilter[i]).prop("disabled", "disabled");
+			} // end if
+		} // end for
 	} // disableInput
 </script>
 
@@ -190,289 +180,330 @@
 <div class="nk-block">
 	<div class="card card-bordered card-stretch">
 		<div class="card-inner-group">
-			<div class="card-inner position-relative card-tools-toggle">
-				<div class="card-title-group">
-					<div class="card-tools">
-						<div class="form-inline flex-nowrap gx-5">
-							<div class="row gy-4">
-								<div class="col-sm-1">
-									<div class="btn-wrap">
-										<span class="d-none d-md-block">
-											<input type="button" class="btn btn-light" id="btnAllSearch" value="전체 조회">
-										</span>
+			<form name="frmBoard" id="frmBoard" action="mgr_member_list_frm.do">
+				<div class="card-inner position-relative card-tools-toggle">
+					<div class="card-title-group">
+						<div class="card-tools">
+							<div class="form-inline flex-nowrap gx-5">
+								<div class="row gy-4">
+									<div class="col-sm-1">
+										<div class="btn-wrap">
+											<span class="d-none d-md-block">
+												<input type="button" class="btn btn-light" id="btnAllSearch" value="전체 조회">
+											</span>
+										</div>
 									</div>
-								</div>
-								<hr style="color:#ffffff"/>
-								<div class="col-sm-2">
-									<div class="form-wrap">
-										<div class="input-group-prepend" style="width:180px;">
-											<select id="gender" class="form-select js-select2" name="gender">
-												<option value="">모든 성별</option>
-												<option value="M"${param.tradeMethodCode eq 'M' ? " selected='selected'" : ""}>남자</option>
-												<option value="F"${param.tradeMethodCode eq 'F' ? " selected='selected'" : ""}>여자</option>
-											</select>
-										</div>	
+									<hr style="color:#ffffff"/>
+									<div class="col-sm-2">
+										<div class="form-wrap">
+											<div class="input-group-prepend" style="width:180px;">
+												<select id="gender" class="form-select js-select2 filter" name="gender">
+													<option value="">모든 성별</option>
+													<option value="M"${param.gender eq 'M' ? " selected='selected'" : ""}>남자</option>
+													<option value="F"${param.gender eq 'F' ? " selected='selected'" : ""}>여자</option>
+												</select>
+											</div>	
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-2">
-									<div class="form-wrap">
-										<div class="input-group-prepend" style="width:180px;">
-											<select id="loginFlag" class="form-select js-select2" name="loginFlag">
-												<option value="">모든 로그인 타입</option>
-												<option value="N"${param.qualityCode eq 'N' ? " selected='selected'" : ""}>일반 회원</option>
-												<option value="S"${param.qualityCode eq 'S' ? " selected='selected'" : ""}>소셜 회원</option>
-											</select>
-										</div>	
+									<div class="col-sm-2">
+										<div class="form-wrap">
+											<div class="input-group-prepend" style="width:180px;">
+												<select id="loginFlag" class="form-select js-select2 filter" name="loginFlag">
+													<option value="">모든 로그인 타입</option>
+													<option value="N"${param.loginFlag eq 'N' ? " selected='selected'" : ""}>일반 회원</option>
+													<option value="S"${param.loginFlag eq 'S' ? " selected='selected'" : ""}>소셜 회원</option>
+												</select>
+											</div>	
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-3">
-									<div class="form-group">
-										<div class="form-control-wrap">
-											<div class="input-daterange date-picker-range input-group">
-												<div class="input-group-addon">가입일</div>
-												<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}">
-												<div class="input-group-addon"> ~ </div>
-												<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<div class="form-control-wrap">
+												<div class="input-daterange date-picker-range input-group">
+													<div class="input-group-addon">가입일</div>
+													<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}">
+													<div class="input-group-addon"> ~ </div>
+													<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}">
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-sm-2">
-									<div class="form-wrap">
-										<div class="input-group-prepend" style="width:180px;">
-											<select id="memStatus" class="form-select js-select2" name="memStatus">
-												<option value="">모든 회원 상태</option>
-												<option value="N"${param.sellStatusCode eq 'N' ? " selected='selected'" : ""}>일반</option>
-												<option value="S"${param.sellStatusCode eq 'S' ? " selected='selected'" : ""}>정지</option>
-												<option value="W"${param.sellStatusCode eq 'W' ? " selected='selected'" : ""}>탈퇴</option>
-											</select>
-										</div>	
+									<div class="col-sm-2">
+										<div class="form-wrap">
+											<div class="input-group-prepend" style="width:180px;">
+												<select id="memStatus" class="form-select js-select2 filter" name="memStatus">
+													<option value="">모든 회원 상태</option>
+													<option value="N"${param.memStatus eq 'N' ? " selected='selected'" : ""}>일반</option>
+													<option value="S"${param.memStatus eq 'S' ? " selected='selected'" : ""}>정지</option>
+													<option value="W"${param.memStatus eq 'W' ? " selected='selected'" : ""}>탈퇴</option>
+												</select>
+											</div>	
+										</div>
+									</div>
+									<hr style="color:#ffffff"/>
+									<div class="col-sm-1">
+										<div class="btn-wrap">
+											<span class="d-none d-md-block">
+												<input type="button" class="btn btn-dim btn-primary" id="btnFilter" value="적용하기">
+											</span>
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="btn-wrap">
+											<span class="d-none d-md-block">
+												<input type="button" class="btn btn-outline-secondary" id="resetFilter" value="초기화">
+											</span>
+										</div>
 									</div>
 								</div>
-								<hr style="color:#ffffff"/>
-								<div class="col-sm-1">
-									<div class="btn-wrap">
-										<span class="d-none d-md-block">
-											<input type="button" class="btn btn-dim btn-primary" id="btnFilter" value="적용하기">
+							</div>
+						</div>
+						<div class="card-tools me-n1">
+							<ul class="btn-toolbar gx-s1">
+								<li>
+									<div class="toggle-wrap">
+										<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
+											<em class="icon ni ni-menu-right"></em>
+										</a>
+										<div class="toggle-content" data-content="cardTools">
+											<ul class="btn-toolbar gx-1">
+												<li class="toggle-close">
+													<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
+														<em class="icon ni ni-arrow-left"></em>
+													</a>
+												</li>
+	<!-- 											<li> -->
+	<!-- 												<div class="dropdown"> -->
+	<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
+	<!-- 														<div class="dot dot-primary"></div> -->
+	<!-- 														<em class="icon ni ni-filter-alt"></em> -->
+	<!-- 													</a> -->
+	<!-- 													<div class="filter-wg dropdown-menu dropdown-menu-end" style="min-width:200px;max-width:200px;"> -->
+	<!-- 														<div class="dropdown-head"> -->
+	<!-- 															<span class="sub-title dropdown-title">필터</span> -->
+	<!-- 														</div> -->
+	<!-- 														<div class="dropdown-body dropdown-body-rg"> -->
+	<!-- 															<div class="row gx-6 gy-3"> -->
+	<!-- 																<div class="col-12"> -->
+	<!-- 																	<div class="form-group"> -->
+	<!-- 																		<label class="overline-title overline-title-alt">상태 선택</label> -->
+	<!-- 																		<select class="form-select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true"> -->
+	<!-- 																			<option value="any">모든 상태</option> -->
+	<!-- 																			<option value="n">일반</option> -->
+	<!-- 																			<option value="s">정지</option> -->
+	<!-- 																			<option value="w">탈퇴</option> -->
+	<!-- 																			<option value="sw">정지 + 탈퇴</option> -->
+	<!-- 																		</select> -->
+	<!-- 																	</div> -->
+	<!-- 																</div> -->
+	<!-- 																<div class="col-12"> -->
+	<!-- 																	<div class="form-group"> -->
+	<!-- 																		<button type="button" class="btn btn-secondary">Filter</button> -->
+	<!-- 																	</div> -->
+	<!-- 																</div> -->
+	<!-- 															</div> -->
+	<!-- 														</div> -->
+	<!-- 														<div class="dropdown-foot between"> -->
+	<!-- 															<a class="clickable" href="#">초기화</a> -->
+	<!-- 														</div> -->
+	<!-- 													</div> -->
+	<!-- 												</div> -->
+	<!-- 											</li> -->
+	<!-- 											<li> -->
+	<!-- 												<div class="dropdown"> -->
+	<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
+	<!-- 														<em class="icon ni ni-setting"></em> -->
+	<!-- 													</a> -->
+	<!-- 													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end"> -->
+	<!-- 														<ul class="link-check"> -->
+	<!-- 															<li> -->
+	<!-- 																<span>리스트 수</span> -->
+	<!-- 															</li> -->
+	<!-- 															<li class="active"> -->
+	<!-- 																<a href="#">10</a> -->
+	<!-- 															</li> -->
+	<!-- 															<li> -->
+	<!-- 																<a href="#">20</a> -->
+	<!-- 															</li> -->
+	<!-- 															<li> -->
+	<!-- 																<a href="#">50</a> -->
+	<!-- 															</li> -->
+	<!-- 														</ul> -->
+	<!-- 														<ul class="link-check"> -->
+	<!-- 															<li> -->
+	<!-- 																<span>정렬</span> -->
+	<!-- 															</li> -->
+	<!-- 															<li class="active"> -->
+	<!-- 																<a href="#">내림차순</a> -->
+	<!-- 															</li> -->
+	<!-- 															<li> -->
+	<!-- 																<a href="#">오름차순</a> -->
+	<!-- 															</li> -->
+	<!-- 														</ul> -->
+	<!-- 													</div> -->
+	<!-- 												</div> -->
+	<!-- 											</li> -->
+											</ul>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="card-search search-wrap" data-search="search">
+						<div class="card-body">
+							<div class="search-content">
+								<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
+									<em class="icon ni ni-arrow-left"></em>
+								</a>
+								<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
+								<button class="search-submit btn btn-icon">
+									<em class="icon ni ni-search"></em>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<c:set var="flagIsList" value="${not (requestScope.list eq null or fn:length(requestScope.list) eq 0)}"/>
+				<div class="card-inner p-0">
+					<div class="nk-tb-list nk-tb-ulist">
+						<div class="nk-tb-item nk-tb-head">
+							<div class="nk-tb-col" style="width:8%;">
+								<span class="sub-text">번호</span>
+							</div>
+							<div class="nk-tb-col tb-col-xs">
+								<span class="sub-text">닉네임</span>
+							</div>
+							<div class="nk-tb-col tb-col-xs">
+								<span class="sub-text">로그인 타입</span>
+							</div>
+							<div class="nk-tb-col">
+								<span class="sub-text">아이디</span>
+							</div>
+<!-- 							<div class="nk-tb-col"> -->
+<!-- 								<span class="sub-text">이름</span> -->
+<!-- 							</div> -->
+							<div class="nk-tb-col tb-col-xs">
+								<span class="sub-text">최근 로그인</span>
+							</div>
+							<div class="nk-tb-col tb-col-xs">
+								<span class="sub-text">가입일</span>
+							</div>
+							<div class="nk-tb-col tb-col-xs">
+								<span class="sub-text">상태</span>
+							</div>
+						</div>
+						<c:if test="${flagIsList }">
+							<c:forEach var="memberDomain" items="${requestScope.list }" varStatus="i">
+								<div class="nk-tb-item">
+									<div class="nk-tb-col tb-col-mb">
+										<span class="tb-amount"><c:out value="${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }"/></span>
+									</div>
+									<div class="nk-tb-col tb-col-mb">
+										<div class="user-card">
+											<div class="user-avatar2 bg-white"><span>
+											<c:choose>
+												<c:when test="${memberDomain.img eq null or memberDomain.img eq '' }">
+													<img src="${pageContext.request.contextPath}/profile-img/default.png" alt="" class="thumbnail">
+												</c:when>
+												<c:when test="${fn:startsWith(memberDomain.img, 'http')}">
+													<img src="${memberDomain.img}" alt="" class="thumbnail" style="max-width:40px; max-height:40px;">
+												</c:when>
+												<c:otherwise>
+													<img src="${pageContext.request.contextPath}/profile-img/${memberDomain.img}" alt="" class="thumbnail">
+												</c:otherwise>
+											</c:choose>
+											</span></div>
+											<div class="user-info">
+												<span class="tb-amount"><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do?memNum=${memberDomain.memNum}"><c:out value="${memberDomain.nick}"/></a></span>
+											</div>
+										</div>
+									</div>
+									<div class="nk-tb-col tb-col">
+										<c:choose>
+											<c:when test="${memberDomain.loginFlag eq 'N' }">
+												<span class="tb-status text-success">일반</span>
+											</c:when>
+											<c:when test="${memberDomain.loginFlag eq 'S' }">
+												<span class="tb-status text-info">소셜</span>
+											</c:when>
+										</c:choose>
+									</div>
+									<div class="nk-tb-col tb-col">
+										<span class="tb-lead">
+										<c:choose>
+											<c:when test="${memberDomain.memId ne null}"><c:out value="${memberDomain.memId}"/></c:when>
+											<c:otherwise>-</c:otherwise>
+										</c:choose>
 										</span>
 									</div>
-								</div>
-								<div class="col-sm-1">
-									<div class="btn-wrap">
-										<span class="d-none d-md-block">
-											<input type="button" class="btn btn-outline-secondary" id="resetFilter" value="초기화">
+<!-- 									<div class="nk-tb-col tb-col-xs"> -->
+<!-- 										<span class="tb-lead"> -->
+<%-- 										<c:choose> --%>
+<%-- 											<c:when test="${memberDomain.name ne null}"><c:out value="${memberDomain.name}"/></c:when> --%>
+<%-- 											<c:otherwise>-</c:otherwise> --%>
+<%-- 										</c:choose> --%>
+<!-- 										</span> -->
+<!-- 									</div> -->
+									<div class="nk-tb-col tb-col-xs">
+										<span>
+										<c:choose>
+											<c:when test="${memberDomain.recentLoginDate ne null}"><fmt:formatDate value="${memberDomain.recentLoginDate}" pattern="yyyy-MM-dd HH:mm:ss"/></c:when>
+											<c:otherwise>-</c:otherwise>
+										</c:choose>
 										</span>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-tools me-n1">
-						<ul class="btn-toolbar gx-s1">
-							<li>
-								<div class="toggle-wrap">
-									<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
-										<em class="icon ni ni-menu-right"></em>
-									</a>
-									<div class="toggle-content" data-content="cardTools">
-										<ul class="btn-toolbar gx-1">
-											<li class="toggle-close">
-												<a href="#" class="btn btn-icon btn-trigger toggle" data-target="cardTools">
-													<em class="icon ni ni-arrow-left"></em>
-												</a>
-											</li>
-<!-- 											<li> -->
-<!-- 												<div class="dropdown"> -->
-<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
-<!-- 														<div class="dot dot-primary"></div> -->
-<!-- 														<em class="icon ni ni-filter-alt"></em> -->
-<!-- 													</a> -->
-<!-- 													<div class="filter-wg dropdown-menu dropdown-menu-end" style="min-width:200px;max-width:200px;"> -->
-<!-- 														<div class="dropdown-head"> -->
-<!-- 															<span class="sub-title dropdown-title">필터</span> -->
-<!-- 														</div> -->
-<!-- 														<div class="dropdown-body dropdown-body-rg"> -->
-<!-- 															<div class="row gx-6 gy-3"> -->
-<!-- 																<div class="col-12"> -->
-<!-- 																	<div class="form-group"> -->
-<!-- 																		<label class="overline-title overline-title-alt">상태 선택</label> -->
-<!-- 																		<select class="form-select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true"> -->
-<!-- 																			<option value="any">모든 상태</option> -->
-<!-- 																			<option value="n">일반</option> -->
-<!-- 																			<option value="s">정지</option> -->
-<!-- 																			<option value="w">탈퇴</option> -->
-<!-- 																			<option value="sw">정지 + 탈퇴</option> -->
-<!-- 																		</select> -->
-<!-- 																	</div> -->
-<!-- 																</div> -->
-<!-- 																<div class="col-12"> -->
-<!-- 																	<div class="form-group"> -->
-<!-- 																		<button type="button" class="btn btn-secondary">Filter</button> -->
-<!-- 																	</div> -->
-<!-- 																</div> -->
-<!-- 															</div> -->
-<!-- 														</div> -->
-<!-- 														<div class="dropdown-foot between"> -->
-<!-- 															<a class="clickable" href="#">초기화</a> -->
-<!-- 														</div> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</li> -->
-<!-- 											<li> -->
-<!-- 												<div class="dropdown"> -->
-<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
-<!-- 														<em class="icon ni ni-setting"></em> -->
-<!-- 													</a> -->
-<!-- 													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end"> -->
-<!-- 														<ul class="link-check"> -->
-<!-- 															<li> -->
-<!-- 																<span>리스트 수</span> -->
-<!-- 															</li> -->
-<!-- 															<li class="active"> -->
-<!-- 																<a href="#">10</a> -->
-<!-- 															</li> -->
-<!-- 															<li> -->
-<!-- 																<a href="#">20</a> -->
-<!-- 															</li> -->
-<!-- 															<li> -->
-<!-- 																<a href="#">50</a> -->
-<!-- 															</li> -->
-<!-- 														</ul> -->
-<!-- 														<ul class="link-check"> -->
-<!-- 															<li> -->
-<!-- 																<span>정렬</span> -->
-<!-- 															</li> -->
-<!-- 															<li class="active"> -->
-<!-- 																<a href="#">내림차순</a> -->
-<!-- 															</li> -->
-<!-- 															<li> -->
-<!-- 																<a href="#">오름차순</a> -->
-<!-- 															</li> -->
-<!-- 														</ul> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</li> -->
-										</ul>
+									<div class="nk-tb-col tb-col-xs">
+										<span><fmt:formatDate value="${memberDomain.joinDate}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+									</div>
+									<div class="nk-tb-col tb-col-xs">
+										<c:choose>
+											<c:when test="${memberDomain.memStatus eq 'N'}">
+											<span class="tb-status text-success">일반</span>
+											</c:when>
+											<c:when test="${memberDomain.memStatus eq 'S'}">
+											<span class="tb-status text-warning">정지</span>
+											</c:when>
+											<c:when test="${memberDomain.memStatus eq 'W'}">
+											<span class="tb-status text-danger">탈퇴</span>
+											</c:when>
+										</c:choose>
 									</div>
 								</div>
-							</li>
-						</ul>
+							</c:forEach>
+						</c:if>
 					</div>
 				</div>
-				<div class="card-search search-wrap" data-search="search">
-					<div class="card-body">
-						<div class="search-content">
-							<a href="#" class="search-back btn btn-icon toggle-search" data-target="search">
-								<em class="icon ni ni-arrow-left"></em>
-							</a>
-							<input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-							<button class="search-submit btn btn-icon">
-								<em class="icon ni ni-search"></em>
-							</button>
+				<c:if test="${not flagIsList }">
+					<div style="margin:0px auto; text-align:center; padding-top:15px;">
+						<h4>조회된 데이터가 없습니다</h4>
+						<hr/>
+					</div>
+				</c:if>
+				<div class="card-inner">
+					<div class="nk-block-between-md g-3">
+						<div class="g" style="margin:0px auto;">
+							${requestScope.pageNation }
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="card-inner p-0">
-				<div class="nk-tb-list nk-tb-ulist">
-					<div class="nk-tb-item nk-tb-head">
-						<div class="nk-tb-col" style="width:8%;">
-							<span class="sub-text">번호</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="sub-text">닉네임</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="sub-text">아이디</span>
-						</div>
-						<div class="nk-tb-col">
-							<span class="sub-text">이름</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="sub-text">최근 로그인</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="sub-text">가입일</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="sub-text">상태</span>
-						</div>
-					</div>
-					<div class="nk-tb-item">
-						<div class="nk-tb-col tb-col-mb">
-							<span class="tb-amount">1</span>
-						</div>
-						<div class="nk-tb-col tb-col-mb">
-							<div class="user-card">
-								<div class="user-avatar bg-primary"><span></span></div>
-								<div class="user-info">
-									<span class="tb-amount"><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do">김닉</a></span>
+					<div style="margin:0px auto; width:500px; height:70px; text-align:center; padding-top:20px;">
+						<div class="form-group">
+							<div class="form-control-wrap">
+								<div class="input-group">
+									<div class="input-group-prepend" style="width:200px;">
+							 			<select class="form-select js-select2" id="field" name="field">
+											<option value="id"${param.field eq 'id' ? " selected='selected'" : ""}>아이디</option>
+											<option value="nick"${param.field eq 'nick' ? " selected='selected'" : ""}>닉네임</option>
+										</select>
+									</div>
+									<input type="text" class="form-control" aria-label="Text input with dropdown button"id="keyword" name="keyword" value="${param.keyword }">
+									<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색"/>
 								</div>
 							</div>
-						</div>
-						<div class="nk-tb-col tb-col">
-							<span class="tb-lead">memberkim</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-lead">김회원</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.07.05 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span>2024.06.02 11:12:13</span>
-						</div>
-						<div class="nk-tb-col tb-col-xs">
-							<span class="tb-status text-success">일반</span>
-						</div>
+						</div>				
 					</div>
 				</div>
-			</div>
-			<div class="card-inner">
-				<div class="nk-block-between-md g-3">
-					<div class="g" style="margin:0px auto;">
-						<ul class="pagination justify-content-center justify-content-md-start">
-							<li class="page-item">
-								<a class="page-link" href="#">처음 페이지로</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">&lt;&lt;</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">4</a>
-							</li>
-							<li class="page-item active">
-								<a class="page-link" href="#">5</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">6</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">&gt;&gt;</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="#">마지막 페이지로</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div style="margin:0px auto; width:300px; height:70px; text-align:center; padding-top:20px;">
-					<div class="form-group">
-						<div class="form-control-wrap">
-							<div class="input-group">
-								<div class="input-group-prepend" style="width:80px;">
-						 			<select class="form-select js-select2">
-										<option value="id">아이디</option>
-										<option value="nick">닉네임</option>
-									</select>
-								</div>
-								<input type="text" class="form-control" aria-label="Text input with dropdown button">
-								<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색"/>
-							</div>
-						</div>
-					</div>				
-				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
