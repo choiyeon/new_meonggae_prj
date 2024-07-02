@@ -10,6 +10,12 @@
 			location.href="http://localhost/meonggae_prj/index.do";
 		</script>
 	</c:when>
+	<c:when test="${ deleteFlag eq 'false' }">
+		<script type="text/javascript">
+			alert("삭제된 글입니다.");
+			location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+		</script>
+	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
@@ -46,7 +52,7 @@
 				return;
 			}//else
 				
-			if(!confirm("문의를 작성하시겠습니까?")){
+			if(!confirm("문의를 수정하시겠습니까?")){
 				return;
 			}//if
 			
@@ -54,9 +60,10 @@
 			var formData = new FormData(form);
 			
 			$.ajax({
-				url: "/meonggae_prj/My/mypage/inquiry/inquiry_process.do",
+				url: "/meonggae_prj/My/mypage/inquiry/inquiry_modify_process.do",
 				type: "POST",
 				data: {
+					num: $("#inquiryNum").val(),
 					title: $("#title").val(),
 					category: $("#category option:selected").val(),
 					content: $("#content").val()
@@ -69,8 +76,9 @@
 					var result = data.result;
 					
 					if(result == "success"){
-						alert("문의가 정상적으로 등록되었습니다.");
-						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+						var num = ${ inquiry.inquiryNum };
+						alert("수정 완료되었습니다.");
+						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_detail.do?inquiryNum=" + num;
 					}else if(result == "noSession"){
 						alert("로그인이 필요한 서비스입니다.");
 						location.href="http://localhost/meonggae_prj/index.do";
@@ -114,22 +122,23 @@
 	</div>
 		<!-- 메뉴목록 -->
 		<form method="post" action="inquiry_process.do" name="inquiryFrm" id="inquiryFrm">
+		<input type="hidden" name="inquiryNum" id="inquiryNum" value="${ inquiry.inquiryNum }"/>
 		<div class="inquiryStyle1">제목<br/>
-		<input type="text" id="title" class="inquiryStyle2" placeholder="제목" maxlength="20"/><br/></div>
+		<input type="text" value="${ inquiry.title }" id="title" class="inquiryStyle2" placeholder="제목" maxlength="20"/><br/></div>
 		
 		<div class="inquiryStyle1">문의 종류<br/></div>
 		<div style="width: 600px;">
 		<select name="category" id="category" class="form-control">
 			<option value="N/A">-- 문의 종류를 선택해주세요 --</option>
 			<c:forEach items="${ categoryList }" var="cl">
-			<option value="${ cl.categoryNum }">${ cl.name }</option>
+			<option value="${ cl.categoryNum }" ${ inquiry.category eq cl.name ?'selected=selected':'' }>${ cl.name }</option>
 			</c:forEach>
 		</select><br/>
 		</div>
 		
 		<div class="inquiryStyle1">문의 내용</div>
-		<textarea id="content" class="ta"></textarea>
-		<input type="button" value="글 작성" id="submitBtn" class="btn btn-primary btn-lg"/>
+		<textarea id="content" class="ta"><c:out value="${ inquiry.contents }" escapeXml="true"/></textarea>
+		<input type="button" value="글 수정" id="submitBtn" class="btn btn-warning btn-lg"/>
 		</form>
 		
 </div>
