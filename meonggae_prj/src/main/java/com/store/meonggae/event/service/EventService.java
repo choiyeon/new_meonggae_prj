@@ -15,26 +15,32 @@ public class EventService {
     @Autowired
     private UserEventDAO eventDAO;
 
+    //이벤트 총 개수
     public int totalCount(PagingVO pVO) {
         return eventDAO.selectTotalCount(pVO);
     }
 
+    //이벤트 목록
     public List<EventDomain> selectEvent(PagingVO pVO) {
         return eventDAO.selectEvent(pVO);
     }
 
+    //이벤트 상세
     public EventDomain selectDetailEvent(int eventNum) {
         return eventDAO.selectDetailEvent(eventNum);
     }
     
+    //조회수 올리기
     public int updateCnt(int eventNum) {
     	return eventDAO.updateCnt(eventNum);
     }
 
+    //페이지 스케일(페이지당 이벤트 개수)
     public int pageScale() {
         return 4; // 페이지당 항목 수
     }
 
+    //페이지 네이션
     public String pageNation(String url, String param, int totalPage, int currentPage) {
         StringBuilder pageNation = new StringBuilder();
 
@@ -91,7 +97,6 @@ public class EventService {
         pVO.setTotalCount(totalCnt);
 
         pVO.calculatePageNumbers();
-
         return pVO;
     }
 }

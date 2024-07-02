@@ -18,24 +18,28 @@ public class UserEventDAO {
 	@Autowired
 	private MybatisDAO mbDAO;
 
+	//	이벤트 총 개수
 	public int selectTotalCount(PagingVO pVO) throws PersistenceException {
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
 			return ss.selectOne("com.store.meonggae.event.selectTotalCount", pVO);
 		}
 	}
 
+	//이벤트 리스트
 	public List<EventDomain> selectEvent(PagingVO pVO) throws PersistenceException {
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
 			return ss.selectList("com.store.meonggae.event.selectEventList", pVO);
 		}
 	}
 
+	//이벤트 상세
 	public EventDomain selectDetailEvent(int eventNum) throws PersistenceException {
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
 			return ss.selectOne("com.store.meonggae.event.selectDetailEvent", eventNum);
 		}
 	}
 	
+	//조회수 올리기
 	public int updateCnt(int eventNum) throws PersistenceException {
 	    try (SqlSession ss = mbDAO.getMyBatisHandler(true)) {
 	        return ss.update("com.store.meonggae.event.updateCnt", eventNum);
