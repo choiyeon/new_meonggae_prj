@@ -5,52 +5,64 @@
 <mapper namespace="com.store.meonggae.event">
 <!-- 이벤트 총 개수 -->
 <select id="selectTotalCount" resultType="int" parameterType="pagingVO">
-select count(*) cnt from event
+select count(*) from VIEW_EVENT
 <where>
-<if test="keyword neq null and keyword neq ''">
+<if test="keyword != null and keyword != ''">
+	REPLACE(
 	<choose>
-		<when test ="field eq 0">
+		<when test ="field == 0">
 			title
 		</when>
-		<when test="field eq 1">
+		<when test="field == 1">
 			content
 		</when>
 		<otherwise>
-			id
+			event_status
 		</otherwise>
 	</choose>
-	like '%'||#{ keyword }||'%'
+	, ' ', '') like '%'||REPLACE(#{keyword}, ' ', '')||'%'
 </if>
 </where>
 </select>
 <!-- 이벤트 목록 -->
 <select id="selectEventList" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="pagingVO">
-select EVENT_NUM as eventNum, title, img, start_date, end_date, input_date, cnt, rnum
-from (select EVENT_NUM, title, img, start_date, end_date, input_date, cnt, 
-row_number() over(order by start_date desc) rnum
-from event
+select rnum, EVENT_NUM as eventNum, title, img, start_date, end_date, input_date, cnt, event_status
+from (
+select EVENT_NUM, title, img, start_date, end_date, input_date, cnt, event_status,
+row_number() over(order by start_date desc, end_date asc) rnum
+from VIEW_EVENT
 <where>
-	<if test="keyword neq null and keyword neq ''">
-		instr(
+	<if test="keyword != null and keyword != ''">
+		REPLACE(
 		<choose>
-			<when test="field eq 0">
+			<when test="field == 0">
 			title
 			</when>
-			<when test="field eq 1">
+			<when test="field == 1">
 			content
 			</when>
 			<otherwise>
-			input_date
+			event_status
 			</otherwise>
 		</choose>
-		,#{ keyword } ) > 0
-		</if>
+		, ' ', '') like '%'||REPLACE(#{ keyword }, ' ', '')||'%'
+	</if>
+	<if test="eventStatus != null and eventStatus != ''">
+		<choose>
+			<when test="eventStatus == 1">
+		 		and end_date > SYSDATE
+			</when>
+			<when test="eventStatus == 2">
+				and <![CDATA[end_date < SYSDATE]]>
+			</when>
+		</choose>
+	</if>
 </where>
 ) where rnum between #{ startPageNum } and #{ endPageNum }
-<!-- 이벤트 상세페이지 -->
 </select>
+<!-- 이벤트 상세페이지 -->
 <select id="selectDetailEvent" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="int">
-	select title, content, input_date, cnt, img
+	select title, content, img, start_date, end_date, cnt
 	from event
 	where event_num=#{ event_num, jdbcType=VARCHAR }
 </select>

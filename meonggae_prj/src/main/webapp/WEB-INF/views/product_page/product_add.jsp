@@ -129,7 +129,6 @@ $(document).on('click', '#add', function() {
 	<c:when test="${ not empty uploadFlag && uploadFlag == true }">
 		<script>
 			alert("상품이 등록되었습니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
 		</script>
 	</c:when>
 	<c:when test="${ not empty uploadFlag && uploadFlag == false }">

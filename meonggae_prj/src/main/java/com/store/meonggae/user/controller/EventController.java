@@ -24,27 +24,40 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    //이벤트 메인 페이지 이동
     @GetMapping("/event_page/event_main.do")
     public String eventMain(Model model, 
-                            @RequestParam(defaultValue = "1") int currentPage, 
-                            @RequestParam(required = false) String keyword, 
-                            @RequestParam(required = false) String field) {
-        PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage);
-
+    						@RequestParam(name = "event-type", required = false) String eventType,
+                            @RequestParam(name = "currentPage", defaultValue = "1") int currentPage, 
+                            @RequestParam(name = "keyword", required = false) String keyword, 
+                            @RequestParam(name = "field", required = false) String field) {
+    	PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage);
+    	if("진행중".equals(eventType)) {
+    		pVO.setEventStatus("1");
+    	}else if("종료".equals(eventType)) {
+    		pVO.setEventStatus("2");
+    	}
+    	System.out.println("pVO : " + pVO);
         List<EventDomain> eventList = eventService.selectEvent(pVO);
+        System.out.println("eventMain eventList : " + eventList);
         
+        String param = "";
+        if( keyword != null && field != null ) {
+        	param = "&keyword="+keyword+"&field="+field;
+        }
 
         model.addAttribute("eventList", eventList);
         model.addAttribute("totalCnt", pVO.getTotalCount());
         model.addAttribute("pageScale", pVO.getPageScale());
         model.addAttribute("currentPage", pVO.getCurrentPage());
         model.addAttribute("totalPage", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()));
-        model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", "", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
+        model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", param, (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
         
         
         return "event_page/event_main";
-    }
+    }//eventMain
 
+    //이벤트 상세
     @GetMapping("/event_page/event_detail.do")
     public String eventDetail(Model model, @RequestParam("event-code") int eventNum, HttpSession session) {
         // 이벤트 상세 정보를 조회합니다.
@@ -55,39 +68,37 @@ public class EventController {
 		boolean cntFlag = false;
 		if (cntSession != null) {
 			cntFlag = ((String)cntSession).contains(String.valueOf(eventNum));
-		}
+		}//end if
 
 		if (!cntFlag) {
 			eventService.updateCnt(eventNum);
 			session.setAttribute("cntFlag", session.getAttribute("cntFlag")+ ","+eventNum);
-		}
+		}//end if
                 
         model.addAttribute("eventDetail", eventDetail);
         model.addAttribute("cnt", eventDetail.getCnt());
         return "event_page/event_detail";
-    }
+    }//eventDetail
 
+    //이벤트 핸들러 - 페이지네이션
     @GetMapping("/event_page/event_handler.do")
     public String eventHandler(Model model, 
-    		@RequestParam("event-type") String eventType,
-    		@RequestParam(defaultValue = "1") int currentPage, 
-            @RequestParam(required = false) String keyword, 
-            @RequestParam(required = false) String field ) {
+    		@RequestParam(name = "event-type", required = true) String eventType,
+    		@RequestParam(name = "currentPage", defaultValue = "1") int currentPage, 
+            @RequestParam(name = "keyword", required = false) String keyword, 
+            @RequestParam(name = "field", required = false) String field) {
+    	System.out.println("[handler] eventType : " + eventType + " / currentPage : " +currentPage + " / keyword : " + keyword + " / field : " +  field);
     	PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage);
-    	List<EventDomain> eventList = eventService.selectEvent(pVO);
-    	
-    	List<EventDomain> filterByEndDate = new ArrayList<EventDomain>();
-    	
-    	LocalDate currentDate = LocalDate.now();
-    	
-    	for(EventDomain ed : eventList) {
-    		LocalDate endDate = LocalDate.parse(ed.getEnd_date(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    		if(endDate.isAfter(currentDate)) {
-    			filterByEndDate.add(ed);
-    		}
+    	if("진행중".equals(eventType)) {
+    		pVO.setEventStatus("1");
+    	}else if("종료".equals(eventType)) {
+    		pVO.setEventStatus("2");
     	}
+    	System.out.println("pVO : " + pVO);
+    	List<EventDomain> eventList = eventService.selectEvent(pVO);
+    	System.out.println("eventList : " + eventList);
     	
-    	model.addAttribute("eventList", filterByEndDate);
+    	model.addAttribute("eventList", eventList);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("pageScale", pVO.getPageScale());
     	model.addAttribute("eventType", eventType);
@@ -95,21 +106,33 @@ public class EventController {
     	model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", "", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
     	
     	return "event_page/event_handler";
-    }
-}
-
-
-/*
- * @Controller public class EventController {
- * 
- * @GetMapping("/event_page/event_main.do") public String event() { return
- * "event_page/event_main"; }
- * 
- * @GetMapping("/event_page/event_handler.do") public String eventHandler() {
- * return "/event_page/event_handler"; }
- * 
- * @GetMapping("/event_page/event_detail.do") public String eventDetail() {
- * return "/event_page/event_detail"; }
- * 
- * }
- */
+    }//eventHandler
+    
+    //이벤트 핸들러 - 페이지네이션
+    @GetMapping("/event_page/onGO.do")
+    public String onGoing(Model model, 
+    		@RequestParam(name = "event-type", required = true) String eventType,
+    		@RequestParam(name = "currentPage", defaultValue = "1") int currentPage, 
+    		@RequestParam(name = "keyword", required = false) String keyword, 
+    		@RequestParam(name = "field", required = false) String field) {
+    	System.out.println("[onGoing] eventType : " + eventType + " / currentPage : " +currentPage + " / keyword : " + keyword + " / field : " +  field);
+    	PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage);
+    	if("진행중".equals(eventType)) {
+    		pVO.setEventStatus("1");
+    	}else if("종료".equals(eventType)) {
+    		pVO.setEventStatus("2");
+    	}
+    	System.out.println("onGoing pVO : " + pVO);
+    	List<EventDomain> eventList = eventService.selectEvent(pVO);
+    	System.out.println("onGoing eventList : " + eventList);
+    	
+    	model.addAttribute("eventList", eventList);
+    	model.addAttribute("currentPage", currentPage);
+    	model.addAttribute("pageScale", pVO.getPageScale());
+    	model.addAttribute("eventType", eventType);
+    	model.addAttribute("totalPage", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()));
+    	model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", "", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
+    	
+    	return "event_page/on_going_content";
+    }//onGoing
+}//class

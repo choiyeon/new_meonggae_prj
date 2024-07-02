@@ -54,16 +54,12 @@
 		<div id="event_main">
 			<div class="tab tab--item2">
 				<form name="evt_frm" id="evt_frm">
-					<input type="button" name="event-type" value="진행중"> <input
-						type="button" name="event-type" value="종료">
+					<input type="button" name="event-type" value="진행중"> 
+					<input type="button" name="event-type" value="종료">
 				</form>
 			</div>
 			<c:choose>
 				<c:when test="${not empty eventList}">
-					<%--        총 레코드의 수 : ${totalCnt}건<br />
-                    한 화면에 보여줄 게시물 수 : ${pageScale}건<br />
-                    총 페이지 수 : ${totalPage}장<br />
-                    클릭한 페이지 : ${currentPage}<br /> --%>
 					<div class="article">
 						<div class="event-board">
 							<div class="list list--event">
@@ -101,7 +97,7 @@
 										</li>
 									</c:forEach>
 								</ul>
-								<div class="pagination">${paging}</div>
+								<div class="pagination" style="display: flex; justify-content: center;">${paging}</div>
 							</div>
 						</div>
 					</div>
@@ -113,6 +109,24 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
+	<div class="container">
+		<!-- 검색 창 시작 -->
+		<div style="text-align: center; margin-top: 100px">
+			<form name="searchFrm" id="searchFrm" method="GET">
+				<select name="field" id="field">
+					<option value="0"${ param.field eq 0 ? " selected='selected' " : "" }>제목</option>
+					<option value="1"${ param.field eq 1 ? " selected='selected' " : "" }>내용</option>
+					<option value="2"${ param.field eq 2 ? " selected='selected' " : "" }>진행상황</option>
+				</select>
+				<input type="hidden" name="currentPage" id="currentPage" value="${ param.currentPage }"/>
+				<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px" />
+				<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
+				<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
+				<input type="text" style="display: none;"/>
+			</form>
+		</div>
+		<!-- 검색 창 끝 -->
+	</div>
 	</div>
 	
 	<!-- footer 시작 -->

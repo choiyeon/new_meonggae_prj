@@ -11,8 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
 public class EventVO {
 	int cnt;
-	String title, writer, content;
+	String title, event_status, content;
 }
