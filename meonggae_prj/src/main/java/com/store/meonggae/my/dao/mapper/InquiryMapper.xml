@@ -34,13 +34,47 @@ where   DELETE_FLAG='N'
 order by INPUT_DATE desc
 </select>
 
+
+<!-- 문의 상세조회 -->
 <select id="selectInquiryOne" parameterType="String" resultType="inquiryDetailDomain">
-select	i.MEM_NUM writerNum, i.TITLE, ic.NAME category, i.CONTENTS, i.INPUT_DATE inputDate, 		i.ANSWER_FLAG answerFlag, i.ANSWER_CONTENTS answerContents, i.ANSWER_DATE answerDate, 		i.DELETE_FLAG deleteFlag
+select	i.INQUIRY_NUM inquiryNum, i.MEM_NUM writerNum, i.TITLE, ic.NAME category,
+		i.CONTENTS, i.INPUT_DATE inputDate,
+		i.ANSWER_FLAG answerFlag, i.ANSWER_CONTENTS answerContents, i.ANSWER_DATE answerDate, 		i.DELETE_FLAG deleteFlag
 from	INQUIRY i, INQUIRY_CATEGORY ic
 where	i.INQUIRY_CATEGORY_NUM=ic.INQUIRY_CATEGORY_NUM
-		and i.DELETE_FLAG='N'
 		and INQUIRY_NUM='${inquiryNum}'
 </select>
+
+<!-- 문의 수정 select -->
+<select id="selectInquiryForUpdate" parameterType="String" resultType="inquiryModifyDomain">
+select	i.INQUIRY_NUM inquiryNum, i.TITLE, ic.NAME category, i.CONTENTS
+from	inquiry i, INQUIRY_CATEGORY ic
+where	i.INQUIRY_CATEGORY_NUM=ic.INQUIRY_CATEGORY_NUM
+		and INQUIRY_NUM='${inquiryNum}'
+</select>
+
+
+<!-- 문의 수정 process -->
+<update id="updateInquiry" parameterType="imfVO">
+update	inquiry
+set		TITLE='${title}', INQUIRY_CATEGORY_NUM='${category}', CONTENTS='${content}'
+where	INQUIRY_NUM='${inquiryNum}'
+</update>
+
+<!-- 문의 삭제flag 조회 -->
+<select id="selectFlag" parameterType="String" resultType="String">
+select	delete_flag
+from	inquiry
+where	delete_flag='N' and INQUIRY_NUM='${num}'
+</select>
+
+<!-- 문의 삭제 -->
+<update id="deleteInquiry" parameterType="String">
+update	INQUIRY
+set		delete_Flag='Y'
+where	INQUIRY_NUM='${num}'
+</update>
+
 
 </mapper>
 

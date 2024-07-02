@@ -44,12 +44,15 @@
 		
 		/* 수정 */
 		$("#inquiryModifyBtn").click(function(){
-			location.href="";
+			$("#inquiryModifyForm").submit();
 		});
 		
 		/* 삭제 */
 		$("#inquiryDeleteBtn").click(function(){
-			location.href="";
+			if(confirm("정말 삭제하시겠습니까?")){
+				$("#inquiryDeleteForm").submit();
+				alert("삭제되었습니다.");
+			}//if
 		});
 	});//ready
 </script>
@@ -102,11 +105,18 @@
 
 		
 		<div id="btnWrap2">
-		<input type="button" value="목록" id="inquiryListBtn" class="btn btn-info"/>
 		<c:choose>
 			<c:when test="${ iDetailDomain.answerFlag eq 'Y' }">
+			<input type="button" value="목록" id="inquiryListBtn" class="btn btn-info"/>
 			</c:when>
 			<c:otherwise>
+			<form method="post" action="inquiry_modify.do" id="inquiryModifyForm">
+			<input type="hidden" name="inquiryNum" value="${ iDetailDomain.inquiryNum }"/>
+			</form>
+			<form method="get" action="inquiry_delete.do" id="inquiryDeleteForm">
+			<input type="hidden" name="inquiryNum" value="${ iDetailDomain.inquiryNum }"/>
+			</form>
+			<input type="button" value="목록" id="inquiryListBtn" class="btn btn-info"/>
 			<input type="button" value="수정" id="inquiryModifyBtn" class="btn btn-warning"/>
 			<input type="button" value="삭제" id="inquiryDeleteBtn" class="btn btn-secondary"/>
 			</c:otherwise>

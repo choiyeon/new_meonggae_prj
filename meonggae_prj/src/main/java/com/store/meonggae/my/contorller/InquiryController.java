@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.store.meonggae.my.domain.InquiryCategoryDomain;
 import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
+import com.store.meonggae.my.domain.InquiryModifyDomain;
 import com.store.meonggae.my.service.InquiryService;
+import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
 import com.store.meonggae.user.login.domain.LoginDomain;
 
@@ -103,15 +105,16 @@ public class InquiryController {
 	        return jsonObj;
 		}//end if
 		
-		String deleteP = request.getParameter("content").substring(3, request.getParameter("content").length()-4);
+		String content = request.getParameter("content");
+//		if(content.startsWith("<p>") && content.endsWith("</p>")) {
+//			content = content.substring(3, content.length()-4);
+//		}//if
 		
 		InquiryVO iVO = new InquiryVO();
-		
 		iVO.setMemnum(userSession.getMemNum());
 		iVO.setTitle(request.getParameter("title"));
 		iVO.setCategory(request.getParameter("category"));
-		iVO.setContent(deleteP);
-		
+		iVO.setContent(content);
 		
 		int cnt = is.inputInquiry(iVO);
 		if(cnt != 0) {
@@ -120,5 +123,88 @@ public class InquiryController {
 		
 		return jsonObj;
 	}//insertInquirt
+	
+	/**
+	 * 마이페이지 : 1:1문의_수정
+	 */
+	@PostMapping("/inquiry/inquiry_modify.do")
+	public String modifyInquiry(HttpServletRequest request,
+							@RequestParam("inquiryNum") String inquiryNum,
+							Model model) {
+		
+		HttpSession session = request.getSession();
+		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
+		
+		if(userSession == null) {
+			return "/My/mypage/main/myPageMain_frm";
+		}//end if
+		
+		List<InquiryCategoryDomain> list = is.searchCategory();
+		model.addAttribute("categoryList", list);
+		
+		String flag = is.searchDeleteFlag(inquiryNum);
+		if(flag == null) {
+			model.addAttribute("deleteFlag", "false");
+			return "/My/mypage/inquiry/inquiry_modify_frm";
+		}//if
+		
+		InquiryModifyDomain imDomain = is.searchInquiryForUpdate(inquiryNum);
+		model.addAttribute("inquiry", imDomain);
+		
+		return "/My/mypage/inquiry/inquiry_modify_frm";
+	}//modifyInquiry
+	
+	/**
+	 * 마이페이지 : 1:1문의_문의수정 process
+	 */
+	@PostMapping("/inquiry/inquiry_modify_process.do")
+	@ResponseBody
+	public JSONObject modifyInquiryProcess(HttpServletRequest request) {
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("result", "false");
+		
+		HttpSession session = request.getSession();
+		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
+		
+		if(userSession == null) {
+			jsonObj.put("result", "noSession");
+	        return jsonObj;
+		}//end if
+		
+		String content = request.getParameter("content");
+//		if(content.startsWith("<p>") && content.endsWith("</p>")) {
+//			content = content.substring(3, content.length()-4);
+//		}//if
+		
+		InquiryModifyVO imVO = new InquiryModifyVO();
+		imVO.setInquiryNum(request.getParameter("num"));
+		imVO.setTitle(request.getParameter("title"));
+		imVO.setCategory(request.getParameter("category"));
+		imVO.setContent(content);
+		
+		int cnt = is.updateInquiry(imVO);
+		if(cnt != 0) {
+			jsonObj.put("result", "success");
+		}//if
+		
+		return jsonObj;
+	}//insertInquirt
+	
+	/**
+	 * 마이페이지 : 1:1문의_문의삭제 process
+	 */
+	@GetMapping("/inquiry/inquiry_delete.do")
+	public String deleteInquiryProcess(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
+		
+		if(userSession == null) {
+	        return "/My/mypage/main/myPageMain_frm";
+		}//end if
+		
+		is.deleteInquiry(request.getParameter("inquiryNum"));
+		
+		return "forward:/My/mypage/inquiry/inquiry_frm.do";
+	}//deleteInquiryProcess
 	
 }//class

@@ -11,6 +11,8 @@ import com.store.meonggae.my.dao.InquiryDAO;
 import com.store.meonggae.my.domain.InquiryCategoryDomain;
 import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
+import com.store.meonggae.my.domain.InquiryModifyDomain;
+import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
 
 @Service
@@ -78,5 +80,65 @@ public class InquiryService {
 		
 		return iDetailDomain;
 	}//searchInquiryOne
+	
+	/**
+	 * 문의 수정 글불러오기 select
+	 */
+	public InquiryModifyDomain searchInquiryForUpdate(String inquiryNum) {
+		InquiryModifyDomain imDomain = null;
+		
+		try {
+			imDomain = iDAO.selectInquiryForUpdate(inquiryNum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return imDomain;
+	}//searchInquiryForUpdate
+	
+	/**
+	 * 문의 수정 update process
+	 */
+	public int updateInquiry(InquiryModifyVO inVO) {
+		int cnt = 0;
+		
+		try {
+			cnt = iDAO.updateInquiry(inVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return cnt;
+	}//updateInquiry
+	
+	/**
+	 * 문의 삭제
+	 */
+	public int deleteInquiry(String inquiryNum) {
+		int cnt = 0;
+		
+		try {
+			cnt = iDAO.deleteInquiry(inquiryNum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return cnt;
+	}//deleteInquiry
+	
+	/**
+	 * 삭제 flag 조회
+	 */
+	public String searchDeleteFlag(String inquiryNum) {
+		String result = "";
+		
+		try {
+			result = iDAO.selectFlag(inquiryNum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return result;
+	}//searchDeleteFlag
 	
 }//class

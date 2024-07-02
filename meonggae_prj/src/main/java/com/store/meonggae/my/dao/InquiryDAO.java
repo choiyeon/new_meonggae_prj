@@ -13,7 +13,9 @@ import com.store.meonggae.my.domain.GoodsDomain;
 import com.store.meonggae.my.domain.InquiryCategoryDomain;
 import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
+import com.store.meonggae.my.domain.InquiryModifyDomain;
 import com.store.meonggae.my.domain.PersonalDomain;
+import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
 import com.store.meonggae.my.vo.PersonalInfoVO;
 import com.store.meonggae.my.vo.PwVO;
@@ -74,5 +76,58 @@ public class InquiryDAO {
 		
 		return iDetailDomain;
 	}//selectInquiryOne
+	
+	/**
+	 * 문의글 수정 글불러오기 select
+	 */
+	public InquiryModifyDomain selectInquiryForUpdate(String inquiryNum) throws PersistenceException{
+		InquiryModifyDomain imDomain = null;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		imDomain = ss.selectOne("com.store.meonggae.Inquiry.selectInquiryForUpdate", inquiryNum);
+		mbDAO.CloseHandler(ss);
+		
+		return imDomain;
+	}//selectInquiryForUpdate
+	
+	/**
+	 * 문의글 수정 update
+	 */
+	public int updateInquiry(InquiryModifyVO imVO) throws PersistenceException{
+		int cnt = 0;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(true);
+		cnt = ss.update("com.store.meonggae.Inquiry.updateInquiry", imVO);
+		mbDAO.CloseHandler(ss);
+		
+		return cnt;
+	}//updateInquiry
+	
+	/**
+	 * 문의 삭제
+	 */
+	public int deleteInquiry(String inquiryNum) throws PersistenceException{
+		int cnt = 0;
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(true);
+		cnt = ss.update("com.store.meonggae.Inquiry.deleteInquiry", inquiryNum);
+		mbDAO.CloseHandler(ss);
+		
+		return cnt;
+	}//deleteInquiry
+	
+	
+	/**
+	 * deleteFlag 조회
+	 */
+	public String selectFlag(String inquiryNum) {
+		String result = "";
+		
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		result = ss.selectOne("com.store.meonggae.Inquiry.selectFlag", inquiryNum);
+		mbDAO.CloseHandler(ss);
+		
+		return result;
+	}//selectFlag
 	
 }//class
