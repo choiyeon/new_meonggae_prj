@@ -83,7 +83,11 @@
 </style>
 
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
 	$(function() {
+		
 		//탭 누르면 parameter에 담아서 이동하는 방식
 		$(".memTab").click(function(){
 			let url = new URL(location.href);

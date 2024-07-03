@@ -219,6 +219,7 @@
 
 <script type="text/javascript">
 	$(function() {
+		
 		// 필터 적용 버튼
 		$("#btnFilter").click(function(){
 			if($("#keyword").val() == null || $("#keyword").val().trim() == '') {

@@ -37,7 +37,11 @@
 </style>
 
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
 	$(function() {
+		
 		// 닫기 -> 리스트로
 		$("#btnClose").click(function() {
 			let url = new URL(location.href);

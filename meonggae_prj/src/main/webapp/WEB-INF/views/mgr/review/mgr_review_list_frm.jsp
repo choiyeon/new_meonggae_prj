@@ -79,6 +79,9 @@
 	</script>
 </c:if>
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
 	$(function() {
 		//callAjaxCategoryList(0, 0);
 		//$("#selCategoryLower").prop("disabled", "disabled");
