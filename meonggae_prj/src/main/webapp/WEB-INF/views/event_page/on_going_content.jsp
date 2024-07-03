@@ -9,7 +9,7 @@
                             <a href="${pageContext.request.contextPath}/event_page/event_detail.do?event-code=${evtDomain.eventNum}" class="event_link">
                                 <div class="list__thumb">
                                     <div class="image-container">
-                                        <img src="${pageContext.request.contextPath}/common/images/event${evtDomain.img}" alt="이벤트 이미지">
+                                        <img src="${pageContext.request.contextPath}/common/images/${evtDomain.img}" alt="이벤트 이미지">
                                     </div>
                                 </div>
                                 <div class="list__content">
@@ -24,7 +24,7 @@
                                     </div>
                                 </div>
                                 <div class="list__status">
-                                    <span class="list__status--ongoing">진행</span>
+                                    <span class="list__status--ongoing">${ evtDomain.event_status }</span>
                                 </div>
                             </a>
                         </div>

@@ -25,6 +25,8 @@ import com.store.meonggae.product.domain.SellerInfoDomain;
 import com.store.meonggae.product.service.CategoryService;
 import com.store.meonggae.product.service.SearchProductService;
 import com.store.meonggae.product.service.ProductDetailInfoService;
+import com.store.meonggae.event.domain.EventDomain;
+import com.store.meonggae.event.service.EventService;
 import com.store.meonggae.product.vo.SearchProductVO;
 import com.store.meonggae.product.vo.SteamVO;
 import com.store.meonggae.user.login.domain.LoginDomain;
@@ -39,11 +41,17 @@ public class MainController {
 	private CategoryService CategoryService;
 	@Autowired
 	private ProductDetailInfoService ProductDetailInfoService;
+	@Autowired
+	private EventService EventService;
 
 	@RequestMapping(value="/index.do",method= {GET,POST})
 	public String main(Model model) {
+		// 전체상품 조회
 		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
+		// 이벤트 캐러셀 조회
+		List<EventDomain> eventList = EventService.eventCarousel();
 		model.addAttribute("prdAllList", list);
+		model.addAttribute("eventList", eventList);
 		return "main_page/main_contents";
 	}
 	

@@ -15,6 +15,7 @@ $(function() {
                 'event-code': eventCode,
             },
             success: function(data) {
+            console.log("data:", data);
                 $('#event_main').html(data);
             },
             error: function(xhr, status, error) {
