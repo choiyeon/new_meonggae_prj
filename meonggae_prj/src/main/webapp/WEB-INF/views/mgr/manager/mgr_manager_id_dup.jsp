@@ -37,7 +37,11 @@
 </style>
 
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
 	$(function() {
+		
 		// 중복확인 버튼 클릭
 		$("#btn").click(function() {
 			

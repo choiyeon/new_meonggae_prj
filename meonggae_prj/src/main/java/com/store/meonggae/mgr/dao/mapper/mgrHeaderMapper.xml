@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.meonggae.mgr.header">
+	<resultMap type="com.store.meonggae.mgr.header.domain.MgrNoticeDomain" id="mgrNoticeDomResult">
+		<result column="NOTICE_TYPE" property="noticeType"/>
+		<result column="NOTICE_NUM" property="noticeNum"/>
+		<result column="TITLE" property="title"/>
+		<result column="TIME_AGO" property="timeAgo"/>
+		<result column="NOTICE_READ_FLAG" property="noticeReadFlag"/>
+	</resultMap>
+	
+	<!-- 안 읽은 알림이 존재하는지 조회 -->	
+	<select id="selectOneIsNotice" resultType="boolean" parameterType="String">
+		select	case
+					when count(*) &gt;= 1 then 1
+					else 0
+				end flag_Notice
+		from	(
+				select 	'R' noti, rn.manager_id, r.REP_NUM notice_num, r.title, r.input_date, rn.NOTICE_READ_FLAG
+				from	REPORT_NOTICE rn, REPORT r
+				where	rn.REP_NUM = r.REP_NUM
+				union all
+				select	'I' noti, ino.manager_id, i.INQUIRY_NUM notice_num, i.title, i.INPUT_DATE, ino.NOTICE_READ_FLAG
+				from	INQUIRY_NOTICE ino, INQUIRY i
+				where	ino.INQUIRY_NUM = i.INQUIRY_NUM
+				)
+		where	NOTICE_READ_FLAG = 'N' and
+				manager_id = #{managerId}
+	</select>
+	
+	<!-- 안 읽은 알림 리스트 목록 조회 -->
+	<select id="selectListNoticeList" resultMap="mgrNoticeDomResult" parameterType="String">
+		select	NOTI notice_type,NOTICE_NUM,manager_Id,
+				case
+					when length(title) &gt; 18 then substr(title, 0, 15) || '...'
+					else title
+				end title,
+				case
+					when sysdate - input_date &lt;= 1/24 then round((sysdate - input_date) * 24 * 60 ) || '분 전'
+					when sysdate - input_date &lt;= 1 then round((sysdate - input_date) * 24) || '시간 전'
+					else trunc(sysdate - input_date) || '일 전'
+				end time_ago,
+				NOTICE_READ_FLAG
+		from	(
+				select 	'R' noti, rn.manager_id, r.REP_NUM notice_num, r.title, r.input_date, rn.NOTICE_READ_FLAG
+				from	REPORT_NOTICE rn, REPORT r
+				where	rn.REP_NUM = r.REP_NUM
+				union all
+				select	'I' noti, ino.manager_id, i.INQUIRY_NUM notice_num, i.title, i.INPUT_DATE, ino.NOTICE_READ_FLAG
+				from	INQUIRY_NOTICE ino, INQUIRY i
+				where	ino.INQUIRY_NUM = i.INQUIRY_NUM
+				)
+		where	NOTICE_READ_FLAG = 'N' and
+				manager_id = #{managerId}
+		order by	input_date desc		
+	</select>
+	
+	<!-- 알림(문의) 전부 읽기 -->
+	<update id="updateAllInquiryNoticeRead"  parameterType="String">
+		update	INQUIRY_NOTICE 
+		set 	NOTICE_READ_FLAG = 'Y' 
+		where 	NOTICE_READ_FLAG = 'N' and
+				MANAGER_ID = #{managerId}
+	</update>
+	
+	<!-- 알림(신고) 전부 읽기 -->
+	<update id="updateAllReportNoticeRead"  parameterType="String">
+		update	REPORT_NOTICE 
+		set 	NOTICE_READ_FLAG = 'Y' 
+		where 	NOTICE_READ_FLAG = 'N' and
+				MANAGER_ID = #{managerId} 
+	</update>
+	
+	<!-- 알림 하나 읽기 -->
+	<update id="updateOneNoticeRead" parameterType="com.store.meonggae.mgr.header.vo.MgrNoticeVO">
+		<choose>
+			<when test='noticeType.equals("I")'>
+			update 	INQUIRY_NOTICE
+			</when>
+			<when test='noticeType.equals("R")'>
+			update 	REPORT_NOTICE
+			</when>
+		</choose>
+		set			NOTICE_READ_FLAG = 'Y'
+		<where>
+			<choose>
+				<when test='noticeType.equals("I")'>
+				INQUIRY_NUM = #{noticeNum} and 
+				manager_id = #{managerId} 
+				</when>
+				<when test='noticeType.equals("R")'>
+				rep_num = #{noticeNum} and 
+				manager_id = #{managerId} 
+				</when>
+			</choose>
+		</where>
+	</update>
+</mapper>

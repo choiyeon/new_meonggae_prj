@@ -13,7 +13,8 @@
 <c:set var="dateLastMonth" value="<%=new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30L)%>"/>
 <c:set var="strDate"><fmt:formatDate value="${date}" pattern="yyyy-MM-dd" /></c:set>
 <c:set var="strDateLastMonth"><fmt:formatDate value="${dateLastMonth}" pattern="yyyy-MM-dd"/></c:set>
-
+<jsp:useBean id="mgr" class="com.store.meonggae.mgr.login.domain.MgrDomain" scope="session"/>
+<jsp:setProperty property="*" name="mgr"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,12 +71,17 @@
 	/* datepicker 아이콘 가져오기 */
    .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
     
+    .icon-status-info2::after {
+		content: none;
+	}
 </style>
 
 <script type="text/javascript">
-
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
+	
 	$(function() {
-		
 		// 상위 거래 카테고리 select
 		topCategory();
 		// 사용자수 요약 select
@@ -108,15 +114,17 @@
 		}); // chang
 		
 		// 사이트 방문자수 datepicker 시작일
-	//		$("#visitorStartDate").change(function() {
-	//			chkOverToday($("#visitorStartDate"), $("#visitorEndDate"));
-	//			chkStartLessThenEnd($("#visitorStartDate"), $("#visitorEndDate"));
-	//		});
-		// 사이트 방문자수 datepicker 종료일
-	//		$("#visitorEndDate").change(function() {
-	//			chkOverToday($("#visitorStartDate"), $("#visitorEndDate"));
-	//			chkEndGreaterThenStart($("#visitorStartDate"), $("#visitorEndDate"));
-	//		});
+// 			$("#visitorStartDate").change(function() {
+// 				chkOverToday($("#visitorStartDate"), $("#visitorEndDate"));
+// 				chkStartLessThenEnd($("#visitorStartDate"), $("#visitorEndDate"));
+// 			});
+// 		사이트 방문자수 datepicker 종료일
+// 			$("#visitorEndDate").change(function() {
+// 				chkOverToday($("#visitorStartDate"), $("#visitorEndDate"));
+// 				chkEndGreaterThenStart($("#visitorStartDate"), $("#visitorEndDate"));
+// 			});
+		
+		
 		
 	}); // $(document).ready(function() { })
 	
@@ -628,8 +636,8 @@
 	// 사이트 방문자수 - 그래프
 	function drawGraphVisitorStatistics(jsonObj, selector, set_data){
 		let jsonData = JSON.parse(jsonObj.data);
-		console.log(jsonObj);
-		console.log(jsonData);
+		//console.log(jsonObj);
+		//console.log(jsonData);
 
 		var selectCanvas = $("#analyticOvData");
 		let chartStatus = Chart.getChart(selectCanvas);
@@ -869,8 +877,6 @@
 
 </head>
 <body class="nk-body bg-lighter npc-general has-sidebar no-touch nk-nio-theme">
-<jsp:useBean id="mgr" class="com.store.meonggae.mgr.login.domain.MgrDomain" scope="session"/>
-<jsp:setProperty property="*" name="mgr"/>
 <div class="nk-app-root">
 <div class="nk-main ">
 <!-- 사이드바 시작 -->
@@ -1338,11 +1344,13 @@
 <!-- dashlite 시작-->
 <%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script> --%>
 <%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/beauty_my/scripts.js?ver=3.2.3"></script> --%>
+
 <%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
 <!-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
+
 <%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
 <%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
-<div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
+<!-- <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div> -->
 <!-- dashlite 끝-->
 <script type="text/javascript">
 	$(function() {

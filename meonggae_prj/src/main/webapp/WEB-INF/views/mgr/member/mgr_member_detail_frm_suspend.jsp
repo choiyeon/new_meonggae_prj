@@ -136,6 +136,7 @@
 		
 <script type="text/javascript">
 	$(function() {
+		
 		// 라디오 버튼에 따라 select, input 활/비활성화
 		$("#suspendPeriodDefault").click(function() {
 			$("#suspendPeriod").removeAttr("disabled");
