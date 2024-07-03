@@ -93,7 +93,7 @@ public class InquiryController {
 	 */
 	@PostMapping("/inquiry/inquiry_process.do")
 	@ResponseBody
-	public JSONObject insertInquirt(HttpServletRequest request) {
+	public JSONObject doInsertInquirt(HttpServletRequest request) {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("result", "false");
 		
@@ -159,7 +159,7 @@ public class InquiryController {
 	 */
 	@PostMapping("/inquiry/inquiry_modify_process.do")
 	@ResponseBody
-	public JSONObject modifyInquiryProcess(HttpServletRequest request) {
+	public JSONObject doModifyInquiryProcess(HttpServletRequest request) {
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("result", "false");
 		
@@ -194,7 +194,7 @@ public class InquiryController {
 	 * 마이페이지 : 1:1문의_문의삭제 process
 	 */
 	@GetMapping("/inquiry/inquiry_delete.do")
-	public String deleteInquiryProcess(HttpServletRequest request) {
+	public String doDeleteInquiryProcess(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		

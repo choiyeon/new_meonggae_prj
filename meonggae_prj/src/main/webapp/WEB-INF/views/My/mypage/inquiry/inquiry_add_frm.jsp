@@ -50,9 +50,6 @@
 				return;
 			}//if
 			
-			var form = $('#inquiryFrm')[0];
-			var formData = new FormData(form);
-			
 			$.ajax({
 				url: "/meonggae_prj/My/mypage/inquiry/inquiry_process.do",
 				type: "POST",
@@ -76,7 +73,6 @@
 						location.href="http://localhost/meonggae_prj/index.do";
 					}else{
 						alert("오류가 발생하였습니다. 잠시 후에 다시 시도해주세요.");
-						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
 					}
 				}//success
 			});//ajax    
@@ -113,7 +109,7 @@
 		<hr id="menuBottonLine">
 	</div>
 		<!-- 메뉴목록 -->
-		<form method="post" action="inquiry_process.do" name="inquiryFrm" id="inquiryFrm">
+		
 		<div class="inquiryStyle1">제목<br/>
 		<input type="text" id="title" class="inquiryStyle2" placeholder="제목" maxlength="20"/><br/></div>
 		
@@ -130,7 +126,6 @@
 		<div class="inquiryStyle1">문의 내용</div>
 		<textarea id="content" class="ta"></textarea>
 		<input type="button" value="글 작성" id="submitBtn" class="btn btn-primary btn-lg"/>
-		</form>
 		
 </div>
 <!-- 내용 끝 -->
