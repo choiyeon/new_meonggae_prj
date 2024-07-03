@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"
     info="나의 후기"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!-- 로그인 세션 설정 시작 -->
 <c:choose>
 	<c:when test="${ empty user }">
@@ -20,13 +21,85 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css">
+<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css?asdf">
 <!-- CSS -->
 
 <script type="text/javascript">
 	$(function(){
+		//X를 클릭하면 내용 리셋
+		$("#reviewModal").on('hidden.bs.modal',function(e){
+			$(this).find('form')[0].reset();
+		});
 		
+		$("#reviewBtn").click(function(){
+			if(!confirm("후기를 작성하시겠습니까?")){
+				return;
+			}//if
+			
+			$.ajax({
+				url: "http://localhost/meonggae_prj/My/mypage/review/write_review.do",
+				type: "POST",
+				dataType: "JSON",
+				data: {
+					goodsNum: $("#goodsNum").val(),
+					reivewContents: $("#reivewContents").val()
+					},
+				error: function(request, status, error){
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					},
+				success: function(data){
+					var result = data.result;
+					
+					if(result == "success"){
+						alert("후기가 작성되었습니다");
+						location.reload();
+						/* loaction.href="http://localhost/meonggae_prj/My/mypage/review/review_frm.do"; */
+					}else if(result == "noSession"){
+						alert("로그인이 필요한 서비스입니다.");
+						location.href="http://localhost/meonggae_prj/index.do";
+					}else{
+						alert("오류가 발생하였습니다. 잠시 후에 다시 시도해주세요.");
+					}//else
+				}//success
+			});//ajax
+		});//click
 	});//ready
+	
+	function insertReview(goodsName, goodsNum) {
+		var output = "구매물품명 : " + goodsName;
+		$("#boughtGoods").html(output);
+		$("#goodsNum").val(goodsNum);
+		$("#reviewModal").modal("show");
+	}//insertReview
+	
+	function deleteReview(goodsNum) {
+		if(!confirm("정말 삭제하시겠습니까?")){
+			return;
+		}//if
+		
+		$.ajax({
+			url: "http://localhost/meonggae_prj/My/mypage/review/delete_review_process.do",
+			type: "POST",
+			dataType: "JSON",
+			data: {sendData : goodsNum},
+			error: function(request, status, error){
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			},
+			success: function(data){
+				var result = data.result;
+				if(result = "true"){
+					alert("삭제되었습니다.");
+					location.reload();
+				}else if(result == "noSession"){
+					alert("로그인이 필요한 서비스입니다.");
+					location.href="http://localhost/meonggae_prj/index.do";
+				}else{
+					alert("오류가 발생하였습니다. 다시 시도해주세요.");
+				}//else
+			}//success
+		});//ajax
+		
+	}//deleteReview
 </script>
 
 <!-- 내용 시작 -->
@@ -44,6 +117,9 @@
 		<div id="reviewLowMenu1" class="reviewLowMenu1">내가 쓴 후기</div>
 		<div id="notice1" class="notice1">한번 작성한 후기는 수정할 수 없습니다.</div>
 		
+		
+		<c:choose>
+		<c:when test="${not empty myReviewList}">
 		<table id="inquiryTable" class="table table-hover">
 			<thead>
 				<tr>
@@ -54,26 +130,31 @@
 				</tr>
 			</thead>
 			<tbody>
+				<c:forEach items="${ myReviewList }" var="mr">
 				<tr>
-					<td>벽돌이 왔어요</td>
-					<td>돈없는직장인</td>
-					<td>2024-05-23</td>
+					<td><c:out value="${ mr.reviewContents }"/></td>
+					<td><c:out value="${ mr.seller }"/></td>
+					<td><fmt:formatDate value="${ mr.inputDate }" pattern="yyyy-MM-dd"/></td>
 					<td>
-					<img src="http://localhost/meonggae_prj/common/images/deleteBtn.png" id="deleteImg"/>
+					<input type="button" value="X" class="btn btn-danger btn-sm"
+							onclick="deleteReview(${ mr.goodsNum })"/>
 					</td>
 				</tr>
-				<tr>
-					<td>감사합니다. 복받으세요!</td>
-					<td>돈많은백수</td>
-					<td>2024-05-22</td>
-					<td>
-					<img src="http://localhost/meonggae_prj/common/images/deleteBtn.png" id="deleteImg"/>
-					</td>
-				</tr>
+				</c:forEach>
 			</tbody>
 		</table>
+		</c:when>
+		<c:otherwise>
+			<div class="noGoodsDibs">
+			작성한 리뷰가 없습니다!
+			</div>
+		</c:otherwise>
+		</c:choose>
 		
 		<div id="reviewLowMenu2" class="reviewLowMenu2">작성 가능한 후기</div>
+		
+		<c:choose>
+		<c:when test="${not empty writeReviewList}">
 		<table id="inquiryTable" class="table table-hover">
 			<thead>
 				<tr>
@@ -82,21 +163,54 @@
 				</tr>
 			</thead>
 			<tbody>
+				<c:forEach items="${ writeReviewList }" var="wr">
 				<tr>
+					<td>
+					<a href="javascript:void(0);" onclick="insertReview('${ wr.goodsName }', '${ wr.goodsNum }');">
+					<c:out value="${ wr.goodsName }"/>
+					</a>
+					</td>
+					<td><c:out value="${ wr.seller }"/></td>
+				</tr>
+				</c:forEach>
+				<!-- <tr>
 					<td>
 					<a href="http://naver.com"><div>
 					50만km탄 레이
 					</div></a>
 					</td>
 					<td>판매자1</td>
-				</tr>
-				<tr>
-					<td>귤껍질(눅눅함)</td>
-					<td>집에가고싶어섷거</td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
+		</c:when>
+		<c:otherwise>
+			<div class="noGoodsDibs">
+			작성 가능한 리뷰가 없습니다!
+			</div>
+		</c:otherwise>
+		</c:choose>
 		
+		<!-- 리뷰작성 -->
+		<div class="modal fade" tabindex="-1" role="dialog" id="reviewModal" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h3><strong>후기 작성</strong></h3>
+					</div>
+					<div class="modal-body">
+						<div id="boughtGoods"></div>
+						<input type="hidden" id="goodsNum" name="goodsNum" value=""/>
+						<input type="text" placeholder="한줄 후기를 작성해주세요." style="width: 100%" maxlength="1000" name="reivewContents" id="reivewContents"/><br/>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-success" data-dismiss="modal" id="reviewBtn" name="reviewBtn" value="후기작성"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 리뷰작성 -->
 	</div>
 </div>
 <!-- 내용 끝 -->
