@@ -81,6 +81,7 @@
 <%@ include file="mgr_member_detail_frm_lower.jsp" %>
 <script type="text/javascript">
 	$(function () {
+		
 		// 검색
 		$("#btnSearch").click(function () {
 			chkNull();

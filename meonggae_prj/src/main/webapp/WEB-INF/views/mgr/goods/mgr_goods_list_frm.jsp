@@ -76,6 +76,9 @@
 
 <script type="text/javascript">
 
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "http://localhost${pageContext.request.contextPath}";
 	$(function() {
 		
 		// 상위 거래 카테고리 선택시
