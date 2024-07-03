@@ -41,28 +41,8 @@ function chkNull(){
 		if(currentPage == "" || currentPage == 0){
 		 currentPage = 1;
 		}
-		$.ajax({
-			url: 'onGO.do',
-			type: 'GET',
-			data: {
-				'event-type': eventType,
-				'currentPage': currentPage,
-				'keyword': keyword,
-				'field': field
-			},
-			success: function(data) {
-				console.log("AJAX 요청 성공");
-			},
-			error: function(xhr, status, error) {
-				console.error('AJAX 요청 실패: ', status, error);
-			}//error
-		});//ajax
+		location.href="http://localhost/meonggae_prj/event_page/event_main.do?currentPage="+currentPage+"&event-type="+eventType+"&field="+field+"&keyword="+keyword;
+		
+		
 	}//end if
 }//chkNull
-
-function isFutureDate(eventEndDate) {
-     var currentDate = new Date();
-     var end = new Date(eventEndDate);
-
-     return end > currentDate;
-}

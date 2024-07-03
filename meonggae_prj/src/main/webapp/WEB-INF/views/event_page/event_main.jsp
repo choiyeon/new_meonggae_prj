@@ -35,7 +35,7 @@
 <!-- Theme Stylesheet -->
 <script src="../common/JS/script.js"></script>
 <script src="../common/JS/event_content_ajax.js"></script>
-<script src="../common/JS/event_detail_ajax.js"></script>
+<!-- <script src="../common/JS/event_detail_ajax.js"></script> -->
 <link rel="stylesheet"
 	href="http://localhost/meonggae_prj/common/CSS/style.css">
 <link rel="stylesheet"
@@ -46,7 +46,7 @@
 <body>
 	<!-- header 시작 -->
 	<jsp:include page="../header/header.jsp" />
-	<div class="container" style="height: 1000px;">
+	<div class="container" >
 		<div>
 			<h1>이벤트</h1>
 		</div>
@@ -73,7 +73,7 @@
 													<div class="list__thumb">
 														<div class="image-container">
 															<img
-																src="${pageContext.request.contextPath}/common/images/event${evtDomain.img}"
+																src="${pageContext.request.contextPath}/common/images/${evtDomain.img}"
 																alt="이벤트 이미지">
 														</div>
 													</div>
@@ -90,7 +90,7 @@
 														</div>
 													</div>
 													<div class="list__status">
-														<span class="list__status--ongoing">진행</span>
+														<span class="list__status--ongoing">${ evtDomain.event_status }</span>
 													</div>
 												</a>
 											</div>
@@ -109,15 +109,15 @@
 				</c:otherwise>
 			</c:choose>
 		</div>
-	<div class="container">
 		<!-- 검색 창 시작 -->
-		<div style="text-align: center; margin-top: 100px">
+		<div style="text-align: center; margin-top: 20px">
 			<form name="searchFrm" id="searchFrm" method="GET">
 				<select name="field" id="field">
 					<option value="0"${ param.field eq 0 ? " selected='selected' " : "" }>제목</option>
 					<option value="1"${ param.field eq 1 ? " selected='selected' " : "" }>내용</option>
 					<option value="2"${ param.field eq 2 ? " selected='selected' " : "" }>진행상황</option>
 				</select>
+				<input type="hidden" name="eventType" id="eventType" value="진행중"/>
 				<input type="hidden" name="currentPage" id="currentPage" value="${ param.currentPage }"/>
 				<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px" />
 				<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
@@ -126,7 +126,6 @@
 			</form>
 		</div>
 		<!-- 검색 창 끝 -->
-	</div>
 	</div>
 	
 	<!-- footer 시작 -->

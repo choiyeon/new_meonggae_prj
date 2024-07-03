@@ -37,16 +37,22 @@
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="3000">
 			<!-- 슬라이드 -->
 			<div class="carousel-inner" role="listbox">
-				<div class="item active">
-					<img src="http://localhost/meonggae_prj/common/images/banner-1.png" alt="광고1">
-				</div>
-				<div class="item">
-					<img src="http://localhost/meonggae_prj/common/images/banner-2.png" alt="광고2">
-				</div>
-				<div class="item">
-					<img src="http://localhost/meonggae_prj/common/images/banner-3.png" alt="광고3">
-				</div>
-			</div>
+			<c:forEach var="eventList" items="${eventList}" varStatus="i">
+				<c:if test="${i.index == 1 }">
+					<div class="item active">
+						<a href="${pageContext.request.contextPath}/event_page/event_detail.do?event-code=${eventList.eventNum}">
+							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" style="width: 100%; height: 300px;!important" alt="${eventList.title}">
+						</a>
+					</div>
+				</c:if>
+				<c:if test="${i.index != 1 }">
+					<div class="item">
+						<a href="${pageContext.request.contextPath}/event_page/event_detail.do?event-code=${eventList.eventNum}">
+							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" style="width: 100%; height: 300px;!important" alt="${eventList.title}">
+						</a>
+					</div>
+				</c:if>
+			</c:forEach>
 			<!-- 좌우 버튼 -->
 			<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev"> 
 				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

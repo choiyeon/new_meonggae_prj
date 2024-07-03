@@ -45,54 +45,12 @@ public class UserEventDAO {
 	        return ss.update("com.store.meonggae.event.updateCnt", eventNum);
 	    }
 	}
+	
+	//이벤트 캐러셀
+	public List<EventDomain> eventCarousel() throws PersistenceException {
+		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+			return ss.selectList("com.store.meonggae.event.eventCarousel");
+		}
+	}
 
 }
-
-/*
- * @Component public class UserEventDAO {
- * 
- * @Autowired(required = false) private MybatisDAO mbDAO;
- * 
- * private static UserEventDAO ueDAO;
- * 
- * private String[] columNames;
- * 
- * private UserEventDAO() { columNames = new String[] {"title", "content",
- * "input_date"}; }
- * 
- * public static UserEventDAO getInstance() { if(ueDAO == null) { ueDAO = new
- * UserEventDAO(); }//end if return ueDAO; }//getInstance
- * 
- * public int selectTotalCount(PagingVO pVO) throws PersistenceException{ int
- * totalCnt = 0; MybatisDAO mbDAO = MybatisDAO.getInstance(); SqlSession ss =
- * mbDAO.getMyBatisHandler(false);
- * 
- * totalCnt = ss.selectOne("com.store.meonggae.event.selectTotalCount", pVO);
- * 
- * mbDAO.CloseHandler(ss);
- * 
- * return totalCnt; }//selectTotalCount
- * 
- * public List<EventDomain> selectEvent(PagingVO pVO) throws
- * PersistenceException{ List<EventDomain> eventList = null; MybatisDAO mbDAO =
- * MybatisDAO.getInstance(); SqlSession ss = mbDAO.getMyBatisHandler(false);
- * 
- * eventList = ss.selectList("com.store.meonggae.event.selectEventList", pVO);
- * 
- * mbDAO.CloseHandler(ss);
- * 
- * 
- * return eventList; }
- * 
- * public EventDomain selectDetailEvent(int seq) throws PersistenceException{
- * EventDomain ed = null; MybatisDAO mbDAO = MybatisDAO.getInstance();
- * SqlSession ss = mbDAO.getMyBatisHandler(false); ed =
- * ss.selectOne("com.store.meonggae.event.selectDetailEvent", seq);
- * 
- * mbDAO.CloseHandler(ss);
- * 
- * 
- * return ed; }
- * 
- * }
- */

@@ -34,6 +34,11 @@ public class EventService {
     public int updateCnt(int eventNum) {
     	return eventDAO.updateCnt(eventNum);
     }
+    
+    //이벤트 캐러셀
+    public List<EventDomain> eventCarousel() {
+    	return eventDAO.eventCarousel();
+    }
 
     //페이지 스케일(페이지당 이벤트 개수)
     public int pageScale() {
@@ -86,11 +91,18 @@ public class EventService {
         return pageNation.toString();
     }
 
-    public PagingVO createPagingVO(String keyword, String field, int currentPage) {
+    public PagingVO createPagingVO(String keyword, String field, int currentPage, String eventType) {
         PagingVO pVO = new PagingVO();
         pVO.setKeyword(keyword);
         pVO.setField(field);
         pVO.setCurrentPage(currentPage);
+        
+        if("진행중".equals(eventType)) {
+    		pVO.setEventStatus("진행");
+    	}else if("종료".equals(eventType)) {
+    		pVO.setEventStatus("종료");
+    	}
+        
         pVO.setPageScale(pageScale());
 
         int totalCnt = totalCount(pVO);

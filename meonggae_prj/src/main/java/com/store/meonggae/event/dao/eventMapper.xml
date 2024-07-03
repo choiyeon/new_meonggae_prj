@@ -4,25 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.store.meonggae.event">
 <!-- 이벤트 총 개수 -->
+<!-- EVENT_STATUS='종료'; -->
 <select id="selectTotalCount" resultType="int" parameterType="pagingVO">
 select count(*) from VIEW_EVENT
-<where>
-<if test="keyword != null and keyword != ''">
-	REPLACE(
-	<choose>
-		<when test ="field == 0">
-			title
-		</when>
-		<when test="field == 1">
-			content
-		</when>
-		<otherwise>
-			event_status
-		</otherwise>
-	</choose>
-	, ' ', '') like '%'||REPLACE(#{keyword}, ' ', '')||'%'
-</if>
-</where>
+where EVENT_STATUS=#{eventStatus}
 </select>
 <!-- 이벤트 목록 -->
 <select id="selectEventList" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="pagingVO">
@@ -41,18 +26,18 @@ from VIEW_EVENT
 			<when test="field == 1">
 			content
 			</when>
-			<otherwise>
+			<when test="field == 2">
 			event_status
-			</otherwise>
+			</when>
 		</choose>
 		, ' ', '') like '%'||REPLACE(#{ keyword }, ' ', '')||'%'
 	</if>
 	<if test="eventStatus != null and eventStatus != ''">
 		<choose>
-			<when test="eventStatus == 1">
+			<when test="eventStatus == '진행'">
 		 		and end_date > SYSDATE
 			</when>
-			<when test="eventStatus == 2">
+			<when test="eventStatus == '종료'">
 				and <![CDATA[end_date < SYSDATE]]>
 			</when>
 		</choose>
@@ -60,11 +45,11 @@ from VIEW_EVENT
 </where>
 ) where rnum between #{ startPageNum } and #{ endPageNum }
 </select>
-<!-- 이벤트 상세페이지 -->
+<!-- 이벤트 상세페이지 event_num -->
 <select id="selectDetailEvent" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="int">
 	select title, content, img, start_date, end_date, cnt
 	from event
-	where event_num=#{ event_num, jdbcType=VARCHAR }
+	where event_num=#{ eventNum, jdbcType=VARCHAR }
 </select>
 <!-- 조회수 cnt -->
 <update id="updateCnt" parameterType="int">
@@ -72,4 +57,10 @@ from VIEW_EVENT
 	set cnt=cnt+1
 	where event_num=#{event_num, jdbcType=VARCHAR}
 </update>
+<!-- 이벤트 캐러셀 -->
+<select id="eventCarousel" resultType="com.store.meonggae.event.domain.EventDomain">
+select EVENT_NUM as eventNum, img, title
+from VIEW_EVENT
+where EVENT_STATUS='진행'
+</select>
 </mapper>
