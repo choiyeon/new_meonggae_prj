@@ -2,7 +2,9 @@ package com.store.meonggae.user.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class LoginController {
 	private LoginService loginService;
 
 	@PostMapping("/authenticate.do")
-	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session) {
+	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session, HttpServletResponse response) {
 		LoginVO loginVO = new LoginVO(id, pass);
 		LoginDomain user = null;
 
@@ -76,6 +78,13 @@ public class LoginController {
 		        return "redirect:/index.do";
 		    case "N":
 		        session.setAttribute("user", user);
+		        
+		        Cookie cookie = new Cookie("memNum", String.valueOf(user.getMemNum()));
+		        cookie.setMaxAge(60 * 30);
+		        cookie.setPath("/");
+		        cookie.setSecure(false);
+		        response.addCookie(cookie);
+		        
 		        return "redirect:/index.do";
 		    default:
 		        session.setAttribute("message", "알 수 없는 상태입니다.");
