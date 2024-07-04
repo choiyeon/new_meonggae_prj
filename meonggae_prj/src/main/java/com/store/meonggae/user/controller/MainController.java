@@ -6,6 +6,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -109,7 +111,7 @@ public class MainController {
 	// 상세페이지 이동
 	@GetMapping("/main_page/products_detail.do")
 	public String productDetail(HttpSession session, @RequestParam(name = "goodsNum", required = false) String goodsNum,
-			Model model) {
+			Model model, HttpServletResponse response) {
 		// 조회한 페이지인지 확인
 		Object cntSession = session.getAttribute("cntFlag");
 		boolean cntFlag = false;
@@ -165,6 +167,12 @@ public class MainController {
 		model.addAttribute("sellerInfo", sellerInfo);
 		model.addAttribute("sellerOtherPrdList", sellerOtherPrdList);
 		model.addAttribute("searchReviewList", searchReviewList);
+		
+		Cookie cookie =  new Cookie("goodsNum", goodsNum);
+        cookie.setMaxAge(60 * 30);
+        cookie.setPath("/");
+        cookie.setSecure(false);
+        response.addCookie(cookie);
 
 		return "main_page/products_detail";
 	}
