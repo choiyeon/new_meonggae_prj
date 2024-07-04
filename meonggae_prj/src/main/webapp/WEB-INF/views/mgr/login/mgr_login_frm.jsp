@@ -13,18 +13,18 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터 관리자</title>
-<link rel="icon" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<link rel="icon" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
 <!--bootstrap 시작-->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
 <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
 <!--bootstrap 끝-->
 
 <!-- dashlite 시작-->
-<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
 <!--dashlite 끝-->
 
-<!--<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" />-->
-<!--<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" />-->
+<!--<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" />-->
+<!--<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" />-->
 
 <!-- jQuery CDN 시작 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -78,8 +78,8 @@
 							<div class="nk-block nk-block-middle nk-auth-body">
 								<div class="brand-logo pb-5">
 									<div class="logo-link text-center">
-										<img class="logo-light logo-img logo-img-lg" src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo">
-										<img class="logo-dark logo-img logo-img-lg" src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo-dark">
+										<img class="logo-light logo-img logo-img-lg" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo">
+										<img class="logo-dark logo-img logo-img-lg" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo-dark">
 									</div>
 								</div>
 								<div class="nk-block-head">
@@ -131,12 +131,12 @@
 		</div>
 	</div>
 <!-- dashlite 시작-->
-<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script>
-<%-- <script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> --%>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script>
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script>
+<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
+<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script>
+<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script>
+<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> --%>
+<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script>
+<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script>
 <!-- dashlite 끝-->
 </body>
 </html>
