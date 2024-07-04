@@ -185,7 +185,7 @@
 <!-- datepicker 시작-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
-<script src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
 <script>
 	$( function() {
 		// 기본 사용
@@ -204,7 +204,7 @@
 <!-- datepicker 끝-->
 
 <!-- datepicker css 시작 -->
-<link rel="stylesheet" href="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
 <!-- datepicker css 끝 -->
 
 <style type="text/css">
@@ -213,7 +213,7 @@
  	.errMsg{color:#ff0000;}
  	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+   .ui-widget-header .ui-icon { background-image: url('http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 

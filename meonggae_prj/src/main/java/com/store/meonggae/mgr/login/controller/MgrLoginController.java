@@ -40,6 +40,10 @@ public class MgrLoginController {
 		listAllowIp.add("192.168.10.219");
 		listAllowIp.add("192.168.10.220");
 		listAllowIp.add("192.168.10.210");
+		listAllowIp.add("211.63.89.135");
+		listAllowIp.add("211.63.89.136");
+		listAllowIp.add("211.63.89.140");
+		listAllowIp.add("211.63.89.141");
 		listAllowIp.add("1.221.18.2");
 		
 		return listAllowIp.contains(ip);

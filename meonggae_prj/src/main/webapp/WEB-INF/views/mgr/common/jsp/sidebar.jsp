@@ -16,8 +16,8 @@
     </div>
     <div class="nk-sidebar-brand" style="text-align:center; margin:0px auto;">
       <a href="#void" class="logo-link nk-sidebar-logo">
-        <img class="logo-light logo-img" src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
-        <img class="logo-dark logo-img" src="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://192.168.10.214${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
+        <img class="logo-light logo-img" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
+        <img class="logo-dark logo-img" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
       </a>
     </div>
   </div>
