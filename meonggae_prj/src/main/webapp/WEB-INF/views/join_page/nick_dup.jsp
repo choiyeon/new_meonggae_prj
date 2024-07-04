@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>닉네임 중복 검사</title>
-<link rel="icon" href="http://192.168.10.218/Rest_Area_prj/common/tamcatIcon.ico"/>
+<link rel="icon" href="http://localhost/meonggae_prj/common/tamcatIcon.ico"/>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
