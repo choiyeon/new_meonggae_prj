@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.store.meonggae.dao.MybatisDAO;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
 import com.store.meonggae.product.domain.SearchProductDomain;
+import com.store.meonggae.product.domain.SellerInfoDomain;
 import com.store.meonggae.product.vo.SearchProductVO;
 
 
@@ -67,4 +68,12 @@ public class SearchProductDAO {
 			return ss.selectOne("com.store.meonggae.product.selectCategoryName", categoryNum);
 		}
 	};//isParentCategory
+	
+	//상점명 검색
+	public List<SellerInfoDomain> selectStore(String keyword)throws PersistenceException {
+		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+			return ss.selectList("com.store.meonggae.product.selectStore", keyword);
+		}
+	};//selectPrdKeyword
+	
 }

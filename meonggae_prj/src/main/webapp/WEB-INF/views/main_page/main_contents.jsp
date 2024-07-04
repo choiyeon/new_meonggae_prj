@@ -70,8 +70,8 @@
 
         <div class="container">
 
-            <div class="row" style="padding: 0 15px">
-
+            <div class="row" style="width: 1140px">
+<!-- style="padding: 0 15px" -->
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="trending">

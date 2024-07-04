@@ -69,7 +69,7 @@
 							<tr>
 								<td colspan="5"><img
 									src="${pageContext.request.contextPath}/common/images/${eventDetail.img}"
-									style="width: 100%; height: 500px;">
+									style="width: 100%; height: auto;">
 									${eventDetail.content}</td>
 							</tr>
 						</table>
