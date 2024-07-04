@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.store.meonggae.product.dao.SearchProductDAO;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
 import com.store.meonggae.product.domain.SearchProductDomain;
+import com.store.meonggae.product.domain.SellerInfoDomain;
 import com.store.meonggae.product.vo.SearchProductVO;
 
 @Service
@@ -60,5 +61,11 @@ public class SearchProductService {
     //카테고리 번호로 카테고리 이름 조회하기
     public String selectCategoryName(String categoryNum) {
     	return spDAO.selectCategoryName(categoryNum);
+    }
+    
+    //상점명 검색
+    public List<SellerInfoDomain> selectStore(String keyword){
+    	keyword = keyword.substring(1);
+    	return spDAO.selectStore(keyword);
     }
 }

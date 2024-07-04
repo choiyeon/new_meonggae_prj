@@ -74,7 +74,8 @@
 														<div class="image-container">
 															<img
 																src="${pageContext.request.contextPath}/common/images/${evtDomain.img}"
-																alt="이벤트 이미지">
+																alt="이벤트 이미지"
+																style="width: 558px;!important">
 														</div>
 													</div>
 													<div class="list__content">
