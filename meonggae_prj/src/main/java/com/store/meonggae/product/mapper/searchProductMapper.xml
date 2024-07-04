@@ -84,4 +84,9 @@ from V_SELECT_GOODS_DETAIL
 where GOODS_NUM=#{ goodsNum }
 </select>
 
+<!-- 상점명 검색 -->
+<select id="selectStore" resultType="SellerInfoDomain" parameterType="String">
+select * from V_SELECT_STORE
+where REPLACE(nick, ' ', '') like '%'||REPLACE(#{keyword}, ' ', '')||'%'
+</select>
 </mapper>
