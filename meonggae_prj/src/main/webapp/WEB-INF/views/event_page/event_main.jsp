@@ -52,10 +52,10 @@
 		</div>
 		<hr>
 		<div id="event_main">
-			<div class="tab tab--item2">
+			<div class="tab tab--item2" style="font-size: 20px; font-weight: 500 ">
 				<form name="evt_frm" id="evt_frm">
-					<input type="button" name="event-type" value="진행중"> 
-					<input type="button" name="event-type" value="종료">
+					<input type="button" class="btn-gradient green small" name="event-type" value="진행중" style="margin-right: 5px"> 
+					<input type="button" class="btn-gradient green small" name="event-type" value="종료">
 				</form>
 			</div>
 			<c:choose>
@@ -74,8 +74,7 @@
 														<div class="image-container">
 															<img
 																src="${pageContext.request.contextPath}/common/images/${evtDomain.img}"
-																alt="이벤트 이미지"
-																style="width: 558px;!important">
+																alt="이벤트 이미지">
 														</div>
 													</div>
 													<div class="list__content">
@@ -111,18 +110,18 @@
 			</c:choose>
 		</div>
 		<!-- 검색 창 시작 -->
-		<div style="text-align: center; margin-top: 20px">
+		<div style="text-align: center; margin-top: 20px;">
 			<form name="searchFrm" id="searchFrm" method="GET">
-				<select name="field" id="field">
+				<select name="field" id="field" style="height: 30px; vertical-align: middle;">
 					<option value="0"${ param.field eq 0 ? " selected='selected' " : "" }>제목</option>
 					<option value="1"${ param.field eq 1 ? " selected='selected' " : "" }>내용</option>
 					<option value="2"${ param.field eq 2 ? " selected='selected' " : "" }>진행상황</option>
 				</select>
 				<input type="hidden" name="eventType" id="eventType" value="진행중"/>
 				<input type="hidden" name="currentPage" id="currentPage" value="${ param.currentPage }"/>
-				<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px" />
-				<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
-				<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
+				<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px; height: 30px; vertical-align: middle;" />
+				<input type="button" value="검색" id="btnSearch" class="btn-gradient green small" style="padding: 3px 9px !important; width: 80px; height: 30px; vertical-align: middle;"/>
+				<input type="button" value="전체글" id="btnAllSearch" class="btn-gradient green small" style="padding: 3px 9px !important; width: 80px; height: 30px; vertical-align: middle;"/>
 				<input type="text" style="display: none;"/>
 			</form>
 		</div>

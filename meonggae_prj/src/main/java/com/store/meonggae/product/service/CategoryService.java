@@ -21,7 +21,7 @@ public class CategoryService {
     	return cateDAO.selectCategory(subCategory);
     }
     public boolean isParentCategory(String categoryNum) {
-    	return cateDAO.isParentCategory(categoryNum) > 0;//true면 부모, false면 자식
+    	return cateDAO.isParentCategory(categoryNum).equals("0");//true면 부모, false면 자식
     }
     
 

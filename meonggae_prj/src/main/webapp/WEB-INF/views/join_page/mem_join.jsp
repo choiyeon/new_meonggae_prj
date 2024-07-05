@@ -133,8 +133,10 @@
 					<th><label for="id">아이디</label></th>
 					<td>
 						<input data-value="아이디를 입력해주세요." name="id" id="id" class="inputTxt inputIdtype essential" type="text" maxlength="20"  />
-						<div class="space"></div>
-						<input type="button" value="ID 중복확인"class="btn btn-outline-dark" id="idChk"/>
+						<button type="button" id="idChk" class="exclude-input button button--quidel button--inverted button--text-thick button--text-upper button--size-s">
+						<i class="button__icon icon icon-flag"></i>
+						<span>ID 중복확인</span>
+						</button>
 						<span>*아이디를 영문, 숫자를 모두 포함하여 5~12자 이내로 입력해주세요.</span>
 						<div class="error_text item_style" id="idMsg" style="display: none;"></div>
 					</td>
@@ -165,8 +167,10 @@
                     <th scope="row"><label for="nick">닉네임</label></th>
                     <td>
                         <input data-value="닉네임를 입력해주세요." name="nick" id="nick" class="inputTxt inputIdtype essential" type="text" maxlength="20"  />
-                        <div class="space"></div>
-                        <input type="button" value="닉네임 중복확인"class="btn btn-outline-dark" id="nickChk"/>
+                        <button type="button" id="nickChk" style="width: auto !important" class="exclude-input button button--quidel button--inverted button--text-thick button--text-upper button--size-s">
+						<i class="button__icon icon icon-flag"></i>
+						<span>닉네임 중복확인</span>
+						</button>
                         <span>*닉네임을 한글, 영문, 숫자를 사용하여 1~12자 이내로 입력해주세요.</span>
                         <div class="error_text item_style" id="nickMsg" style="display: none;"></div>
                     </td>
@@ -200,8 +204,10 @@
 					<th><label for="zipcode">우편번호</label></th>
 					<td>
 						<input data-value="우편번호를 입력해주세요." type="text" class="zipcode essential" id="zipcode" name="zipcode" value="" readonly="readonly" maxlength="5"/>
-						<div class="space"></div>
-						<input type="button" value="우편번호검색"class="btn btn-outline-dark" id="addChk"/>
+						<button type="button" id="addChk" class="exclude-input exclude-input button button--quidel button--inverted button--text-thick button--text-upper button--size-s">
+						<i class="button__icon icon icon-flag"></i>
+						<span>우편번호검색</span>
+						</button>
 						<div class="error_text item_style" id="zipcodeMsg" style="display: none;"></div>
 					</td>
 				</tr>
@@ -216,8 +222,8 @@
 				</tr>
 			</table>
 	<div class="writeForm_btn">
-		<input type="button" value="확인" class="btn btn-secondary btn-lg" id="btnSubmit"/>
-		<input type="reset" value="취소" class="btn btn-secondary btn-lg" id="btnCancle"/>
+		<button type="button" class="joinBtn" id="btnSubmit"><span>회원가입</span></button>
+		<button type="button" class="joinBtn" id="btnCancle" style="width: 176.41px"><span>취소</span></button>
 	</div>
 	</div>
 </form>
