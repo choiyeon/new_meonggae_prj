@@ -81,5 +81,9 @@
     <mapper resource="com/store/meonggae/my/dao/mapper/InquiryMapper.xml"/>
     <mapper resource="com/store/meonggae/my/dao/mapper/ReviewMapper.xml"/>
     <!-- 내상점, 마이페이지 끝 -->
+    
+    <!-- 멍게톡 채팅 -->
+    <mapper resource="com/store/meonggae/talk/dao/mapper/chatMapper.xml"/>
+	<!-- 멍게톡 채팅 끝 -->
   </mappers>
 </configuration>
