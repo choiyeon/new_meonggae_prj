@@ -10,11 +10,11 @@ from GOODS_CATEGORY
 where PARENT_CATEGORY_NUM=#{PARENT_CATEGORY_NUM}
 </select>
  <!-- 부모 카테고리인지 확인하는 쿼리 -->
- <!-- 0이 아니면 부모, 0이면 자식 -->
-<select id="isParentCategory" resultType="int" >
-SELECT COUNT(*)
+<!--  결과가 0이면 부모 아니면 자식 -->
+<select id="isParentCategory" resultType="String" >
+SELECT PARENT_CATEGORY_NUM
 FROM GOODS_CATEGORY
-WHERE PARENT_CATEGORY_NUM = #{categoryNum}
+WHERE CATEGORY_NUM = #{categoryNum}
 </select>
 <select id="selectCategoryName" resultType="String" >
 select NAME

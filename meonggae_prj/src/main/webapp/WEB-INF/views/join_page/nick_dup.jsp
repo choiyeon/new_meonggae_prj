@@ -33,29 +33,32 @@
 		<div id="mpop">
 			<form name="board" method="get" action="nick_dup.do">
 					<h2>NickName CHECK<br> <span>닉네임 중복확인</span></h2>
-					<p>사용하고자 하는 닉네임를 입력해주세요. <br />닉네임 중복확인 후 사용 가능한 닉네임로 선택해주세요.</p>
+<!-- 					<p>사용하고자 하는 닉네임를 입력해주세요. <br />닉네임 중복확인 후 사용 가능한 닉네임로 선택해주세요.</p> -->
 					<div class="bgBox">
 						<dl class="conBox">
 							<dd>
-								<input type="text" id="nick" name="nick" maxlength="50" class="inw195" title="사용하실 닉네임을 입력주세요." value="${param.nick}" maxlength="20" />
+								<input type="text" id="nick" name="nick" maxlength="50" class="inw195" title="사용하실 닉네임을 입력주세요." value="${param.nick}" maxlength="20" readonly="readonly"/>
 								<input type="text" style="display: none"/>
 							</dd>
-							<dd>
-								<input type="button" onclick="nickChk();" class="popcheckBtn btn btn-success" value="닉네임 중복확인" />
-							</dd>
+<!-- 							<dd> -->
+<!-- 								<input type="button" onclick="nickChk();" class="popcheckBtn btn btn-success" value="닉네임 중복확인" /> -->
+<!-- 							</dd> -->
 						</dl>
 					</div>
 			</form>
 					<div id="dupResult">
 						<c:if test="${ not empty param.nick }">
-							입력하신 닉네임 [<strong><c:out value="${ param.nick }"/></strong>]는<br>
+							입력하신 닉네임 [<strong><c:out value="${ param.nick }"/></strong>]는
 						<c:choose>
 							<c:when test="${ result eq true }">
 								사용<strong style="color:#E53E30"> 불가능</strong>합니다.
 							</c:when>
 							<c:otherwise>
 								사용 <strong style="color:#0055FF">가능</strong> 합니다.<br>
-								<a id="btns" href="#" onclick="goSave();"><strong>사용하기</strong></a>
+<!-- 								<a id="btns" href="#" onclick="goSave();"><strong>사용하기</strong></a> -->
+								<div style="margin: 10px 0 0 0">
+								 <a href="#" id="btns" onclick="goSave();" class="button btnPush btnBlueGreen">사용하기</a>
+								</div>
 							</c:otherwise>
 						</c:choose>
 						</c:if>

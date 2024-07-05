@@ -41,14 +41,14 @@
 				<c:if test="${i.index == 1 }">
 					<div class="item active">
 						<a href="${pageContext.request.contextPath}/event_page/event_detail.do?event-code=${eventList.eventNum}">
-							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" style="width: 100%; height: 300px;!important" alt="${eventList.title}">
+							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" class="event-image" alt="${eventList.title}">
 						</a>
 					</div>
 				</c:if>
 				<c:if test="${i.index != 1 }">
 					<div class="item">
 						<a href="${pageContext.request.contextPath}/event_page/event_detail.do?event-code=${eventList.eventNum}">
-							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" style="width: 100%; height: 300px;!important" alt="${eventList.title}">
+							<img src="${pageContext.request.contextPath}/common/images/${eventList.img}" class="event-image" alt="${eventList.title}">
 						</a>
 					</div>
 				</c:if>

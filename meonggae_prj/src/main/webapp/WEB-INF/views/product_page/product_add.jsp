@@ -119,7 +119,10 @@ $(document).on('click', '#add', function() {
 });
 </script>
 <link rel="stylesheet"
-    href="http://localhost/meonggae_prj/common/CSS/style.css?v=1.0">
+    href="http://localhost/meonggae_prj/common/CSS/style.css">
+<!-- <link rel="stylesheet" -->
+<!--     href="http://localhost/meonggae_prj/common/CSS/style.css?v=1.0"> -->
+<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
 <link rel="stylesheet"
     href="http://localhost/meonggae_prj/common/CSS/tab.css?v=1.0">
 <link rel="stylesheet"
