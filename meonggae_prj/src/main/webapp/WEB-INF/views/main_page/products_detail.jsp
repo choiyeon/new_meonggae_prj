@@ -115,12 +115,14 @@
 				</ul>
 				</div>
 				<div class="wish-talk-btn">
+					<c:if test="${not requestScope.isSellerEqMe}">
 					<button id="wishlist-btn" class="wishlist-btn">
 						<i class="fa fa-heart-o"></i> 찜 0
 					</button>
 					<button id="meonggaeTalk-btn" class="meonggaeTalk-btn">
 						<i class="fa fa-comments" aria-hidden="true"></i>멍게톡
 					</button>
+					</c:if>
 				</div>	
 
                 </div>
@@ -252,3 +254,13 @@
 <!-- footer 시작 -->
 	<jsp:include page="../footer/footer.jsp" />
 <!-- footer 끝 -->
+
+<script type="text/javascript">
+$(function() {
+	$("#meonggaeTalk-btn").click(function() {
+		if($("[name='user_memNum']").val() != null && $("[name='user_memNum']").val() != '') {
+			location.href="http://localhost${pageContext.request.contextPath}/chat_dm.do?memNumSend=${user.memNum}&goodsNum=${ spd.goodsNum }";
+		} // end if
+	}); // click
+}); // ready
+</script>

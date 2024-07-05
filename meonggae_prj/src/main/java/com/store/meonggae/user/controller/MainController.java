@@ -6,6 +6,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -109,7 +111,7 @@ public class MainController {
 	// 상세페이지 이동
 	@GetMapping("/main_page/products_detail.do")
 	public String productDetail(HttpSession session, @RequestParam(name = "goodsNum", required = false) String goodsNum,
-			Model model) {
+			Model model, HttpServletResponse response) {
 		// 조회한 페이지인지 확인
 		Object cntSession = session.getAttribute("cntFlag");
 		boolean cntFlag = false;
@@ -143,6 +145,7 @@ public class MainController {
 		// 상품의 전체 찜 횟수 조회
 		int countSteam = ProductDetailInfoService.countAllSteam(goodsNum);
 		spd.setCountSteam(countSteam);
+		
 		// 회원의 찜 여부 조회
 		if (loginUser != null) {
 			SteamVO steamVo = new SteamVO(spd.getGoodsNum(), loginUser.getMemNum());
@@ -152,19 +155,30 @@ public class MainController {
 
 		// 판매자 정보
 		SellerInfoDomain sellerInfo = ProductDetailInfoService.sellerInfo(spd.getMemNumSell());
-
+		
 		// 판매자 다른상품
 		SteamVO steamVo2 = new SteamVO(spd.getGoodsNum(), spd.getMemNumSell());
 		List<SellOtherPrdDomain> sellerOtherPrdList = ProductDetailInfoService.sellerOtherPrd(steamVo2);
 
 		// 판매자 리뷰
 		List<SearchReviewDomain> searchReviewList = ProductDetailInfoService.searchReview(spd.getMemNumSell());
-
+		
+		// 판매자와 로그인한 사용자가 동일인인지
+		if (loginUser != null) {
+			model.addAttribute("isSellerEqMe", loginUser.getMemNum() == sellerInfo.getMemNum());
+		} // end if
+		
 		model.addAttribute("spd", spd);
 		model.addAttribute("parentCateList", parentCateList);
 		model.addAttribute("sellerInfo", sellerInfo);
 		model.addAttribute("sellerOtherPrdList", sellerOtherPrdList);
 		model.addAttribute("searchReviewList", searchReviewList);
+		
+		Cookie cookie =  new Cookie("goodsNum", goodsNum);
+        cookie.setMaxAge(60 * 60 * 2);
+        cookie.setPath("/");
+        cookie.setSecure(false);
+        response.addCookie(cookie);
 
 		return "main_page/products_detail";
 	}

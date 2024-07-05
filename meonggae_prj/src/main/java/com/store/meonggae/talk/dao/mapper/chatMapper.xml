@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.store.meonggae.chat">
+    <resultMap type="com.store.meonggae.talk.domain.ChatGoodsDomain" id="chatGoodsDom">
+        <result column="mem_Num_Sell" property="memNumSell"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+	<!-- 상품번호에 해당하는 판매자 번호 반환 -->
+    <select id="selectMemNumSellByGoodsNum" resultMap="chatGoodsDom" parameterType="String">
+        SELECT	mem_num_sell, name title
+        FROM 	goods
+        WHERE	goods_num = #{goodsNum}
+    </select>
+    
+   	<!-- 상품 상세 페이지에서 판매자에게 구매를 처음 시작하는 채팅 보내기 -->
+	<insert id="insertChat" parameterType="com.store.meonggae.talk.vo.ChatSendVO">
+		insert into chat(CHAT_KEY,GOODS_NUM,CONTENT,INPUT_DATE,MEM_NUM_SEND,MEM_NUM_RECV,READ_FLAG)
+		values	(
+				#{memNumSend} || '㏇' || to_char(sysdate, 'yyyymmdd') || chat_seq.nextval || '㏇' || #{memNumRecv},
+				#{goodsNum}, #{content}, sysdate, #{memNumSend}, #{memNumRecv}, 
+				<choose>
+					<when test="readFlag eq null or readFlag eq ''">
+					'N'
+					</when>
+					<otherwise>
+					#{readFlag}
+					</otherwise>
+				</choose>
+				)
+	</insert>
+</mapper>

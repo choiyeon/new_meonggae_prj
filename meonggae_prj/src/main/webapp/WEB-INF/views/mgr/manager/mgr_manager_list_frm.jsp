@@ -225,7 +225,7 @@
 													</a>
 												</li>
 												<li>
-													<div class="dropdown">
+													<div class="dropdown2">
 														<div id="dropdownFilter" class="btn btn-trigger btn-icon dropdown-toggle filterArea" data-bs-toggle="dropdown">
 															<div class="dot dot-primary"></div>
 															<em class="icon ni ni-filter-alt"></em>
