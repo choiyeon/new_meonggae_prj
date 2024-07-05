@@ -145,6 +145,7 @@ public class MainController {
 		// 상품의 전체 찜 횟수 조회
 		int countSteam = ProductDetailInfoService.countAllSteam(goodsNum);
 		spd.setCountSteam(countSteam);
+		
 		// 회원의 찜 여부 조회
 		if (loginUser != null) {
 			SteamVO steamVo = new SteamVO(spd.getGoodsNum(), loginUser.getMemNum());
@@ -154,14 +155,19 @@ public class MainController {
 
 		// 판매자 정보
 		SellerInfoDomain sellerInfo = ProductDetailInfoService.sellerInfo(spd.getMemNumSell());
-
+		
 		// 판매자 다른상품
 		SteamVO steamVo2 = new SteamVO(spd.getGoodsNum(), spd.getMemNumSell());
 		List<SellOtherPrdDomain> sellerOtherPrdList = ProductDetailInfoService.sellerOtherPrd(steamVo2);
 
 		// 판매자 리뷰
 		List<SearchReviewDomain> searchReviewList = ProductDetailInfoService.searchReview(spd.getMemNumSell());
-
+		
+		// 판매자와 로그인한 사용자가 동일인인지
+		if (loginUser != null) {
+			model.addAttribute("isSellerEqMe", loginUser.getMemNum() == sellerInfo.getMemNum());
+		} // end if
+		
 		model.addAttribute("spd", spd);
 		model.addAttribute("parentCateList", parentCateList);
 		model.addAttribute("sellerInfo", sellerInfo);
@@ -169,7 +175,7 @@ public class MainController {
 		model.addAttribute("searchReviewList", searchReviewList);
 		
 		Cookie cookie =  new Cookie("goodsNum", goodsNum);
-        cookie.setMaxAge(60 * 30);
+        cookie.setMaxAge(60 * 60 * 2);
         cookie.setPath("/");
         cookie.setSecure(false);
         response.addCookie(cookie);

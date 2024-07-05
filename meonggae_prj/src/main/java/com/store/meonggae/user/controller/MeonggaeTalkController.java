@@ -19,7 +19,7 @@ public class MeonggaeTalkController {
 
         if (loginUser != null) {
             model.addAttribute("user", loginUser);
-		return "meongae_talk/talk_page";
+		return "redirect:/chat.do";
 	}else {
         redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스 입니다.");
         return "redirect:/index.do";

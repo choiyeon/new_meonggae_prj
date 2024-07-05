@@ -1,4 +1,4 @@
-package com.store.meonggae.talk.vo;
+package com.store.meonggae.talk.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ChatSendVO {
-	private String memNumSend, memNumRecv, content;
-	private String goodsNum,readFlag;
+public class ChatGoodsDomain {
+	private String memNumSell, title;
 }
-
