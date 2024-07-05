@@ -64,6 +64,10 @@ $(function() {
 		chkInputAll();
 	}); // click
 
+	$("#btnCancle").click(function(){
+		$('input').not('.exclude-input').val('');
+		window.scrollTo(0,0);
+	});//click
 });//ready
 
 //아이디 유효성검사 후 중복 팝업 생성
@@ -78,7 +82,7 @@ function idDupWin(){
 	}else{
 		$("#idMsg").css('display', 'none');
 		$("#id").css('color', 'black');
-		window.open("id_dup.do?id="+id, "idDup", "width=472, height=390, top="+
+		window.open("id_dup.do?id="+id, "idDup", "width=472, height=341, top="+
         (window.screenY+203)+", left="+(window.screenX+306));
 	}
 };//idDupWin
@@ -122,7 +126,7 @@ function nickDupWin() {
 	}else{
 		$("#nickMsg").css('display', 'none');
 		$("#nick").css('color', 'black');
-		window.open("nick_dup.do?nick="+nick, "nickDup", "width=472, height=390, top="+
+		window.open("nick_dup.do?nick="+nick, "nickDup", "width=472, height=341, top="+
         (window.screenY+203)+", left="+(window.screenX+306));
 	}
     	

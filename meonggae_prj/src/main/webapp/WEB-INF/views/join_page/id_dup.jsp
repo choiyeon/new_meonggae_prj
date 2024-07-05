@@ -31,30 +31,33 @@
 	<div id="member" class="idCheck_wrap">
 		<div id="mpop">
 			<form name="board" method="get" action="id_dup.do">
-					<h2>ID CHECK <span>아이디 중복확인</span></h2>
-					<p>사용하고자 하는 아이디를 입력해주세요. <br />아이디 중복확인 후 사용 가능한 아이디로 선택해주세요.</p>
+					<h2>ID CHECK<br> <span>아이디 중복확인</span></h2>
+<!-- 					<p>사용하고자 하는 아이디를 입력해주세요. <br />아이디 중복확인 후 사용 가능한 아이디로 선택해주세요.</p> -->
 					<div class="bgBox">
 						<dl class="conBox">
 							<dd>
-								<input type="text" id="id" name="id" maxlength="50" class="inw195" title="사용하실 아이디를 입력주세요." value="${param.id}" maxlength="20" />
+								<input type="text" id="id" name="id" maxlength="50" class="inw195" title="사용하실 아이디를 입력주세요." value="${param.id}" maxlength="20" readonly="readonly"/>
 								<input type="text" style="display: none"/>
 							</dd>
-							<dd>
-								<input type="button" onclick="idChk();" class="popcheckBtn btn btn-success" value="ID 중복확인" />
-							</dd>
+<!-- 							<dd> -->
+<!-- 								<input type="button" onclick="idChk();" class="popcheckBtn btn btn-success" value="ID 중복확인" /> -->
+<!-- 							</dd> -->
 						</dl>
 					</div>
 			</form>
 					<div id="dupResult">
 						<c:if test="${ not empty param.id }">
-							입력하신 아이디 [<strong><c:out value="${ param.id }"/></strong>]는<br>
+							입력하신 아이디 [<strong><c:out value="${ param.id }"/></strong>]는
 						<c:choose>
 							<c:when test="${ result eq true }">
 								사용<strong style="color:#E53E30"> 불가능</strong>합니다.
 							</c:when>
 							<c:otherwise>
 								사용 <strong style="color:#0055FF">가능</strong> 합니다.<br>
-								<a id="btns" href="#" onclick="goSave();"><strong>사용하기</strong></a>
+<!-- 								<a id="btns" href="#" onclick="goSave();"><strong>사용하기</strong></a> -->
+								<div style="margin: 10px 0 0 0">
+								 <a href="#" id="btns" onclick="goSave();" class="button btnPush btnBlueGreen">사용하기</a>
+								</div>
 							</c:otherwise>
 						</c:choose>
 						</c:if>

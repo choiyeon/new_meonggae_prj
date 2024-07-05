@@ -142,7 +142,7 @@
 .writeForm table tr td input[type="text"]{height:37px; border:1px solid #dedede; font-size:14px; padding:0 20px; vertical-align:middle; box-sizing:border-box;}
 .writeForm table tr td input[type="password"]{height:37px; border:1px solid #dedede; font-size:14px; padding:0 20px; vertical-align:middle; box-sizing:border-box;}
 .writeForm table tr td input[type="file"]{width:60%; height:42px; border:1px solid #dedede; font-size:14px; padding:7px 20px; vertical-align:middle; box-sizing:border-box;}
-.writeForm table tr td .inputTxt{width:248px;}
+.writeForm table tr td .inputTxt{width:248px; display: inline-block;}
 .writeForm table tr td .inputPass{width:248px;}
 /*.writeForm table tr td .inputTxt{width:calc(30% - 40px);}*/
 .writeForm table tr td .inputPass.size02{width:calc(40% - 40px); max-width:248px;}
@@ -155,7 +155,7 @@
 .writeForm_top table tr td select{width:70%;}
 .writeForm table tr td select.selecEmail{width:245px;}
 .writeForm table tr td select option{text-align:center;}
-.writeForm table tr td > span{margin:0 10px; font-size:14px; color:#444; vertical-align:middle;}
+.writeForm table tr td > span{margin:0 0px; font-size:14px; color:#444; vertical-align:middle;}
 .writeForm table tr td span.label{font-size:14px;}
 .writeForm table tr td.step span{color:#333; font-weight:500;}
 .writeForm table tr td span a{font-size:18px;}
@@ -218,7 +218,152 @@
 #frm > .btn {
 	width: 150px;
 }
+/* 폼 내 버튼 */
+/* 제출 취소버튼 슬라이드*/
+.joinBtn {
+  border: none;
+display :inline-block;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: #222;
+  padding: 17px 60px;
+  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+.joinBtn span {
+  position: relative; 
+  z-index: 1;
+}
 
+.joinBtn:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 390%;
+  width: 140%;
+  background: #40bea7;
+  -webkit-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
+  transform: translateX(-98%) translateY(-25%) rotate(45deg);
+}
+
+.joinBtn:hover:after {
+  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
+  transform: translateX(-9%) translateY(-25%) rotate(45deg);
+}
+/* <button class="
+button button--quidel button--inverted button--text-thick 
+button--text-upper button--size-s"> */
+/* <i class="button__icon icon icon-flag"></i> */
+/* <span>Flag</span> */
+/* </button> */
+.button--quidel {
+  background: #40bea7;
+  color: #40bea7;
+  overflow: hidden;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+  -webkit-transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+  transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+}
+.button--quidel.button--inverted {
+  background: #fff;
+  color: #fff;
+}
+.button--quidel::before,
+.button--quidel::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+}
+.button--quidel::after {
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: #fff;
+}
+.button--quidel.button--inverted::after {
+  background: #37474f;
+}
+.button--quidel::before {
+  background: #37474f;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transform: translate3d(0, 100%, 0);
+  transform: translate3d(0, 100%, 0);
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  -webkit-transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+  transition-timing-function: cubic-bezier(0.75, 0, 0.125, 1);
+}
+.button--quidel.button--inverted::before {
+  background: #40bea7;
+}
+.button--round-s.button--quidel::after {
+  border-radius: 3px;
+}
+.button--round-m.button--quidel::after {
+  border-radius: 13px;
+}
+.button--round-l.button--quidel::after {
+  border-radius: 40px;
+}
+.button--quidel > span {
+  padding-left: 0.35em;
+}
+/* .button--quidel:hover { */
+/*   color: #37474f; */
+/* } */
+/* .button--quidel.button--inverted:hover { */
+/*   color: #40bea7; */
+/* } */
+/* .button--quidel:hover::before { */
+/*   -webkit-transform: translate3d(0, 0, 0); */
+/*   transform: translate3d(0, 0, 0); */
+/* } */
+.button--text-thick {
+  font-weight: 600;
+}
+.button--text-upper {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.button--size-s {
+  font-size: 11px;
+}
+.button {
+  width: 100px;
+  display: inline-block;
+  margin: 1em;
+  padding: 1em 1em;
+  border: none;
+  background: none;
+  color: inherit;
+  vertical-align: middle;
+  position: relative;
+  z-index: 1;
+  -webkit-backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+}
+.button:focus {
+  outline: none;
+}
+.button > span {
+  vertical-align: middle;
+}
 /*================================================= 게시판 =================================================*/
 .show1000{display:none;}
 .show1000i{display:none;}
@@ -807,11 +952,11 @@
 	.writeForm table tr td .inputEmail{width:calc(50% - 22px); margin-right:10px;}
 	.writeForm table tr td .email_txt{display:none;}
 	.writeForm table tr td .inputTit{width:100%;}
-	.writeForm table tr td .inputIdtype{width:calc(100% - 100px);}
+	.writeForm table tr td .inputIdtype{width:calc(100% - 120px); vertical-align: middle; display: inline-block;}
 	.writeForm table tr td select.selecEmail{width:calc(50% - 22px); margin-right:0;}
 	.writeForm table tr td textarea{width:100%; height:268px; padding:15px; margin:13px 0; resize:none; font-size:14px;}
 
-	.writeForm_btn{margin-top:40px;}
+	.writeForm_btn{margin-top:40px; text-align: center;}
 	.writeForm_btn a{width:49%; height:40px; line-height:40px; font-size:14px;}
 	.writeForm_btn a:last-of-type{margin-left:2%;}
 	
