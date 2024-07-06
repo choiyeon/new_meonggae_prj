@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyBatisDAO {
+public class MyBatisDAO2 {
 	
 //	private static MyBatisDAO mbDAO;
 	private static SqlSessionFactory ssf;//singleton 사용권장 => 비용절감, 일관성유지, 관리용이
