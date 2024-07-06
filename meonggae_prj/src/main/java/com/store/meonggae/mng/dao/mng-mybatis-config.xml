@@ -6,12 +6,12 @@
 <properties resource="properties/database.properties"/>
 <typeAliases>
 	
-	<typeAlias type="kr.co.sist.domain.InquiryDomain" alias="id"/>
-	<typeAlias type="kr.co.sist.domain.ReportDomain" alias="rd"/>
+	<typeAlias type="com.store.meonggae.mng.inquiry.domain.InquiryDomain" alias="id"/>
+	<typeAlias type="com.store.meonggae.mng.report.domain.ReportDomain" alias="rd"/>
 	
-	<typeAlias type="kr.co.sist.vo.SearchVO" alias="searchVO"/>
-	<typeAlias type="kr.co.sist.vo.InquiryVO" alias="inquiryVO"/>
-	<typeAlias type="kr.co.sist.vo.ReportVO" alias="reportVO"/>
+	<typeAlias type="com.store.meonggae.mng.search.vo.SearchVO" alias="searchVO"/>
+	<typeAlias type="com.store.meonggae.mng.inquiry.vo.InquiryVO" alias="inquiryVO"/>
+	<typeAlias type="com.store.meonggae.mng.report.vo.ReportVO" alias="reportVO"/>
 	
 	
 </typeAliases>
@@ -27,8 +27,8 @@
     </environment>
   </environments>
   <mappers>
-    <mapper resource="kr/co/sist/dao/mapper/inquiryMapper.xml"/>
-    <mapper resource="kr/co/sist/dao/mapper/reportMapper.xml"/>
+    <mapper resource="com/store/meonggae/mng/dao/mapper/inquiryMapper.xml"/>
+    <mapper resource="com/store/meonggae/mng/dao/mapper/reportMapper.xml"/>
 
   </mappers>
 </configuration>

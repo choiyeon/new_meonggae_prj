@@ -32,7 +32,7 @@ public class MyBatisDAO {
 		if(ssf ==null) {
 			try {
 				//1. 설정파일과 연결
-				Reader reader=Resources.getResourceAsReader("kr/co/sist/dao/mybatis-config.xml");
+				Reader reader=Resources.getResourceAsReader("com/store/meonggae/mng/dao/mng-mybatis-config.xml");
 				//2. MyBatis Framework 생성
 				ssf=new SqlSessionFactoryBuilder().build( reader );
 				//3. 스트림 닫기
