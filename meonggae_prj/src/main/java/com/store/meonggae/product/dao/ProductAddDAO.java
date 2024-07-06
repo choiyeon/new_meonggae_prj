@@ -44,6 +44,14 @@ public class ProductAddDAO {
         	e.printStackTrace();
 		}
     }
+    public void deleteProduct(ProductDomain product) {
+    	try (SqlSession ss = mbDAO.getMyBatisHandler(true)) {
+    		ss.update("com.store.meonggae.product.deleteProduct", product);
+    	}catch (PersistenceException e) {
+    		System.out.println("상품 삭제에 실패했습니다.");
+    		e.printStackTrace();
+    	}
+    }
     
 	/*
 	 * public void updateProductImg(ProductDomain product) { try (SqlSession ss =
