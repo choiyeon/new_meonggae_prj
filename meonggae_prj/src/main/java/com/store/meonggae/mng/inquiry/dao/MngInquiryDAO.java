@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.store.meonggae.mng.dao.MyBatisDAO;
+import com.store.meonggae.mng.dao.MyBatisDAO2;
 import com.store.meonggae.mng.inquiry.domain.MngInquiryDomain;
 import com.store.meonggae.mng.search.vo.SearchVO;
 
@@ -17,7 +17,7 @@ import com.store.meonggae.mng.search.vo.SearchVO;
 public class MngInquiryDAO { 
 
 	@Autowired(required = false)
-	private MyBatisDAO mbDAO;
+	private MyBatisDAO2 mbDAO;
 	
 	public List<MngInquiryDomain> selectInquiry( SearchVO sVO)throws PersistenceException {
 	
