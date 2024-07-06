@@ -33,6 +33,44 @@ $(function() {
             success: function(data) {
                 console.log("Update successful:", data);
                 window.location.reload(); // 업데이트 후 페이지를 새로고침하여 변경사항 반영
+                alert("상품이 수정되었습니다.")
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패: ' + status + " " + error);
+            }
+        });
+    });
+    $(".delete").click(function() {
+        var row = $(this).closest("tr");
+
+       
+        if (row.find(".sellStatus").val() == 'N') {
+        	var sell_status_code = "N";
+        } else {
+            var sell_status_code = "S";
+        }
+
+        var name = row.find(".name").val();
+        var price = row.find(".price").val();
+        var location = row.find(".location").val();
+        var goodsNum = $(this).data("value");
+
+        //alert("판매 상태 코드: " + sell_status_code + "\n이름: " + name + "\n가격: " + price + "\n위치: " + location + "\n상품 번호: " + goodsNum);
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/product_page/product_delete.do",
+            type: "POST",
+            data: {
+                'sell_status_code': sell_status_code,
+                'name': name,
+                'price': price,
+                'location': location,
+                'goodsNum': goodsNum
+            },
+            success: function(data) {
+                console.log("Update successful:", data);
+                window.location.reload(); // 업데이트 후 페이지를 새로고침하여 변경사항 반영
+                alert("상품이 삭제되었습니다.");
             },
             error: function(xhr, status, error) {
                 console.error('AJAX 요청 실패: ' + status + " " + error);
@@ -54,6 +92,7 @@ $(function() {
                 <th style="width: 150px;">직거래 장소</th>
                 <th style="width: 50px;">찜</th>
                 <th style="width: 50px;">수정</th>
+                <th style="width: 50px;">삭제</th>
             </tr>
         </thead>
         <tbody>
@@ -80,6 +119,8 @@ $(function() {
                     <td>${product.cnt}</td>
                     <td><input type="button" class="change btn btn-success btn-sm"
                         value="수정" data-value="${product.goodsNum}"></td>
+                    <td><input type="button" class="delete btn2 btn-danger btn-sm"
+                        value="삭제" data-value="${product.goodsNum}"></td>
                 </tr>
             </c:forEach>
         </tbody>

@@ -79,7 +79,7 @@ document.getElementById('category_num').innerHTML = optionTags;
 			</div>
 			<div class="form-actions">
 				<button type="button" id="add" class="btn btn-success">등록하기</button>
-				<button type="button" id="change" class="btn btn-secondary">변경하기</button>
-				<button type="button" id="delete" class="btn btn-warning">삭제하기</button>
+<!-- 				<button type="button" id="change" class="btn btn-secondary">변경하기</button> -->
+<!-- 				<button type="button" id="delete" class="btn btn-warning">삭제하기</button> -->
 			</div>
 		</form>

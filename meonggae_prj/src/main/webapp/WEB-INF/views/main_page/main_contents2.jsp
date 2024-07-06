@@ -23,7 +23,7 @@
 <!-- Theme Stylesheet -->
 
 <script src ="http://localhost/meonggae_prj/common/JS/script.js"></script>
-<script src ="http://localhost/meonggae_prj/common/JS/infinite_scroll.js"></script>
+<!-- <script src ="http://localhost/meonggae_prj/common/JS/infinite_scroll.js"></script> -->
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
 </head>
@@ -68,16 +68,16 @@
 
     <div class="featured-items">
 
-<!--         <div class="container"> -->
+        <div class="container">
 
-<!--             <div class="row" style="width: 1140px"> -->
+            <div class="row" style="width: 1140px">
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="trending">
 
                     	<div class="single-products">
 							<c:forEach var="pd" items="${requestScope.prdAllList}" varStatus="i">
-                            	<div class="single-product prevent-overflow"><!-- 상품 한개 -->
+                            	<div class="single-product prevent-overflow">
                             		<div class="product-block">
                             			<a href="main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
                             				<!-- 상세페이지로 이동 -->
@@ -100,9 +100,9 @@
 
 				</div>
 
-<!-- 			</div> -->
+			</div>
 
-<!-- 		</div> -->
+		</div>
 
 	</div>
 
