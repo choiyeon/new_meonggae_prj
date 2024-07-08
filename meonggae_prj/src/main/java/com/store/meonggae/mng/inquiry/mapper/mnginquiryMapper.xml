@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.inquiry">
+	
+	
+	<!-- 게시글목록
+
+	 -->
+	 <select id="selectInquiryList" resultType="id" parameterType="searchVO">
+	 SELECT
+      INQUIRY_NUM,
+      INQUIRY_CATEGORY_NUM,
+      TITLE,
+      MEM_NUM,
+      INPUT_DATE,
+      ANSWER_FLAG,
+      ANSWER_MANAGER_ID,
+      ANSWER_CONTENTS,
+      ANSWER_DATE,
+      DELETE_FLAG,
+      DELETE_DATE,
+      RNUM
+    FROM (
+      SELECT
+        INQUIRY_NUM,
+        INQUIRY_CATEGORY_NUM,
+        TITLE,
+        MEM_NUM,
+        INPUT_DATE,
+        ANSWER_FLAG,
+        ANSWER_MANAGER_ID,
+        ANSWER_CONTENTS,
+        ANSWER_DATE,
+        DELETE_FLAG,
+        DELETE_DATE,
+        ROW_NUMBER() OVER(ORDER BY INPUT_DATE DESC) RNUM
+      FROM
+        INQUIRY
+      <where>
+        DELETE_FLAG = 'N'
+        <if test="keyword != null and keyword != ''">
+          AND (
+            <choose>
+              <when test="field == 0">
+                INSTR(TITLE, #{keyword}) > 0
+              </when>
+              <when test="field == 1">
+                INSTR(CONTENTS, #{keyword}) > 0
+              </when>
+            </choose>
+          )
+        </if>
+      </where>
+    ) WHERE RNUM BETWEEN #{startNum} AND #{endNum}
+  </select>
+
+
+	 <!-- 상세 문의 조회
+	 
+	  -->
+	  <select id="selectDetailInquiry" resultType="id" parameterType="String">
+	    SELECT
+	      INQUIRY_NUM,
+	      INQUIRY_CATEGORY_NUM,
+	      TITLE,
+	      CONTENTS,
+	      MEM_NUM,
+	      INPUT_DATE,
+	      ANSWER_FLAG,
+	      ANSWER_MANAGER_ID,
+	      ANSWER_CONTENTS,
+	      ANSWER_DATE,
+	      DELETE_FLAG,
+	      DELETE_DATE
+	    FROM
+	      INQUIRY
+	    WHERE
+	      INQUIRY_NUM = #{inquiry_num}
+	  </select>
+		
+	  <!-- 문의 답변 업데이트 -->
+	  <update id="updateInquiry" parameterType="id">
+	    UPDATE INQUIRY
+	    SET
+	      ANSWER_CONTENTS = #{answer_contents},
+	      ANSWER_DATE = sysdate
+	    WHERE
+	      INQUIRY_NUM = #{inquiry_num}
+	  </update>
+
+	<!-- 문의 삭제 -->
+	<update id="updateDeleteFlag" parameterType="id">
+	  UPDATE INQUIRY
+	  SET delete_flag = 'Y'
+	  WHERE INQUIRY_NUM = #{inquiry_num}
+	</update>
+
+</mapper>

@@ -18,6 +18,7 @@
 		,member_detail md, goods_category gc
 		where
 		g.goods_num = gi.goods_num
+		and g.DELETE_FLAG='N'
 		and md.mem_num = g.mem_num_sell and
 		g.category_num = gc.category_num
 		and
@@ -96,6 +97,12 @@
     price = #{price, jdbcType=VARCHAR},
     sell_status_code = #{sell_status_code, jdbcType=CHAR}
     where goods_num = #{goodsNum, jdbcType=VARCHAR}
+</update>
+	<!-- 상품 삭제 -->
+	<update id="deleteProduct" parameterType="productDomain">
+	update goods 
+	set DELETE_FLAG='Y', DELETE_DATE=SYSDATE 
+	where  goods_num = #{goodsNum, jdbcType=VARCHAR}
 </update>
 
 	<!-- <update id="updateProductImg" parameterType="com.store.meonggae.product.domain.ProductDomain"> 

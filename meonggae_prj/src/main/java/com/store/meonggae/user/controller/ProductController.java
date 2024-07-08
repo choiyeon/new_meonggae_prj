@@ -170,6 +170,37 @@ public class ProductController {
 
         return "redirect:/product_page/tab01.do";
     }
+    @PostMapping("/product_page/product_delete.do")
+    public String deleteProduct(
+    		@RequestParam("goodsNum") String goodsNum,
+    		@RequestParam("sell_status_code") String sell_status_code,
+    		@RequestParam("name") String name,
+    		@RequestParam("price") String price,
+    		@RequestParam("location") String location,
+    		HttpSession session,
+    		RedirectAttributes redirectAttributes) throws IOException {
+    	
+    	LoginDomain loginUser = (LoginDomain) session.getAttribute("user");
+    	
+    	if (loginUser == null) {
+    		redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스 입니다.");
+    		return "redirect:/index.do";
+    	}
+    	
+    	//System.out.println("Received update request: goodsNum=" + goodsNum + ", sellStatusCode=" + sell_status_code
+    	//+ ", name=" + name + ", price=" + price + ", location=" + location);
+    	
+    	ProductDomain product = new ProductDomain();
+    	product.setGoodsNum(goodsNum);
+//    	product.setSell_status_code(sell_status_code);
+//    	product.setName(name);
+//    	product.setPrice(price);
+//    	product.setLocation(location);
+    	
+    	productAddService.deleteProduct(product);
+    	
+    	return "redirect:/product_page/tab01.do";
+    }
 
     
 }

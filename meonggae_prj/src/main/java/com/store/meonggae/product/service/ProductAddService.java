@@ -42,12 +42,13 @@ public class ProductAddService {
     }
 
 
-    
+    //상품 추가
     public void updateProduct(ProductDomain product) throws IOException {
-        // 로그 추가
-        System.out.println("Updating product: " + product);
-
         praDAO.updateProduct(product);
+    }
+    //상품 삭제
+    public void deleteProduct(ProductDomain product) throws IOException {
+    	praDAO.deleteProduct(product);
     }
     
     public String getUerIp(HttpServletRequest request){
