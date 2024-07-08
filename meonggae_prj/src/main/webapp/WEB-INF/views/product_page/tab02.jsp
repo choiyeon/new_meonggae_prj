@@ -40,7 +40,14 @@ $(function() {
             }
         });
     });
-    $(".delete").click(function() {
+    $("#delete").click(function() {
+    	alert("asdfad");
+    	var result = confirm("정말 상품을 삭제하시겠습니까?");
+    	alert(result);
+    	
+    	if(result){
+//     		deletePrd();//확인을 누르면 상품 삭제.
+//     function deletePrd() {
         var row = $(this).closest("tr");
 
        
@@ -48,7 +55,7 @@ $(function() {
         	var sell_status_code = "N";
         } else {
             var sell_status_code = "S";
-        }
+        }//end else
 
         var name = row.find(".name").val();
         var price = row.find(".price").val();
@@ -74,10 +81,12 @@ $(function() {
             },
             error: function(xhr, status, error) {
                 console.error('AJAX 요청 실패: ' + status + " " + error);
-            }
-        });
-    });
-});
+            }//error
+        });//ajax
+//     });//deletePrd
+    	}//end if
+    });//click
+});//ready
 </script>
 <form>
     <table class="table table-hover" style="width: 100%;">
@@ -119,7 +128,7 @@ $(function() {
                     <td>${product.cnt}</td>
                     <td><input type="button" class="change btn btn-success btn-sm"
                         value="수정" data-value="${product.goodsNum}"></td>
-                    <td><input type="button" class="delete btn2 btn-danger btn-sm"
+                    <td><input type="button" id="delete" class="delete btn2 btn-danger btn-sm"
                         value="삭제" data-value="${product.goodsNum}"></td>
                 </tr>
             </c:forEach>
