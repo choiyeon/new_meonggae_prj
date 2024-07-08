@@ -76,7 +76,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<div class="pagination" style="display: flex; justify-content: center;">${pagination}</div>
 	</c:when>
 	<c:otherwise>
 		<div class="noGoodsSold">

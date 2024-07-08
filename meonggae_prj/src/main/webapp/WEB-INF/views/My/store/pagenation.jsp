@@ -4,6 +4,7 @@
     pageEncoding="UTF-8"
     info="나의 상점"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- 로그인 세션 설정 시작 -->
 <c:choose>
 <c:when test="${ empty param.nick }">
@@ -35,11 +36,6 @@
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_store.css">
 <!-- CSS -->
 
-<script type="text/javascript">
-	$(function(){
-	});//ready
-</script>
-
 <%
 String nick = request.getParameter("nick");
 %>
@@ -56,8 +52,7 @@ String nick = request.getParameter("nick");
 	</div>
 		<span id="storeMenu" class="storeMenu">
 			<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
-			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>			
-			<a href="http://localhost/meonggae_prj/My/store/page.do?nick=${param.nick}" id="unSelected">페이지네이션실험중</a>
+			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>　　　
 		</span>
 	<hr>
 	
@@ -92,13 +87,6 @@ String nick = request.getParameter("nick");
 	</div>
 	<div class="pagination" style="display: flex; justify-content: center;">${pagination}</div>
 	</c:when>
-	<c:otherwise>
-		
-		<div class="noReview">
-		판매중인 상품이 없습니다!
-		</div>
-		
-	</c:otherwise>
 	</c:choose>
 </div>
 <!-- 내용 끝 -->

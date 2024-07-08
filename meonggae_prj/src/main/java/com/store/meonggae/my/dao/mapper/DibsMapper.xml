@@ -5,10 +5,23 @@
 <mapper namespace="com.store.meonggae.dibs">
 
 <!-- 마이페이지 메인 : 찜목록 -->
-<select id="allDibsList" resultType="goodsDomain" parameterType="String">
-select		goodsnum, name, price, img, goodsinputdate inputdate
-from		v_dibs_list
+<select id="allDibsList" resultType="goodsDomain" parameterType="searchVO">
+select  	goodsNum, name, price, img, inputDate, rnum
+from		(
+			select		goodsNum, name, price, img, goodsInputDate inputDate,
+								row_number() over(order by dibsInputDate desc) rnum
+			from			V_DIBS_LIST
+			where			mem_num='${memnumORnick}'
+			)
+where		rnum between ${startNum} and ${endNum}
+</select>
+
+<!-- 찜목록 count -->
+<select id="dibsCount" resultType="Integer" parameterType="String">
+select		count(*)
+from		V_DIBS_LIST
 where		mem_num='${memnum}'
 </select>
+
 
 </mapper>
