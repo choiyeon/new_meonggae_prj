@@ -5,27 +5,63 @@
 <mapper namespace="com.store.meonggae.salesList">
 
 <!-- 판매중 -->
-<select id="allSalesList" resultType="goodsDomain" parameterType="String">
-select		GOODS_NUM goodsnum, name, price, img, inputdate
+<select id="allSalesList" resultType="goodsDomain" parameterType="searchVO">
+select		goodsnum, name, price, img, inputdate
+from		(
+			select		GOODS_NUM goodsnum, name, price, img, inputdate,
+						row_number() over(order by input_date desc) rnum
+			from		V_SALES_LIST2
+			where		MEM_NUM_SELL='${memnumORnick}'
+			order by	input_date desc, goods_num desc
+			)
+where		rnum between ${startNum} and ${endNum}
+</select>
+
+<!-- 판매중 count -->
+<select id="salesCount" resultType="Integer" parameterType="String">
+select		COUNT(*)
 from		V_SALES_LIST2
 where		MEM_NUM_SELL='${memnum}'
-order by	input_date desc, goods_num desc
 </select>
 
 <!-- 판매완료 -->
-<select id="allSoldList" resultType="goodsDomain" parameterType="String">
-select		GOODS_NUM goodsnum, name, price, img, sell_date, inputdate
+<select id="allSoldList" resultType="goodsDomain" parameterType="searchVO">
+select		goodsnum, name, price, img, inputdate, rnum
+from		(
+			select		GOODS_NUM goodsnum, name, price, img, sell_date, inputdate,
+						row_number() over(order by sell_date desc) rnum
+			from		V_SOLD_LIST
+			where		MEM_NUM_Sell='${memnumORnick}'
+			order by	sell_Date desc, goods_num desc
+			)
+where		rnum between ${startNum} and ${endNum}
+</select>
+
+<!-- 판매완료 count -->
+<select id="soldCount" resultType="Integer" parameterType="String">
+select		COUNT(*)
 from		V_SOLD_LIST
-where		MEM_NUM_Sell='${memnum}'
-order by	sell_Date desc, goods_num desc
+where		MEM_NUM_SELL='${memnum}'
 </select>
 
 <!-- 구매완료 -->
-<select id="allBoughtList" resultType="goodsDomain" parameterType="String">
-select		GOODS_NUM goodsNum, NAME, PRICE, IMG, INPUTDATE
+<select id="allBoughtList" resultType="goodsDomain" parameterType="searchVO">
+select		goodsNum, name, price, img, inputdate, rnum
+from		(
+			select		GOODS_NUM goodsNum, NAME, PRICE, IMG, INPUTDATE,
+						row_number() over(order by sell_date desc) rnum
+			from		v_bought_list
+			where		MEM_NUM_BUY='${memnumORnick}'
+			order by	sell_date desc
+			)
+where		rnum between ${startNum} and ${endNum}
+</select>
+
+<!-- 구매완료 count -->
+<select id="boughtCount" resultType="Integer" parameterType="String">
+select		COUNT(*)
 from		v_bought_list
 where		MEM_NUM_BUY='${memnum}'
-order by	sell_date desc
 </select>
 
 </mapper>

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.store.meonggae.my.pagination.PaginationUtil;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.store.domain.ReviewDomain;
 import com.store.meonggae.my.store.domain.StoreMainDomain;
 import com.store.meonggae.my.store.service.StoreService;
@@ -26,13 +28,21 @@ public class StoreController {
 	 * 내 상점 : 메인
 	 */
 	@GetMapping("/store_frm.do")
-	public String storeMain(@RequestParam("nick") String nick, Model model) {
-		
-		List<StoreMainDomain> list = ss.searchSalesList(nick);
-		model.addAttribute("listSales", list);
+	public String storeMain(@RequestParam("nick") String nick,
+							@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+							Model model) {
 		
 		String profile = ss.searchProfile(nick);
 		model.addAttribute("profile", profile);
+		
+		String url = "http://localhost/meonggae_prj/My/store/store_frm.do";
+		String param = "&nick=" + nick;
+		int totalPage = (int)Math.ceil((double)ss.searchCount(nick)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
+		
+		List<StoreMainDomain> list = ss.searchSalesList(nick, currentPage);
+		model.addAttribute("listSales", list);
 		
 		return "My/store/store_frm";
 	}//storeMain
@@ -79,5 +89,33 @@ public class StoreController {
 		
 		return list;
 	}//moreReviewLoad
+	
+	
+	
+	
+	
+	
+	@GetMapping("/page.do")
+	public String page(@RequestParam("nick") String nick,
+					   @RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+					   Model model) {
+		
+		String profile = ss.searchProfile(nick);
+		model.addAttribute("profile", profile);
+		
+		String url = "http://localhost/meonggae_prj/My/store/page.do";
+		String param = "&nick=" + nick;
+		int totalPage = (int)Math.ceil((double)ss.searchCount(nick)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
+		
+		List<StoreMainDomain> list = ss.searchSalesList(nick, currentPage);
+		model.addAttribute("listSales", list);
+		
+		
+		return "My/store/pagenation";
+	}//storeMain
+	
+	
 	
 }//class
