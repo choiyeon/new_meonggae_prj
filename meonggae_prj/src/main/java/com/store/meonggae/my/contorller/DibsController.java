@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.store.meonggae.my.domain.GoodsDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
 import com.store.meonggae.my.service.DibsService;
 import com.store.meonggae.user.login.domain.LoginDomain;
 
@@ -27,7 +29,9 @@ public class DibsController {
 	 * @return
 	 */
 	@GetMapping("/dibs/dibsGoods_frm.do")
-	public String dibs(HttpServletRequest request, Model model) {
+	public String dibs(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -36,9 +40,14 @@ public class DibsController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		String param = "";
+		String url = "http://localhost/meonggae_prj/My/mypage/dibs/dibsGoods_frm.do";
+		int totalPage = (int)Math.ceil((double)ds.searchCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
 		
 		//찜
-		List<GoodsDomain> allDibsList = ds.searchAllDibsList(memNum);
+		List<GoodsDomain> allDibsList = ds.searchAllDibsList(memNum, currentPage);
 		model.addAttribute("allDibsList", allDibsList);
 		
 		return "/My/mypage/dibs/dibsGoods_frm";

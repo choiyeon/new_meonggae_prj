@@ -7,6 +7,8 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.store.meonggae.my.pagination.PaginationUtil;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.store.VO.ReviewVO;
 import com.store.meonggae.my.store.dao.StoreDAO;
 import com.store.meonggae.my.store.domain.ReviewDomain;
@@ -21,17 +23,33 @@ public class StoreService {
 	/**
 	 * 판매중 목록
 	 */
-	public List<StoreMainDomain> searchSalesList(String nick){
+	public List<StoreMainDomain> searchSalesList(String nick, int currentPage){
 		List<StoreMainDomain> list = null;
 		
 		try {
-		list = sDAO.selectSalesList(nick);
+			SearchVO sVO = PaginationUtil.getInstance().startNum(nick, currentPage, PaginationUtil.getInstance().pageScale());
+			list = sDAO.selectSalesList(sVO);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch
 		
 		return list;
 	}//searchSalesList
+	
+	/**
+	 * 판매 상품 갯수
+	 */
+	public int searchCount(String nick){
+		int cnt = 0;
+		
+		try {
+			cnt = sDAO.selectCount(nick);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return cnt;
+	}//searchCount
 	
 	/**
 	 * 프로필 사진 select
