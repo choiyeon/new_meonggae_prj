@@ -41,6 +41,8 @@ public class JoinService {
 	
 	//MEMBER insert
 	public int insertMemDetail(JoinVO joinVO) {
+		//이메일 형식
+		joinVO.setEmail(joinVO.getEmail1()+"@"+joinVO.getEmail2());
 		//비밀번호 암호화
 		PasswordEncoder pe = new BCryptPasswordEncoder();
 		String encodePass = pe.encode(joinVO.getPassword());

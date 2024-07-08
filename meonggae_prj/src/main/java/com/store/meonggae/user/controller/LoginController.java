@@ -1,4 +1,4 @@
-package com.store.meonggae.user.controller;
+ package com.store.meonggae.user.controller;
 
 import java.util.Map;
 
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +34,7 @@ public class LoginController {
 	private LoginService loginService;
 
 	@PostMapping("/authenticate.do")
-	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session, HttpServletResponse response) {
+	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session, HttpServletResponse response,Model model) {
 		LoginVO loginVO = new LoginVO(id, pass);
 		LoginDomain user = null;
 
@@ -78,7 +79,6 @@ public class LoginController {
 		        return "redirect:/index.do";
 		    case "N":
 		        session.setAttribute("user", user);
-		        
 		        Cookie cookie = new Cookie("memNum", String.valueOf(user.getMemNum()));
 		        cookie.setMaxAge(60 * 30);
 		        cookie.setPath("/");

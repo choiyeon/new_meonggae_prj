@@ -25,7 +25,7 @@ values(MEONGAE.SEQ_MEMBER.NEXTVAL, 'N', #{ nick }, 'default.png', SYSDATE, 'N')
 
 <!-- 회원등록_MEMBER_DETAIL -->
 <insert id="insertMemDetail" parameterType="com.store.meonggae.user.join.vo.JoinVO">
-insert into MEMBER_DETAIL(MEM_NUM, MEM_ID, PASS, BIRTH, ADDR, ADDR_DETAIL, TEL, GENDER, NAME, ZIPCODE)
-values(MEONGAE.SEQ_MEMBER.CURRVAL, #{ id }, #{ password }, #{ birthday }, #{ addr0 }, #{ addr1 }, #{ cell }, #{ gender }, #{ name }, #{ zipcode })
+insert into MEMBER_DETAIL(MEM_NUM, MEM_ID, PASS, BIRTH, ADDR, ADDR_DETAIL, TEL, GENDER, NAME, ZIPCODE, EMAIL)
+values(MEONGAE.SEQ_MEMBER.CURRVAL, #{ id }, #{ password }, #{ birthday }, #{ addr0 }, #{ addr1 }, #{ cell }, #{ gender }, #{ name }, #{ zipcode }, #{email})
 </insert>
 </mapper>
