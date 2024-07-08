@@ -168,6 +168,7 @@ public class MainController {
 			model.addAttribute("isSellerEqMe", loginUser.getMemNum() == sellerInfo.getMemNum());
 		} // end if
 		
+		model.addAttribute("user", loginUser);
 		model.addAttribute("spd", spd);
 		model.addAttribute("parentCateList", parentCateList);
 		model.addAttribute("sellerInfo", sellerInfo);
