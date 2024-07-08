@@ -108,7 +108,7 @@
 								<div class="single-product">
 									<div class="product-block">
 										<a
-											href="http://localhost//meonggae_prj/main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
+											href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
 											<!-- 상세페이지로 이동 --> <img
 											src="http://localhost/meonggae_prj/products-img/${ pd.imgName }"
 											alt="" class="thumbnail">

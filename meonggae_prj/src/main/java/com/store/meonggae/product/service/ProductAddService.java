@@ -33,7 +33,10 @@ public class ProductAddService {
         int result = praDAO.insertProduct(product);
 
         // 상품 이미지 정보를 DB에 저장 (필요시 구현)
-        int result2 = praDAO.insertProductImg(product);
+        int result2 = 0;
+        if(result==1) {
+        	result2 = praDAO.insertProductImg(product);
+        }
         boolean resultFlag = false;
         if(result==1 && result2==1) {
         	resultFlag = true;

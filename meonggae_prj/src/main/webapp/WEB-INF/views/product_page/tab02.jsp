@@ -41,13 +41,9 @@ $(function() {
         });
     });
     $("#delete").click(function() {
-    	alert("asdfad");
     	var result = confirm("정말 상품을 삭제하시겠습니까?");
-    	alert(result);
     	
     	if(result){
-//     		deletePrd();//확인을 누르면 상품 삭제.
-//     function deletePrd() {
         var row = $(this).closest("tr");
 
        
@@ -62,7 +58,6 @@ $(function() {
         var location = row.find(".location").val();
         var goodsNum = $(this).data("value");
 
-        //alert("판매 상태 코드: " + sell_status_code + "\n이름: " + name + "\n가격: " + price + "\n위치: " + location + "\n상품 번호: " + goodsNum);
 
         $.ajax({
             url: "${pageContext.request.contextPath}/product_page/product_delete.do",
@@ -83,7 +78,6 @@ $(function() {
                 console.error('AJAX 요청 실패: ' + status + " " + error);
             }//error
         });//ajax
-//     });//deletePrd
     	}//end if
     });//click
 });//ready

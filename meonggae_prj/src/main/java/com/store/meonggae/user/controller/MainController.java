@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.store.meonggae.product.domain.CategoryDomain;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
@@ -127,6 +128,7 @@ public class MainController {
 		} // end if
 			// 사용자 정보를 세션에서 가져옴
 		LoginDomain loginUser = (LoginDomain) session.getAttribute("user");
+		
 
 		// 상품 상세 조회
 		SearchProductDetailDomain spd = SearchProductService.selectPrdDetail(goodsNum);
