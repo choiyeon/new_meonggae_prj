@@ -110,7 +110,7 @@ var randomText = "";
 					$("#codePwDiv").show();
 					$("#chkNumBtn_pw").show();
 					randomText = data.randomText;
-					$("#finalId_pw").val(email);
+					$("#finalId_pw").val(id);
 				}
 				if(data.result == "false"){
 					alert("입력하신 정보에 해당하는 계정 정보가 존재하지 않습니다.\n정보를 확인해주세요.");

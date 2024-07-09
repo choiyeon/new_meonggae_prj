@@ -56,12 +56,12 @@ public class AcountDAO {
 	 *  비밀번호 수정
 	 */
 	public int updatePw(PwVO pwVO) throws PersistenceException{
-		int count = 0;
+		int cnt = 0;
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
-		count = ss.update("com.store.meonggae.acount.updatePw", pwVO);
+		cnt = ss.update("com.store.meonggae.acount.updatePw", pwVO);
 		mbDAO.CloseHandler(ss);
 		
-		return count;
+		return cnt;
 	}//updatePw
 	
 }
