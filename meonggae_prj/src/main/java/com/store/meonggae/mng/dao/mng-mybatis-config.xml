@@ -6,8 +6,8 @@
 <properties resource="properties/database.properties"/>
 <typeAliases>
 	
-	<typeAlias type="com.store.meonggae.mng.inquiry.domain.InquiryDomain" alias="id"/>
-	<typeAlias type="com.store.meonggae.mng.report.domain.ReportDomain" alias="rd"/>
+	<typeAlias type="com.store.meonggae.mng.inquiry.domain.MngInquiryDomain" alias="id"/>
+	<typeAlias type="com.store.meonggae.mng.report.domain.MngReportDomain" alias="rd"/>
 	
 	<typeAlias type="com.store.meonggae.mng.search.vo.SearchVO" alias="searchVO"/>
 	<typeAlias type="com.store.meonggae.mng.inquiry.vo.InquiryVO" alias="inquiryVO"/>
@@ -27,8 +27,8 @@
     </environment>
   </environments>
   <mappers>
-    <mapper resource="com/store/meonggae/mng/dao/mapper/inquiryMapper.xml"/>
-    <mapper resource="com/store/meonggae/mng/dao/mapper/reportMapper.xml"/>
+    <mapper resource="com/store/meonggae/mng/inquiry/mapper/mnginquiryMapper.xml"/>
+    <mapper resource="com/store/meonggae/mng/report/mapper/mngreportMapper.xml"/>
 
   </mappers>
 </configuration>
