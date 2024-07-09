@@ -47,6 +47,11 @@
 	<typeAlias type="com.store.meonggae.my.vo.WriteReviewVO" alias="wrVO"/>
 	
 	<typeAlias type="com.store.meonggae.my.pagination.SearchVO" alias="searchVO"/>
+	
+	<!-- 아이디 비밀번호 찾기 -->
+	<typeAlias type="com.store.meonggae.my.acount.vo.ChkAcountVO" alias="chkAcountVO"/>
+	<typeAlias type="com.store.meonggae.my.acount.vo.ChkPwAcountVO" alias="chkPwAcountVO"/>
+	<typeAlias type="com.store.meonggae.my.acount.vo.PwVO" alias="pwVO2"/>
 <!-- store,my -->
 
 </typeAliases>
@@ -81,6 +86,9 @@
     <mapper resource="com/store/meonggae/my/dao/mapper/PersonalMapper.xml"/>
     <mapper resource="com/store/meonggae/my/dao/mapper/InquiryMapper.xml"/>
     <mapper resource="com/store/meonggae/my/dao/mapper/ReviewMapper.xml"/>
+    
+    	<!-- 아이디 비밀번호 찾기 -->
+    <mapper resource="com/store/meonggae/my/acount/dao/mapper/AcountMapper.xml"/>
     <!-- 내상점, 마이페이지 끝 -->
     
     <!-- 멍게톡 채팅 -->

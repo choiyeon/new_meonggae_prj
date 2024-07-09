@@ -19,6 +19,7 @@ import com.store.meonggae.my.domain.InquiryCategoryDomain;
 import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
 import com.store.meonggae.my.domain.InquiryModifyDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
 import com.store.meonggae.my.service.InquiryService;
 import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
@@ -35,7 +36,9 @@ public class InquiryController {
 	 * 마이페이지 : 1:1문의
 	 */
 	@GetMapping("/inquiry/inquiry_frm.do")
-	public String inquiry(HttpServletRequest request, Model model) {
+	public String inquiry(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -44,8 +47,16 @@ public class InquiryController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		int totalCount = is.searchCount(memNum);
+		if(totalCount > 10) {
+			String param = "";
+			String url = "http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+			int totalPage = (int)Math.ceil((double)totalCount/10);
+			String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+			model.addAttribute("pagination", pagination);
+		}//if
 		
-		List<InquiryDomain> list = is.searchInquiryList(memNum);
+		List<InquiryDomain> list = is.searchInquiryList(memNum, currentPage);
 		model.addAttribute("inquiryList", list);
 		
 		return "/My/mypage/inquiry/inquiry_frm";

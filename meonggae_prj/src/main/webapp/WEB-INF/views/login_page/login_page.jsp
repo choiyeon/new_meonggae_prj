@@ -78,7 +78,8 @@
 						<br> -->
 						<!-- 구글 로그인 버튼 끝-->
 						<a href="http://localhost/meonggae_prj/join_page/mem_join.do">소셜
-							인증 없이 회원가입 하기</a>
+							인증 없이 회원가입 하기</a><br>
+						<a href="http://localhost/meonggae_prj/My/acount/acount.do">아이디/비밀번호 찾기</a>
 						<div style="padding-top: 10px;">
 							<input type="button" class="btn btn-success" id="login"
 								value="로그인">

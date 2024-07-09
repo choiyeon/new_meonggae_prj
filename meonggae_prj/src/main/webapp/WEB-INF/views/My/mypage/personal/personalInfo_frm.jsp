@@ -101,10 +101,38 @@
 		if(addr1 == ""){
 			alert("상세주소를 입력해주세요.");
 			return;
-		}//else
+		}
+		
+		var email_rule =  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+		var email_id =$("#email_id").val();
+		var email_domain =$("#email_domain").val();
+		var mail = "";
+		
+		if(!email_id){
+			alert("이메일을 입력해주세요");
+			$("#email_id").focus();
+			return false;
+		}
+		if(!email_domain){
+			alert("도메인을 입력해주세요");
+			$("#email_domain").focus();
+			return false;
+		}
+		
+		mail = email_id+"@"+email_domain;
+		$("#mail").val(mail);
+
+		if(!email_rule.test(mail)){
+			alert("이메일을 형식에 맞게 입력해주세요.");
+			return false;
+		}
 		
 		submit();
 	}//chkNull
+	
+	function setEmailDomain(domain){
+		$("#email_domain").val(domain);
+	}
 	
 	function submit(){
 		if(confirm("수정된 정보를 적용하시겠습니까?")){
@@ -242,6 +270,24 @@
 			<td id="tableTitle3" class="tableTitle3">전화번호</td>
 			<td>
 			<input type="tel" value="${ pDomain.tel }" id="phoneNumber" name="phoneNumber" class="phoneNumber" maxlength="13" onfocus="this.placeholder=''" oninput="autoHyphen(this)" pattern="010-[0-9]{3,4}-[0-9]{4}" autocomplete="off"/><br/>
+			</td>
+		</tr>
+		<tr>
+			<td id="tableTitle3" class="tableTitle3">이메일</td>
+			<td>
+			<input type="text" id="email_id" name="email_id" value="${ emailId }" title="이메일 아이디" placeholder="email" maxlength="18" /> @ 
+			<input type="text" id="email_domain" name="email_domain" value="${ emailDomain }" title="이메일 도메인" maxlength="18"/>
+			<select class="select" title="이메일 도메인 주소 선택" onclick="setEmailDomain(this.value);return false;">
+			    <option value="">직접입력</option>
+			    <option value="naver.com">naver.com</option>
+			    <option value="gmail.com">gmail.com</option>
+			    <option value="hanmail.net">hanmail.net</option>
+			    <option value="hotmail.com">hotmail.com</option>
+			    <option value="korea.com">korea.com</option>
+			    <option value="nate.com">nate.com</option>
+			    <option value="yahoo.com">yahoo.com</option>
+			</select><br>
+			<div id="imgGuide">이메일은 비밀번호 찾기에 사용됩니다. 정확히 입력해주세요!</div>
 			</td>
 		</tr>
 		<tr>

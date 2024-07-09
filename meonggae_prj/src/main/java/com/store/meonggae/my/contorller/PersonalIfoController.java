@@ -95,7 +95,12 @@ public class PersonalIfoController {
 		String memNum = String.valueOf(userSession.getMemNum());
 		
 		PersonalDomain pDomain = ps.searchPersonal(memNum);
+		String emailId = pDomain.getEmail().substring(0, pDomain.getEmail().indexOf("@"));
+		String emailDomain = pDomain.getEmail().substring(pDomain.getEmail().indexOf("@")+1);
+		
 		model.addAttribute("pDomain", pDomain);
+		model.addAttribute("emailId", emailId);
+		model.addAttribute("emailDomain", emailDomain);
 		
 		return "/My/mypage/personal/personalInfo_frm";
 	}//personalInfo
@@ -227,6 +232,7 @@ public class PersonalIfoController {
 		String zipcode = mr.getParameter("zipcode");
 		String addr0 = mr.getParameter("addr0");
 		String addr1 = mr.getParameter("addr1");
+		String email = mr.getParameter("email_id") + "@" + mr.getParameter("email_domain");
 		
 		PersonalInfoVO piVO = new PersonalInfoVO();
 		piVO.setMemnun(memNum);
@@ -235,6 +241,7 @@ public class PersonalIfoController {
 		piVO.setZipcode(zipcode);
 		piVO.setAddr0(addr0);
 		piVO.setAddr1(addr1);
+		piVO.setEmail(email);
 		
 		if(fileFlag) {
 			piVO.setProfile(profileName);
