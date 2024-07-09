@@ -26,6 +26,7 @@
 <script src ="http://localhost/meonggae_prj/common/JS/infinite_scroll.js"></script>
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
 <link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/infinite_scroll.css">
 </head>
 <body>
 <!-- header 시작 -->
@@ -94,7 +95,6 @@
 								</div>
 							</c:forEach>
                             				-->
-							<!-- 첫 listEnd -->
 							<div id="listEnd"></div>
 						</div>
                    	</div>
