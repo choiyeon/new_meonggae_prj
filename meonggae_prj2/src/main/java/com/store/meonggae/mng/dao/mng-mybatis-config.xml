@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<properties resource="properties/database.properties"/>
+<typeAliases>
+	
+	<typeAlias type="com.store.meonggae.mng.inquiry.domain.MngInquiryDomain" alias="id"/>
+	<typeAlias type="com.store.meonggae.mng.report.domain.MngReportDomain" alias="rd"/>
+	
+	<typeAlias type="com.store.meonggae.mng.search.vo.SearchVO" alias="searchVO"/>
+	<typeAlias type="com.store.meonggae.mng.inquiry.vo.InquiryVO" alias="inquiryVO"/>
+	<typeAlias type="com.store.meonggae.mng.report.vo.ReportVO" alias="reportVO"/>
+	
+	
+</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${connectionURL}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/store/meonggae/mng/inquiry/mapper/mnginquiryMapper.xml"/>
+    <mapper resource="com/store/meonggae/mng/report/mapper/mngreportMapper.xml"/>
+
+  </mappers>
+</configuration>
