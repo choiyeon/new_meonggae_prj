@@ -23,6 +23,51 @@
 	
 	<context:component-scan base-package="com.store.meonggae" />
 	
+	<!-- 관리자 세션 체크 interceptor 시작-->
+	<interceptors>
+		<!-- 관리자가 로그인 했는지 시작 -->
+		<interceptor>
+			<mapping path="/mgr/**"/>
+			<exclude-mapping path="/mgr/login/mgr_login_frm.do"/>
+			<exclude-mapping path="/mgr/login/mgr_main.do"/>
+			<exclude-mapping path="/mgr/login/mgr_second_auth_frm.do"/>
+			<exclude-mapping path="/mgr/login/mgr_second_auth_process.do"/>
+			<beans:bean id="mgrInterceptor" class="com.store.meonggae.mgr.interceptor.MgrInterceptor"></beans:bean>
+		</interceptor>
+		<!-- 관리자가 로그인 했는지 끝 -->
+		
+		<!-- 관리자 관리 페이지는 슈퍼 관리자만 - 시작 -->
+		<interceptor>
+			<mapping path="/mgr/manager/**"/>
+			<beans:bean id="mgrManagerInterceptor" class="com.store.meonggae.mgr.interceptor.MgrManagerInterceptor"></beans:bean>
+		</interceptor>
+		<!-- 관리자 관리 페이지는 슈퍼 관리자만 - 끝 -->
+		
+		<!-- 사용자 관리 권한이 있는 관리자 (회원, 신고, 문의, 후기, 물품, 이벤트) - 시작 -->
+		<interceptor>
+			<mapping path="/mgr/member/**"/>
+			<mapping path="/mgr/report/**"/>
+			<mapping path="/mgr/goods/**"/>
+			<mapping path="/mgr/event/**"/>
+			<beans:bean id="mgrMemberInterceptor" class="com.store.meonggae.mgr.interceptor.MgrMemberInterceptor"></beans:bean>
+		</interceptor>
+		<!-- 사용자 관리 권한이 있는 관리자 (회원, 신고, 문의, 후기, 물품, 이벤트) - 끝 -->
+		
+		<!-- 대시보드 조회만 가진 최하위 관리자 -->
+		<interceptor>
+			<mapping path="/mgr/member/**"/>
+			<mapping path="/mgr/report/**"/>
+			<mapping path="/mgr/inquiry/**"/>
+			<mapping path="/mgr/review/**"/>
+			<mapping path="/mgr/goods/**"/>
+			<mapping path="/mgr/event/**"/>
+			<beans:bean id="mgrDahsOnlyInterceptor" class="com.store.meonggae.mgr.interceptor.MgrDashOnlyInterceptor"></beans:bean>
+		</interceptor>
+		<!-- 대시보드 조회만 가진 최하위 관리자 -->
+		
+	</interceptors>
+	<!-- 관리자 세션 체크 interceptor 끝-->
+	
 <!-- 	<interceptors>
 	<interceptor>
 			<mapping path="/**"/>

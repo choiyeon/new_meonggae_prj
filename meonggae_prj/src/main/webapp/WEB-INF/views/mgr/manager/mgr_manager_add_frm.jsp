@@ -235,7 +235,8 @@
 									<label class="form-label" for="fv-full-name">아이디</label>
 									<div class="form-control-wrap">
 										<div class="input-group">
-											<input type="text" class="form-control invalid" id="managerId" name="managerId" readonly value="manager5">
+<!-- 											<input type="text" class="form-control invalid" id="managerId" name="managerId" readonly value="manager6"> -->
+											<input type="text" class="form-control invalid" id="managerId" name="managerId" readonly value="">
 											<button type="button" class="btn btn-light" id="idChk">중복확인</button>
 											<span class="invalid">아이디는 필수 입력입니다.</span>
 										</div>
@@ -248,7 +249,8 @@
 								<div class="form-group">
 									<label class="form-label" for="fv-full-name">비밀번호 (8자 이상의 영문자, 숫자, 특수문자 @$!%*#로 구성)</label>
 									<div class="form-control-wrap">
-										<input type="password" class="form-control invalid" id="pass" name="pass" value="qwer1234!">
+<!-- 										<input type="password" class="form-control invalid" id="pass" name="pass" value="qwer1234!"> -->
+										<input type="password" class="form-control invalid" id="pass" name="pass" value="">
 										<span class="invalid">비밀번호는 필수 입력입니다.</span>
 										<span class="errMsg passNotGood">비밀번호는 8자 이상의 영문자, 숫자, 특수문자 @$!%*#로 구성</span>
 									</div>
@@ -264,7 +266,8 @@
 	<!-- 										<em class="passcode-icon icon-show icon ni ni-eye"></em> -->
 	<!-- 										<em class="passcode-icon icon-hide icon ni ni-eye-off"></em> -->
 	<!-- 									</a> -->
-										<input autocomplete="new-pass" type="password" class="form-control invalid" id="pass-check" value="qwer1234!">
+<!-- 										<input autocomplete="new-pass" type="password" class="form-control invalid" id="pass-check" value="qwer1234!"> -->
+										<input autocomplete="new-pass" type="password" class="form-control invalid" id="pass-check" value="">
 	<!-- 									<input type="pass" class="form-control invalid" id="fv-full-name" name="fv-full-name" required="" aria-describedby="fv-full-name-error" aria-invalid="true"> -->
 										<span class="invalid">비밀번호 확인은 필수 입력입니다.</span>
 										<span class="errMsg passNotEqual">비밀번호가 일치하지 않습니다</span>
@@ -277,7 +280,8 @@
 								<div class="form-group">
 									<label class="form-label" for="fv-full-name">이름</label>
 									<div class="form-control-wrap">
-										<input type="text" class="form-control invalid" id="name" name="name" value="최관리">
+<!-- 										<input type="text" class="form-control invalid" id="name" name="name" value="정관리"> -->
+										<input type="text" class="form-control invalid" id="name" name="name" value="">
 										<span class="invalid">이름은 필수 입력입니다.</span>
 									</div>
 								</div>
@@ -289,7 +293,8 @@
 									<label class="form-label" for="fv-full-name">닉네임</label>
 									<div class="form-control-wrap">
 										<div class="input-group">
-											<input type="text" class="form-control invalid" id="nick" name="nick" readonly value="관리자5">
+<!-- 											<input type="text" class="form-control invalid" id="nick" name="nick" readonly value="관리자6"> -->
+											<input type="text" class="form-control invalid" id="nick" name="nick" readonly value="">
 											<span class="invalid">닉네임은 필수 입력입니다.</span>
 											<button type="button" class="btn btn-light" id="nickChk">중복확인</button>
 										</div>
@@ -305,7 +310,8 @@
 										<div class="col-sm-6">
 											<div class="form-control-wrap">
 												<div class="input-group">
-													<input type="text" class="form-control invalid" id="email1" value="manager5">
+<!-- 													<input type="text" class="form-control invalid" id="email1" value="sd8273k"> -->
+													<input type="text" class="form-control invalid" id="email1" value="">
 													<span class="invalid">이메일은 필수 입력입니다.</span>
 												</div>
 											</div>
@@ -313,7 +319,8 @@
 										<div class="col-sm-6" style="text-align:center;">
 											<div class="input-group">
 												<div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">@</span></div>
-												<input type="text" class="form-control invalid" list="selecEmail" id="email2">
+<!-- 												<input type="text" class="form-control invalid" list="selecEmail" id="email2" value="gmail.com"> -->
+												<input type="text" class="form-control invalid" list="selecEmail" id="email2" value="">
 												<datalist id="selecEmail">
 													<option value='직접 입력'>직접 입력</option>
 													<option value='naver.com'>naver.com</option>
@@ -370,9 +377,9 @@
 									<label class="form-label" for="fv-full-name">관리 권한</label>
 									<div class="form-control-wrap">
 										<select class="form-select js-select2" name="permission">
-											<option value="1">사용자 관리 전체</option>
-											<option value="2">문의, 후기 관리</option>
-											<option value="3" selected="selected">대시보드 조회</option>
+											<option value="10">사용자 관리 전체</option>
+											<option value="01">문의, 후기 관리</option>
+											<option value="00" selected="selected">대시보드 조회</option>
 										</select>
 <!-- 										<span id="fv-topics-error" class="invalid">이 항목은 필수 입력입니다.</span> -->
 									</div>
@@ -419,7 +426,8 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text" id="fv-phone">+82</span>
 											</div>
-											<input type="text" class="form-control invalid" maxlength="13" id="tel" name="tel" value="010-1212-9898"/>
+<!-- 											<input type="text" class="form-control invalid" maxlength="13" id="tel" name="tel" value="010-1212-9898"/> -->
+											<input type="text" class="form-control invalid" maxlength="13" id="tel" name="tel" value=""/>
 											<span class="invalid">전화번호는 필수 입력입니다.</span>
 										</div>
 									</div>
@@ -432,6 +440,7 @@
 									<label class="form-label" for="fv-full-name">주소</label>
 									<div class="form-control-wrap">
 										<div class="input-group">
+<!-- 											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value=""> -->
 											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value="서울시 강남구 역삼동">
 											<span class="invalid">주소는 필수 입력입니다.</span>
 											<input type="button" class="btn btn-light" id="addChk" value="우편번호검색"></input>
@@ -445,7 +454,8 @@
 								<div class="form-group">
 									<label class="form-label" for="fv-full-name">상세주소</label>
 									<div class="form-control-wrap">
-										<input type="text" class="form-control invalid" id="addr2" name="addr2" value="한독빌등 8층 7">
+<!-- 										<input type="text" class="form-control invalid" id="addr2" name="addr2" value="한독빌등 8층 7"> -->
+										<input type="text" class="form-control invalid" id="addr2" name="addr2" value="">
 										<span class="invalid">상세주소는 필수 입력입니다.</span>
 									</div>
 								</div>

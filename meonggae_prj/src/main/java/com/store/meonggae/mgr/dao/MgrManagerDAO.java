@@ -8,6 +8,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Component;
 
+import com.store.meonggae.mgr.manager.domain.MgrEmailDomain;
 import com.store.meonggae.mgr.manager.domain.MgrManagerDomain;
 import com.store.meonggae.mgr.manager.vo.ManagerSearchVO;
 import com.store.meonggae.mgr.manager.vo.MgrManagerVO;
@@ -83,4 +84,12 @@ public class MgrManagerDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		ss.insert("com.store.meonggae.mgr.manager.insertManager", mmVO);
 	} // insertManager
+	
+	// 관리자 등록시 사용되는 메일 전송 계정
+	public MgrEmailDomain selectOneEmailAcoount(String mailNum) {
+		MgrEmailDomain mgrEmailDomain = null;
+		SqlSession ss = mbDAO.getMyBatisHandler(true);
+		mgrEmailDomain = ss.selectOne("com.store.meonggae.mgr.manager.selectOneEmailAcoount", mailNum);
+		return mgrEmailDomain;
+	} // selectOneEmailAcoount
 } // class

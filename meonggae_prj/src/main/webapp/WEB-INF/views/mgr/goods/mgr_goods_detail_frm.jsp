@@ -150,7 +150,14 @@
 									</ul>
 								</div>
 								<div class="wish-talk-btn">
+									<c:choose>
+									<c:when test="${not goodsDomain.flagDelete }">
 									<input type="button" id="btnDelete" class="btn btn-danger" value="삭제하기">
+									</c:when>
+									<c:otherwise>
+									<input type="button" class="btn btn-light" value="삭제하기" disabled="disabled">
+									</c:otherwise>
+									</c:choose>
 								</div>
 							</div>
 						</div>
@@ -185,7 +192,7 @@
 													<img class="buyer-pic" src="${pageContext.request.contextPath}/profile-img/${ goodsDomain.profileImg }" alt="판매하기 이미지">
 												</c:otherwise>
 											</c:choose>
-										</div> <c:out value="${goodsDomain.nickSell}"/>
+										</div><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do?memNum=${goodsDomain.memNumSell}&t=1&trade=S"><c:out value="${goodsDomain.nickSell}"/></a>
 									</button>
 									<div class="seller-other-products">
 										<c:choose>

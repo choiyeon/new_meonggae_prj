@@ -134,7 +134,7 @@ public class MgrGoodsService {
 	} // searchOneReviewDetail
 	
 	// 물품 삭제
-	public int removeReview(String goodsNum) {
+	public int removeOneGoods(String goodsNum) {
 		int cnt = 0;
 		try {
 			cnt = mgDAO.deleteGoods(goodsNum);

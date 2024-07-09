@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.store.meonggae.visitor">
+	<!-- 사이트 방문자수 ++ -->
+	<update id="mergeIntoVisitorCnt" parameterType="boolean">
+		merge into	visitor
+		using		dual
+		on 			(input_date = to_char(sysdate, 'yyyy-mm-dd'))
+		<choose>
+			<when test="isMember">
+				when 		matched then	update set MEM_CNT = MEM_CNT + 1
+				when not 	matched then	insert (input_date, ALL_CNT, MEM_CNT) values (to_char(sysdate, 'yyyy-mm-dd'), 0, 1)			
+			</when>
+			<otherwise>
+				when 		matched then	update set ALL_CNT = ALL_CNT + 1
+				when not 	matched then	insert (input_date, ALL_CNT, MEM_CNT) values (to_char(sysdate, 'yyyy-mm-dd'), 1, 0)
+			</otherwise>
+		</choose>
+	</update>
+</mapper>

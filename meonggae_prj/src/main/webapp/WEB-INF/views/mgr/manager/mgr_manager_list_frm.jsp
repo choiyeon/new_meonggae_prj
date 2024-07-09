@@ -159,7 +159,7 @@
 	<script type="text/javascript">
 		$(function (){
 			if(${requestScope.flagAddResult }) {
-				alert('관리자 등록에 성공하였습니다');
+				alert('관리자 등록에 성공하였습니다. 등록한 메일을 확인해주세요');
 			} else {
 				alert('관리자 등록에 실패하였습니다');
 			} // else
@@ -263,40 +263,6 @@
 														</div>
 													</div>
 												</li>
-												<li>
-													<div class="dropdown">
-														<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-															<em class="icon ni ni-setting"></em>
-														</a>
-														<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-															<ul class="link-check">
-																<li>
-																	<span>리스트 수</span>
-																</li>
-																<li class="active">
-																	<a href="#">10</a>
-																</li>
-																<li>
-																	<a href="#">20</a>
-																</li>
-																<li>
-																	<a href="#">50</a>
-																</li>
-															</ul>
-															<ul class="link-check">
-																<li>
-																	<span>정렬</span>
-																</li>
-																<li class="active">
-																	<a href="#">내림차순</a>
-																</li>
-																<li>
-																	<a href="#">오름차순</a>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</li>
 											</ul>
 										</div>
 									</div>
@@ -341,7 +307,7 @@
 								<c:otherwise>
 									<c:forEach var="mgrDomain" items="${requestScope.list}" varStatus="i">
 										<tr>
-											<th scope="row"><c:out value="${i.count}"/></th>
+											<th scope="row"><c:out value="${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }"/></th>
 											<c:choose>
 												<c:when test="${pageContext.request.queryString eq null or pageContext.request.queryString eq ''}">
 													<td><a href="${pageContext.request.contextPath}/mgr/manager/mgr_manager_detail_frm.do?managerId=${mgrDomain.managerId}"><c:out value="${mgrDomain.managerId}"/></a></td>

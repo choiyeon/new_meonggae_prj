@@ -1,5 +1,9 @@
 package com.store.meonggae.mgr.manager.service;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,14 +11,19 @@ import java.util.List;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.zxing.WriterException;
+import com.store.meonggae.mgr.common.service.EmailSender;
+import com.store.meonggae.mgr.common.service.OTPUtil;
+import com.store.meonggae.mgr.common.vo.EmailVO;
 import com.store.meonggae.mgr.dao.MgrManagerDAO;
+import com.store.meonggae.mgr.manager.domain.MgrEmailDomain;
 import com.store.meonggae.mgr.manager.domain.MgrManagerDomain;
 import com.store.meonggae.mgr.manager.vo.ManagerSearchVO;
 import com.store.meonggae.mgr.manager.vo.MgrManagerVO;
@@ -24,6 +33,10 @@ public class MgrManagerService {
 	
 	@Autowired
 	private MgrManagerDAO mmDAO;
+	@Autowired
+	private OTPUtil otpUtil;
+	@Autowired
+	private EmailSender email;
 	
 	// 검색된 관리자 수
 	public int getTotalCount(ManagerSearchVO sVO) {
@@ -209,39 +222,67 @@ public class MgrManagerService {
 	// 관리자 신규 등록
 	public boolean addManagerProcess(MgrManagerVO mMgrVO) {
 		boolean flagAddResult = false;
+		MgrEmailDomain mgrEmailDomain = null;
 		
-		try {
-			String key = "test1234";
-			String salt = "123456";
-			TextEncryptor te = Encryptors.text(key, salt);
-			PasswordEncoder pe = new BCryptPasswordEncoder();
+		if(mMgrVO.getParentManagerId() == null) {
+			mMgrVO.setParentManagerId("");
+		} // end if
 			
-			mMgrVO.setPass(pe.encode(mMgrVO.getPass()));
-			mMgrVO.setName(te.encrypt(mMgrVO.getName()));
-			mMgrVO.setBirth(te.encrypt(mMgrVO.getBirth()));
-			mMgrVO.setAddr1(te.encrypt(mMgrVO.getAddr1()));
-			mMgrVO.setAddr2(te.encrypt(mMgrVO.getAddr2()));
-			mMgrVO.setTel(te.encrypt(mMgrVO.getTel()));
-			mMgrVO.setPermission(te.encrypt(mMgrVO.getPermission()));
-			if(mMgrVO.getEmail() != null) {
+		if(mMgrVO.getEmail() != null && !mMgrVO.getEmail().equals("")) {
+			try {
+				String key = "test1234";
+				String salt = "123456";
+				TextEncryptor te = Encryptors.text(key, salt);
+				PasswordEncoder pe = new BCryptPasswordEncoder();
+				String secretKey = "";
+				String googleOTPAuthURL = "";
+				
+				mMgrVO.setPass(pe.encode(mMgrVO.getPass()));
+				mMgrVO.setName(te.encrypt(mMgrVO.getName()));
+				mMgrVO.setBirth(te.encrypt(mMgrVO.getBirth()));
+				mMgrVO.setAddr1(te.encrypt(mMgrVO.getAddr1()));
+				mMgrVO.setAddr2(te.encrypt(mMgrVO.getAddr2()));
+				mMgrVO.setTel(te.encrypt(mMgrVO.getTel()));
+				mMgrVO.setPermission(te.encrypt(mMgrVO.getPermission()));
+				
+				secretKey = otpUtil.getSecretKey();
+				mMgrVO.setSecondAuthKey(te.encrypt(secretKey));
+				
+				googleOTPAuthURL = otpUtil.getGoogleOTPAuthURL(secretKey, mMgrVO.getManagerId(), "meonggae");
+				
+				otpUtil.getQRImage(googleOTPAuthURL, "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images/qr.png", 200, 200);
+				
+				mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
+				
+				String keyMail = "krcosist";
+				String saltMail = "0234824632";
+				TextEncryptor teMail = Encryptors.text(keyMail, saltMail);
+
+				String senderEmail = teMail.decrypt(mgrEmailDomain.getSenderEmail());
+				String senderPassword = teMail.decrypt(mgrEmailDomain.getSenderPassword());
+				
+				EmailVO eVO = new EmailVO(0, mMgrVO.getEmail(), "멍게장터 관리자 인증 이메일", "<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='" + "http://211.63.89.136/meonggae_prj/mgr_common/images/qr.png" + "' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>", senderEmail, senderPassword);
+				
+				email.mailSend(eVO, "html");
 				mMgrVO.setEmail(te.encrypt(mMgrVO.getEmail()));
-			} else {
-				mMgrVO.setEmail("");
-			} // end if
-			if(mMgrVO.getSecondAuthKey() != null) {
-				mMgrVO.setSecondAuthKey(te.encrypt(mMgrVO.getSecondAuthKey()));
-			} else {
-				mMgrVO.setSecondAuthKey("");
-			} // end if
-			if(mMgrVO.getParentManagerId() == null) {
-				mMgrVO.setParentManagerId("");
-			} // end if
-			
-			mmDAO.insertManager(mMgrVO);
-			flagAddResult = true;
-		} catch (PersistenceException pe) {
-			pe.printStackTrace();
-		} // end catch
+				
+				mmDAO.insertManager(mMgrVO);
+				
+				flagAddResult = true;
+			} catch (PersistenceException pe) {
+				pe.printStackTrace();
+			} catch (UnsupportedEncodingException uee) {
+				uee.printStackTrace();
+			} catch (NoSuchAlgorithmException nae) {
+				nae.printStackTrace();
+			} catch (GeneralSecurityException gse) {
+				gse.printStackTrace();
+			} catch (WriterException we) {
+				we.printStackTrace();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			} // end catch
+		} // end if
 		
 		return flagAddResult;
 	} // addManagerProcess
