@@ -1,17 +1,82 @@
 $(function() {
-	const listEnd = document.querySelector("#listEnd");
-	const options = {
-		root: null,//뷰포트를 기준으로 타겟의 가시성 검사
-		rootMargin: "0px, 0px, 0px, 0px",//확장&축소 
-		threshold: 0,//타겟의 가시성 0%일 때 옵저버 실행
-	};
-	
-	const io = new IntersectionObserver((entries, observer) => {
-		entries.forEach(entry => {
-			if(!entry.isIntersecting) return;
-			//entry가 intersecting 중이 아니라면 함수를 실행하지 않는다.
-			if(page._scrollchk) return;
-			//현재 page가 불러오는 중임을 나타내는 flag를 통해 불러오는 중이면 
-		});
-	});
-});//ready
+	// Intersection Observer 옵션 설정
+    const options = {
+        root: null,
+        rootMargin: "-100px 0px 0px 0px",
+        threshold: 0
+    };
+
+    const observerIntersection = (callback) => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    callback();
+                }
+            });
+        }, options);
+
+        return observer;
+    }
+
+    let page = 1;
+    let size = 10;
+    const itemContainer = $('.single-products');
+
+    const callNextPage = () => {
+        console.log("페이지: " + page);
+        addList();
+    };
+
+    const observer = observerIntersection(callNextPage);
+
+    function addList() {
+        console.log("추가 리스트 불러오기");
+        $.ajax({
+            url: 'infiniteScroll.do',
+            data: { page: page, size: size },
+            method: 'GET',
+            dataType: 'json',
+            success: function(result) {
+                console.log("성공: " + result);
+                if(result.length === 0 || result == '') {
+                    $("#listEnd").hide();
+                    console.log("리스트 없음");
+                } else {
+                    $.each(result, function(index, pd) {
+                        var newItem = `
+                            <div class="single-product prevent-overflow">
+                                <div class="product-block">
+                                    <a href="main_page/products_detail.do?goodsNum=${pd.goodsNum}">
+                                        <img src="http://localhost/meonggae_prj/products-img/${pd.imgName}" alt="" class="thumbnail">
+                                        <div class="product-description">
+                                            <p class="title">${pd.goodsName}</p>
+                                            <div style="overflow: hidden;">
+                                                <p class="price" style="float: left;">${pd.priceFm}원</p>
+                                                <p class="location" style="float: left;"><i class="fa fa-map-marker" aria-hidden="true"></i>${pd.locationStr}</p>
+                                                <p class="time-ago" style="float: right;">${pd.timeAgo}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>`;
+                        
+                        itemContainer.append(newItem);
+                    });
+
+                    $("#listEnd").remove();
+                    var newItem2 = `<div id="listEnd"></div>`;
+                    itemContainer.append(newItem2);
+                    page++;
+
+                    // Re-observe the new #listEnd
+                    observer.observe(document.querySelector("#listEnd"));
+                }
+            },
+            error: function(xhr) {
+                console.log('추가 리스트 불러오기 실패', xhr.status);
+            }
+        });
+    }
+
+    observer.observe(document.querySelector("#listEnd"));
+});
