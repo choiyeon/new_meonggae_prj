@@ -68,19 +68,18 @@
 
     <div class="featured-items">
 
-<!--         <div class="container"> -->
-
-<!--             <div class="row" style="width: 1140px"> -->
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="trending">
 
                     	<div class="single-products">
+                    	<!--  
 							<c:forEach var="pd" items="${requestScope.prdAllList}" varStatus="i">
-                            	<div class="single-product prevent-overflow"><!-- 상품 한개 -->
+                            	<div class="single-product prevent-overflow"><!-- 상품 한개 
                             		<div class="product-block">
                             			<a href="main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
-                            				<!-- 상세페이지로 이동 -->
+                            	-->
+                            				<!-- 상세페이지로 이동 
 											<img src="http://localhost/meonggae_prj/products-img/${ pd.imgName }" alt="" class="thumbnail">
 											<div class="product-description">
 												<p class="title">${ pd.goodsName }</p>
@@ -94,15 +93,13 @@
 									</div>
 								</div>
 							</c:forEach>
+                            				-->
+							<!-- 첫 listEnd -->
 							<div id="listEnd"></div>
 						</div>
                    	</div>
 
 				</div>
-
-<!-- 			</div> -->
-
-<!-- 		</div> -->
 
 	</div>
 
