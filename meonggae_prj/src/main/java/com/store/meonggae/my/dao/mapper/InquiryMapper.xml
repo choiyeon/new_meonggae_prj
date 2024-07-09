@@ -27,13 +27,24 @@ from    inquiry_category
 
 <!-- 문의 목록 -->
 <select id="selectInquiryList" parameterType="String" resultType="inquiryDomain">
-select	INQUIRY_NUM inquiryNum, TITLE, ANSWER_FLAG answerFlag, INPUT_DATE inputDate
-from    INQUIRY
-where   DELETE_FLAG='N'
-		and MEM_NUM='${memnum}'
-order by INPUT_DATE desc
+select		inquiryNum, TITLE, answerFlag, inputDate
+from		(
+			select	INQUIRY_NUM inquiryNum, TITLE, ANSWER_FLAG answerFlag, INPUT_DATE inputDate,
+					row_number() over(order by INPUT_DATE desc) rnum
+			from    INQUIRY
+			where   DELETE_FLAG='N'
+					and MEM_NUM='${memnumORnick}'
+			order by INPUT_DATE desc
+			)
+where		rnum between ${startNum} and ${endNum}
 </select>
 
+<!-- 문의 count -->
+<select id="inquiryCount" resultType="Integer" parameterType="String">
+select	count(*)
+from    INQUIRY
+where   DELETE_FLAG='N' and MEM_NUM='${memnum}'
+</select>
 
 <!-- 문의 상세조회 -->
 <select id="selectInquiryOne" parameterType="String" resultType="inquiryDetailDomain">

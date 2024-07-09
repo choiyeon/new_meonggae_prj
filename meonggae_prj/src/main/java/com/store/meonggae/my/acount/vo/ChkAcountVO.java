@@ -1,4 +1,4 @@
-package com.store.meonggae.my.domain;
+package com.store.meonggae.my.acount.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class PersonalDomain {
-	private String name, addr, addrDetail, tel, zipcode, email;
+public class ChkAcountVO {
+	private String name, email;
 }

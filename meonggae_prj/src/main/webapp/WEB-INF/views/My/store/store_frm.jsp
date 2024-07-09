@@ -57,7 +57,6 @@ String nick = request.getParameter("nick");
 		<span id="storeMenu" class="storeMenu">
 			<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
 			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>			
-			<a href="http://localhost/meonggae_prj/My/store/page.do?nick=${param.nick}" id="unSelected">페이지네이션실험중</a>
 		</span>
 	<hr>
 	

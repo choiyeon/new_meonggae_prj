@@ -114,9 +114,9 @@
 		<div id="lowMenu" class="lowMenu">나의 후기</div>
 		<hr id="menuBottonLine">
 		<!-- 메뉴목록 -->
+	</div>
 		<div id="reviewLowMenu1" class="reviewLowMenu1">내가 쓴 후기</div>
 		<div id="notice1" class="notice1">한번 작성한 후기는 수정할 수 없습니다.</div>
-		
 		
 		<c:choose>
 		<c:when test="${not empty myReviewList}">
@@ -143,6 +143,9 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		<c:if test="${ not empty pagination }">
+			<div class="pagination" style="display: flex; justify-content: center;">${ pagination }</div>
+		</c:if>
 		</c:when>
 		<c:otherwise>
 			<div class="noGoodsDibs">
@@ -173,14 +176,6 @@
 					<td><c:out value="${ wr.seller }"/></td>
 				</tr>
 				</c:forEach>
-				<!-- <tr>
-					<td>
-					<a href="http://naver.com"><div>
-					50만km탄 레이
-					</div></a>
-					</td>
-					<td>판매자1</td>
-				</tr> -->
 			</tbody>
 		</table>
 		</c:when>
@@ -211,7 +206,6 @@
 			</div>
 		</div>
 		<!-- 리뷰작성 -->
-	</div>
 </div>
 <!-- 내용 끝 -->
 
