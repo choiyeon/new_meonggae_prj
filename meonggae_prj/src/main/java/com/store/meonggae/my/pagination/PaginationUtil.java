@@ -9,7 +9,7 @@ public class PaginationUtil {
 	
 	public static PaginationUtil getInstance() {
 		if(pu == null) {
-			pu=new PaginationUtil();
+			pu = new PaginationUtil();
 		}//end if
 		return pu;
 	}//getInstance
@@ -109,7 +109,6 @@ public class PaginationUtil {
 		int endNum = startNum + pageScale - 1;
 		
 		sVO = new SearchVO(memnum, startNum, endNum);
-		System.out.println("searchVO : " + sVO);
 		
 		return sVO;
 	}//startNum

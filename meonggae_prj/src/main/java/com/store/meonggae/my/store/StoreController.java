@@ -90,32 +90,4 @@ public class StoreController {
 		return list;
 	}//moreReviewLoad
 	
-	
-	
-	
-	
-	
-	@GetMapping("/page.do")
-	public String page(@RequestParam("nick") String nick,
-					   @RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
-					   Model model) {
-		
-		String profile = ss.searchProfile(nick);
-		model.addAttribute("profile", profile);
-		
-		String url = "http://localhost/meonggae_prj/My/store/page.do";
-		String param = "&nick=" + nick;
-		int totalPage = (int)Math.ceil((double)ss.searchCount(nick)/PaginationUtil.getInstance().pageScale());
-		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
-		model.addAttribute("pagination", pagination);
-		
-		List<StoreMainDomain> list = ss.searchSalesList(nick, currentPage);
-		model.addAttribute("listSales", list);
-		
-		
-		return "My/store/pagenation";
-	}//storeMain
-	
-	
-	
 }//class
