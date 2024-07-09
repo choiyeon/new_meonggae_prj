@@ -47,7 +47,6 @@ public class AcountController {
 		if(as.searchAcount(name, email) != 0) {
 			String randomText = "";
 			randomText = EMailSender.getInstance().email(email);
-			System.out.println(randomText);
 			
 			jsonObj.put("result", "true");
 			jsonObj.put("randomText", randomText);
@@ -85,7 +84,6 @@ public class AcountController {
 		if(as.searchPwAcount(name, id, email) != 0) {
 			String randomText = "";
 			randomText = EMailSender.getInstance().email(email);
-			System.out.println(randomText);
 			
 			jsonObj.put("result", "true");
 			jsonObj.put("randomText", randomText);
@@ -113,12 +111,9 @@ public class AcountController {
 		}//for
 		
 		as.modifyPw(id, pw.toString());
-		
 		model.addAttribute("pw", pw);
 		
 		return "/My/acount/find_result";
 	}//findId
-	
-	
 	
 }//class

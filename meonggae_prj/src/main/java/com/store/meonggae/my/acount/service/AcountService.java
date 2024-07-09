@@ -81,7 +81,6 @@ public class AcountService {
 		try {
 			PasswordEncoder pwe = new BCryptPasswordEncoder();
 			String encryptionpw = pwe.encode(pw.toString());
-			
 			PwVO pwVO = new PwVO(id, encryptionpw);
 			cnt = acDAO.updatePw(pwVO);
 		} catch (PersistenceException pe) {
