@@ -56,15 +56,15 @@
                       </a>
                     </li>
                     <li class="nk-menu-item">
-                      <a href="#void" class="nk-menu-link">
+                      <a href="${pageContext.request.contextPath}/mng/report/report_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-bitcoin-cash"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">신고 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
-                      <a href="#void" class="nk-menu-link">
+                    <li class="nk-menu-item" id="sidebar-inquiry" >
+                      <a href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-growth"></em>
                         </span>
