@@ -7,20 +7,20 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:when test="${ deleteFlag eq 'false' }">
 		<script type="text/javascript">
 			alert("삭제된 글입니다.");
-			location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+			location.href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_frm.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
@@ -31,8 +31,8 @@
 <!-- include summernote css/js -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_mypage.css">
 <!-- CSS -->
 
 
@@ -78,13 +78,13 @@
 					if(result == "success"){
 						var num = ${ inquiry.inquiryNum };
 						alert("수정 완료되었습니다.");
-						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_detail.do?inquiryNum=" + num;
+						location.href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_detail.do?inquiryNum=" + num;
 					}else if(result == "noSession"){
 						alert("로그인이 필요한 서비스입니다.");
-						location.href="http://localhost/meonggae_prj/index.do";
+						location.href="${pageContext.request.contextPath}/index.do";
 					}else{
 						alert("오류가 발생하였습니다. 잠시 후에 다시 시도해주세요.");
-						location.href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+						location.href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_frm.do";
 					}
 				}//success
 			});//ajax    

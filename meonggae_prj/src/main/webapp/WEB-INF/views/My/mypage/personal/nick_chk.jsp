@@ -7,16 +7,16 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/My/mypage/personal/close.do";
+			location.href="${pageContext.request.contextPath}/My/mypage/personal/close.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_pw.css?1233">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_pw.css?1233">
 <!-- CSS -->
 
 <style type="text/css">
@@ -57,7 +57,7 @@
 		}//end if
 		
 		$.ajax({
-			url: "http://localhost/meonggae_prj/My/mypage/personal/doChkNick.do",
+			url: "${pageContext.request.contextPath}/My/mypage/personal/doChkNick.do",
 			type: "GET",
 			dataType: "JSON",
 			data: {data : nick},
@@ -86,7 +86,7 @@
 </script>
 </head>
 <body>
-<form id="chkNick" action="http://localhost/meonggae_prj/My/mypage/personal/doChkNick.do" method="get">
+<form id="chkNick" action="${pageContext.request.contextPath}/My/mypage/personal/doChkNick.do" method="get">
 	<div id="backNick">
 		<div id="title">닉네임 변경</div>
 		<div id="subTitle">사용 가능한 닉네임을 검색해주세요.</div>
