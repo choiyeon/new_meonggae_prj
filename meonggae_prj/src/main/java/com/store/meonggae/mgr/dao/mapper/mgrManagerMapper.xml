@@ -25,6 +25,10 @@
 		<result column="DELETE_FLAG" property="deleteFlag"/>
 		<result column="DELETE_DATE" property="deleteDate"/>
 	</resultMap>
+	<resultMap type="com.store.meonggae.mgr.manager.domain.MgrEmailDomain" id="mgrEmailDomResult">
+		<result column="sender_Email" property="senderEmail"/>
+		<result column="sender_Password" property="senderPassword"/>
+	</resultMap>
 	
 	<!-- 게시판 리스트의 수 -->
 	<select id="selectOneListCnt" resultType="int" parameterType="managerSearchVO">
@@ -110,4 +114,12 @@
 		insert	into manager(MANAGER_ID, DEPTNO, PARENT_MANAGER_ID, PASS, NAME, BIRTH, NICK, GENDER, EMAIL, ADDR1, ADDR2, TEL, PERMISSION, SECOND_AUTH_KEY)
 		values	(#{managerId}, #{deptno}, #{parentManagerId}, #{pass}, #{name}, #{birth}, #{nick}, #{gender}, #{email}, #{addr1}, #{addr2}, #{tel}, #{permission}, #{secondAuthKey}) 
 	</insert>
+	
+	<!-- 관리자 등록시 사용되는 메일 전송 계정 -->
+	<select id="selectOneEmailAcoount" resultMap="mgrEmailDomResult" parameterType="String">
+		select	SENDER_EMAIL, SENDER_PASSword 
+		from	email
+		where	MAIL_NUM = #{mailNum}
+	</select> 
+	
 </mapper>

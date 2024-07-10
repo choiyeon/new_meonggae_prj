@@ -12,7 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터</title>
-<meta http-equiv="refresh" content="3;http://localhost/meonggae_prj/index.do">
+<meta http-equiv="refresh" content="3;${pageContext.request.contextPath}/index.do">
 <link rel="icon" href="http://211.63.89.136/spring_mvc/common/favicon.ico"/>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">

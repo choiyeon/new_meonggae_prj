@@ -112,10 +112,10 @@
 		<!-- 검색 창 시작 -->
 		<div style="text-align: center; margin-top: 20px;">
 			<form name="searchFrm" id="searchFrm" method="GET">
-				<select name="field" id="field" style="height: 30px; vertical-align: middle;">
+				<select name="field" id="field" style="height: 30px; vertical-align: middle; width: 70px;">
 					<option value="0"${ param.field eq 0 ? " selected='selected' " : "" }>제목</option>
 					<option value="1"${ param.field eq 1 ? " selected='selected' " : "" }>내용</option>
-					<option value="2"${ param.field eq 2 ? " selected='selected' " : "" }>진행상황</option>
+<%-- 					<option value="2"${ param.field eq 2 ? " selected='selected' " : "" }>진행상황</option> --%>
 				</select>
 				<input type="hidden" name="eventType" id="eventType" value="진행중"/>
 				<input type="hidden" name="currentPage" id="currentPage" value="${ param.currentPage }"/>

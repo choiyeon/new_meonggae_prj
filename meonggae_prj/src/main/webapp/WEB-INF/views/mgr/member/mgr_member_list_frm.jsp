@@ -18,18 +18,18 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터 관리자</title>
-<link rel="icon" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<link rel="icon" href="${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
 <!--bootstrap 시작-->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
 <!--bootstrap 끝-->
 
 <!-- dashlite css 시작-->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
 <!--dashlite css 끝-->
 
-<!-- <link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
-<!-- <link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" /> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" /> -->
 
 <!-- jQuery CDN 시작 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -38,7 +38,7 @@
 <!-- datepicker 시작-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
-<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script src="${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
 <script>
 	$( function() {
 		// 기본 사용
@@ -57,7 +57,7 @@
 <!-- datepicker 끝-->
 
 <!-- datepicker css 시작 -->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
 <!-- datepicker css 끝 -->
 
 <style type="text/css">
@@ -84,7 +84,7 @@
 <script type="text/javascript">
 	var nick = "${sessionScope.mgr.nick}";
 	var managerId = "${sessionScope.mgr.manager_id}";
-	var link = "http://localhost${pageContext.request.contextPath}";
+	var link = "${pageContext.request.contextPath}";
 	$(function() {
 		
 		// 필터 적용 버튼
@@ -276,77 +276,6 @@
 														<em class="icon ni ni-arrow-left"></em>
 													</a>
 												</li>
-	<!-- 											<li> -->
-	<!-- 												<div class="dropdown"> -->
-	<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
-	<!-- 														<div class="dot dot-primary"></div> -->
-	<!-- 														<em class="icon ni ni-filter-alt"></em> -->
-	<!-- 													</a> -->
-	<!-- 													<div class="filter-wg dropdown-menu dropdown-menu-end" style="min-width:200px;max-width:200px;"> -->
-	<!-- 														<div class="dropdown-head"> -->
-	<!-- 															<span class="sub-title dropdown-title">필터</span> -->
-	<!-- 														</div> -->
-	<!-- 														<div class="dropdown-body dropdown-body-rg"> -->
-	<!-- 															<div class="row gx-6 gy-3"> -->
-	<!-- 																<div class="col-12"> -->
-	<!-- 																	<div class="form-group"> -->
-	<!-- 																		<label class="overline-title overline-title-alt">상태 선택</label> -->
-	<!-- 																		<select class="form-select js-select2 select2-hidden-accessible" tabindex="-1" aria-hidden="true"> -->
-	<!-- 																			<option value="any">모든 상태</option> -->
-	<!-- 																			<option value="n">일반</option> -->
-	<!-- 																			<option value="s">정지</option> -->
-	<!-- 																			<option value="w">탈퇴</option> -->
-	<!-- 																			<option value="sw">정지 + 탈퇴</option> -->
-	<!-- 																		</select> -->
-	<!-- 																	</div> -->
-	<!-- 																</div> -->
-	<!-- 																<div class="col-12"> -->
-	<!-- 																	<div class="form-group"> -->
-	<!-- 																		<button type="button" class="btn btn-secondary">Filter</button> -->
-	<!-- 																	</div> -->
-	<!-- 																</div> -->
-	<!-- 															</div> -->
-	<!-- 														</div> -->
-	<!-- 														<div class="dropdown-foot between"> -->
-	<!-- 															<a class="clickable" href="#">초기화</a> -->
-	<!-- 														</div> -->
-	<!-- 													</div> -->
-	<!-- 												</div> -->
-	<!-- 											</li> -->
-	<!-- 											<li> -->
-	<!-- 												<div class="dropdown"> -->
-	<!-- 													<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown"> -->
-	<!-- 														<em class="icon ni ni-setting"></em> -->
-	<!-- 													</a> -->
-	<!-- 													<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end"> -->
-	<!-- 														<ul class="link-check"> -->
-	<!-- 															<li> -->
-	<!-- 																<span>리스트 수</span> -->
-	<!-- 															</li> -->
-	<!-- 															<li class="active"> -->
-	<!-- 																<a href="#">10</a> -->
-	<!-- 															</li> -->
-	<!-- 															<li> -->
-	<!-- 																<a href="#">20</a> -->
-	<!-- 															</li> -->
-	<!-- 															<li> -->
-	<!-- 																<a href="#">50</a> -->
-	<!-- 															</li> -->
-	<!-- 														</ul> -->
-	<!-- 														<ul class="link-check"> -->
-	<!-- 															<li> -->
-	<!-- 																<span>정렬</span> -->
-	<!-- 															</li> -->
-	<!-- 															<li class="active"> -->
-	<!-- 																<a href="#">내림차순</a> -->
-	<!-- 															</li> -->
-	<!-- 															<li> -->
-	<!-- 																<a href="#">오름차순</a> -->
-	<!-- 															</li> -->
-	<!-- 														</ul> -->
-	<!-- 													</div> -->
-	<!-- 												</div> -->
-	<!-- 											</li> -->
 											</ul>
 										</div>
 									</div>
@@ -366,6 +295,8 @@
 								</button>
 							</div>
 						</div>
+					</div>
+					<div class="" style="margin-top:10px;">검색된 총 회원 수: <c:out value="${requestScope.totalCount }"/>명</div>
 					</div>
 				</div>
 				<c:set var="flagIsList" value="${not (requestScope.list eq null or fn:length(requestScope.list) eq 0)}"/>
@@ -496,12 +427,12 @@
 								<div class="input-group">
 									<div class="input-group-prepend" style="width:200px;">
 							 			<select class="form-select js-select2" id="field" name="field">
-											<option value="id"${param.field eq 'id' ? " selected='selected'" : ""}>아이디</option>
-											<option value="nick"${param.field eq 'nick' ? " selected='selected'" : ""}>닉네임</option>
+											<option value="0"${param.field eq '0' ? " selected='selected'" : ""}>아이디</option>
+											<option value="1"${param.field eq '1' ? " selected='selected'" : ""}>닉네임</option>
 										</select>
 									</div>
 									<input type="text" class="form-control" aria-label="Text input with dropdown button"id="keyword" name="keyword" value="${param.keyword }">
-									<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색"/>
+									<input type="button" class="btn btn-dim btn-sm btn-secondary" value="검색" id="btnSearch"/>
 								</div>
 							</div>
 						</div>				
@@ -524,11 +455,11 @@
 </div>
 </div>
 <!-- dashlite 시작-->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
-<!-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
+<!-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
 <!-- <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div> -->
 <!-- dashlite 끝-->
 <script type="text/javascript">

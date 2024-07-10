@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
+import com.store.meonggae.mgr.common.service.FilterParamService;
 import com.store.meonggae.mgr.review.domain.MgrCategoryDomain;
 import com.store.meonggae.mgr.review.domain.MgrReviewDomain;
 import com.store.meonggae.mgr.review.service.MgrReviewService;
@@ -25,7 +26,9 @@ public class MgrReviewController {
 	private MgrReviewService mrService;
 	@Autowired
 	private BoardUtilService boardUtilService;
-	
+	@Autowired(required = false)
+	private FilterParamService filterService;
+
 	// 리뷰 관리 - 리스트 조회
 	@GetMapping("/mgr/review/mgr_review_list_frm.do")
 	public String searchListReviewList(Model model, MgrReviewSearchVO sVO) {
@@ -55,6 +58,7 @@ public class MgrReviewController {
 		if(sVO.getKeyword() != null) {
 			param = "&field=" + sVO.getField() + "&keyword=" + sVO.getKeyword();
 		} // end if
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/review/mgr_review_list_frm.do", param, totalPage, currentPage);
 		
 		List<MgrCategoryDomain> listCategoryUpper = mrService.searchListCategoryList(0); 

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.store.meonggae.my.dao.ReviewDAO;
 import com.store.meonggae.my.domain.MyReviewDomain;
 import com.store.meonggae.my.domain.WriteReviewDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.vo.WriteReviewVO;
 
 @Service
@@ -20,11 +22,12 @@ public class ReviewService {
 	/**
 	 * 내가 쓴 후기 리스트
 	 */
-	public List<MyReviewDomain> searchMyReview(String memNum){
+	public List<MyReviewDomain> searchMyReview(String memnum, int currentPage){
 		List<MyReviewDomain> list = null;
 		
 		try {
-			list = rDAO.selectMyReview(memNum);
+			SearchVO sVO = PaginationUtil.getInstance().startNum(memnum, currentPage, 10);
+			list = rDAO.selectMyReview(sVO);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch
@@ -33,13 +36,28 @@ public class ReviewService {
 	}//searchReview
 	
 	/**
+	 * 리뷰 count
+	 */
+	public int searchReviewCount(String memnum){
+		int cnt = 0;
+		
+		try {
+			cnt = rDAO.reviewCount(memnum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return cnt;
+	}//searchReviewCount
+	
+	/**
 	 * 작성 가능 리뷰
 	 */
-	public List<WriteReviewDomain> searchWriteReview(String memNum){
+	public List<WriteReviewDomain> searchWriteReview(String memnum){
 		List<WriteReviewDomain> list = null;
 		
 		try {
-			list = rDAO.selectWriteReview(memNum);
+			list = rDAO.selectWriteReview(memnum);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch

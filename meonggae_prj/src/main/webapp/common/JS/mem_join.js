@@ -38,6 +38,22 @@ $(function() {
 	$("#nickChk").click(function(){
 		nickDupWin();
 	});
+	//이메일 유효성검사
+	$("#email1").focusout(function(){
+		var email1 = document.frm.email1.value;
+      	var email2 = document.frm.email2.value;
+      	var email = email1+"@"+email2;
+      	var emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+      	if( !emailPattern.test(email) ){
+      		$("#email1Msg").html("이메일 형식에 맞지 않습니다.");
+			$("#email1Msg").css('display', 'block');
+			$("#email1").css('color', 'red');
+      	}else{
+			$("#email1Msg").css('display', 'none');
+			$("#email1").css('color', 'black');
+		}//end else
+	});//focusout
+	
 	//이름 유효성검사
 	$("#name").focusout(function(){
 		if( $("#name").val().length < 2){
@@ -187,7 +203,7 @@ function chkInputAll() {
 	//필수 입력란 확인
 	let flagInputArrAll = true;
 	let arrEssential = $(".essential");
-	let arrLabel = ['아이디', '비밀번호', '이름', '닉네임', '생년월일', '전화번호', '우편번호', '주소','상세주소']
+	let arrLabel = ['아이디', '비밀번호', '이름', '닉네임', '이메일', '생년월일', '전화번호', '우편번호', '주소','상세주소']
 	var errorMsg = [];
 	
 	//약관에 모두 동의했을 경우

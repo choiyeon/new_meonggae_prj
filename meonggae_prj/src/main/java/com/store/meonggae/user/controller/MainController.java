@@ -11,12 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.store.meonggae.product.domain.CategoryDomain;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
@@ -32,6 +37,7 @@ import com.store.meonggae.event.service.EventService;
 import com.store.meonggae.product.vo.SearchProductVO;
 import com.store.meonggae.product.vo.SteamVO;
 import com.store.meonggae.user.login.domain.LoginDomain;
+import com.store.meonggae.visitor.service.VisitorCntService;
 
 @Controller
 public class MainController {
@@ -44,23 +50,75 @@ public class MainController {
 	private ProductDetailInfoService ProductDetailInfoService;
 	@Autowired
 	private EventService EventService;
+	@Autowired(required = false)
+	private VisitorCntService vcService;
+
+	// 원래 코드 : 삭제하면 죽음뿐
+//	@RequestMapping(value = "/index.do", method = { GET, POST })
+//	public String main(Model model) {
+//		// 전체상품 조회
+//		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
+//		// 이벤트 캐러셀 조회
+//		List<EventDomain> eventList = EventService.eventCarousel();
+//		model.addAttribute("prdAllList", list);
+//		model.addAttribute("eventList", eventList);
+//		return "main_page/main_contents";
+//	}
 
 	@RequestMapping(value = "/index.do", method = { GET, POST })
-	public String main(Model model) {
+	public String main(Model model, HttpSession session) {
 		// 전체상품 조회
 		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
 		// 이벤트 캐러셀 조회
 		List<EventDomain> eventList = EventService.eventCarousel();
-		model.addAttribute("prdAllList", list);
+//		model.addAttribute("prdAllList", list);
 		model.addAttribute("eventList", eventList);
+		
+		// 사이트 방문자수 ++용
+		boolean flagMemberVisit = false;
+		if(session.getAttribute("flagMemberVisit") == null) {	// 아예 방문한 적이 없으면
+			if(session.getAttribute("user") == null) {	// 로그인 세션이 null이면 (비로그인)
+				session.setAttribute("flagMemberVisit", false);
+			} else { // 혹시라도 로그인 세션이 null이 아니면 (로그인한 회원)
+				session.setAttribute("flagMemberVisit", true);
+				// 회원 방문자수 ++
+				vcService.updateVisitorCnt(true);
+			} // end else
+			// 전체 방문자수 ++
+			vcService.updateVisitorCnt(false);
+		} else {	// 방문한 적이 있으면
+			flagMemberVisit = (boolean)session.getAttribute("flagMemberVisit");
+			if(flagMemberVisit == false && session.getAttribute("user") != null) {	// 사이트 접속하고 로그인한 경우
+				session.setAttribute("flagMemberVisit", true);
+				// 회원 방문자수 ++
+				vcService.updateVisitorCnt(true);
+			} // end if
+		} // end else
+		
 		return "main_page/main_contents";
 	}
 
-	/*
-	 * @GetMapping("/index.do") public String goToMain() {
-	 * 
-	 * return "main_page/main_contents"; }
-	 */
+	@ResponseBody//json형식으로 변환하여 클라이언트에게 전달.
+	@RequestMapping(value = "/infiniteScroll.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public String infiniteScroll(@RequestParam int page, @RequestParam int size) {
+		int start = (page - 1) * size + 1;
+		int end = start + size - 1;
+		// 전체상품 조회
+		List<SearchProductDomain> list = SearchProductService.selectAllProduct2(start, end);
+
+		JSONArray jsonArr = new JSONArray();
+		for (SearchProductDomain products : list) {
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("goodsNum", products.getGoodsNum());
+			jsonObj.put("imgName", products.getImgName());
+			jsonObj.put("goodsName", products.getGoodsName());
+			jsonObj.put("priceFm", products.getPriceFm());
+			jsonObj.put("locationStr", products.getLocationStr());
+			jsonObj.put("timeAgo", products.getTimeAgo());
+			jsonArr.add(jsonObj);
+		} // for
+		return jsonArr.toJSONString();
+	}// infiniteScroll
 
 	// 검색페이지 이동
 	@GetMapping("/main_page/search_contents.do")
@@ -97,7 +155,7 @@ public class MainController {
 			model.addAttribute("searchPrdlist", list);// 조회 결과 리스트
 			model.addAttribute("cateCnt", cateCnt);// 조회된 상품들의 카테고리 카운팅
 		} // end else
-		
+
 		model.addAttribute("storeList", storeList);// 조회 결과 리스트
 		model.addAttribute("keyword", kw);// 검색된 키워드 검색창에 유지
 		if (cn != null) {
@@ -145,7 +203,7 @@ public class MainController {
 		// 상품의 전체 찜 횟수 조회
 		int countSteam = ProductDetailInfoService.countAllSteam(goodsNum);
 		spd.setCountSteam(countSteam);
-		
+
 		// 회원의 찜 여부 조회
 		if (loginUser != null) {
 			SteamVO steamVo = new SteamVO(spd.getGoodsNum(), loginUser.getMemNum());
@@ -155,30 +213,31 @@ public class MainController {
 
 		// 판매자 정보
 		SellerInfoDomain sellerInfo = ProductDetailInfoService.sellerInfo(spd.getMemNumSell());
-		
+
 		// 판매자 다른상품
 		SteamVO steamVo2 = new SteamVO(spd.getGoodsNum(), spd.getMemNumSell());
 		List<SellOtherPrdDomain> sellerOtherPrdList = ProductDetailInfoService.sellerOtherPrd(steamVo2);
 
 		// 판매자 리뷰
 		List<SearchReviewDomain> searchReviewList = ProductDetailInfoService.searchReview(spd.getMemNumSell());
-		
+
 		// 판매자와 로그인한 사용자가 동일인인지
 		if (loginUser != null) {
 			model.addAttribute("isSellerEqMe", loginUser.getMemNum() == sellerInfo.getMemNum());
 		} // end if
-		
+
+		model.addAttribute("user", loginUser);
 		model.addAttribute("spd", spd);
 		model.addAttribute("parentCateList", parentCateList);
 		model.addAttribute("sellerInfo", sellerInfo);
 		model.addAttribute("sellerOtherPrdList", sellerOtherPrdList);
 		model.addAttribute("searchReviewList", searchReviewList);
-		
-		Cookie cookie =  new Cookie("goodsNum", goodsNum);
-        cookie.setMaxAge(60 * 60 * 2);
-        cookie.setPath("/");
-        cookie.setSecure(false);
-        response.addCookie(cookie);
+
+		Cookie cookie = new Cookie("goodsNum", goodsNum);
+		cookie.setMaxAge(60 * 60 * 2);
+		cookie.setPath("/");
+		cookie.setSecure(false);
+		response.addCookie(cookie);
 
 		return "main_page/products_detail";
 	}

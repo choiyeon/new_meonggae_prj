@@ -46,6 +46,14 @@ input[type="text"], input[type="file"], select, textarea {
 	border-radius: 4px;
 	cursor: pointer;
 }
+.btn2 {
+	background-color: #f2bcbc;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
 
 .btn-secondary {
 	background-color: #5bc0de;

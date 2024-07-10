@@ -1,0 +1,105 @@
+.btnWrap{
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+#findID {
+	width: 300px;
+	height: 70px;
+	border: none;
+	border-left: #D9D9D9 1px solid;
+	border-right: #D9D9D9 1px solid;
+	font-size: 25px;
+	background: #FFFFFF;
+}
+#findPW {
+	width: 300px;
+	height: 70px;
+	border: none;
+	border-right: #D9D9D9 1px solid;
+	font-size: 25px;
+	background: #FFFFFF;
+}
+
+.contentWrap{
+	text-align: center;
+	width: 100%;
+}
+
+#id{
+	width: 600px;
+	padding: 10px;
+	margin: auto;
+	text-align: left;
+}
+
+#pw{
+	width: 600px;
+	display: none;
+	padding: 10px;
+	margin: auto;
+	text-align: left;
+}
+
+dl, dt, dd{
+	display: inline;
+}
+
+#label{
+	height: 30px;
+	width: 50px;
+	font-weight: bold;
+}
+
+#center{
+	text-align: center;
+}
+
+#center1{
+	margin: 100px;
+	text-align: center;
+}
+
+.codeDiv{
+	display: none;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+.codePwDiv{
+	display: none;
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+#chkNumBtn, #chkNumBtn_pw{
+	display: none;
+}
+
+#mainBtn{
+	height: 80px;
+	width: 200px;
+	background-color: #FFFFFF;
+	border: 2px #FFB4B4 solid;
+	font-size: 20px;
+}
+
+#findPw{
+	height: 80px;
+	width: 200px;
+	background-color: #FFFFFF;
+	border: 2px #B4CCFF solid;
+	font-size: 20px;
+}
+
+#btnWrap{
+	margin-top: 60px;
+}
+
+#void{
+	margin-top: 30px;
+}

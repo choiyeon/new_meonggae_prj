@@ -16,18 +16,18 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터 관리자</title>
-<link rel="icon" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<link rel="icon" href="${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
 <!--bootstrap 시작-->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
 <!--bootstrap 끝-->
 
 <!-- dashlite css 시작-->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
 <!--dashlite css 끝-->
 
-<!-- <link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
-<!-- <link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" /> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" /> -->
 
 <!-- jQuery CDN 시작 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -42,7 +42,7 @@
 <script type="text/javascript">
 	var nick = "${sessionScope.mgr.nick}";
 	var managerId = "${sessionScope.mgr.manager_id}";
-	var link = "http://localhost${pageContext.request.contextPath}";
+	var link = "${pageContext.request.contextPath}";
 	$(function() {
 		
 		setCheckboxChecked();
@@ -159,7 +159,7 @@
 	<script type="text/javascript">
 		$(function (){
 			if(${requestScope.flagAddResult }) {
-				alert('관리자 등록에 성공하였습니다');
+				alert('관리자 등록에 성공하였습니다. 등록한 메일을 확인해주세요');
 			} else {
 				alert('관리자 등록에 실패하였습니다');
 			} // else
@@ -263,40 +263,6 @@
 														</div>
 													</div>
 												</li>
-												<li>
-													<div class="dropdown">
-														<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-															<em class="icon ni ni-setting"></em>
-														</a>
-														<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-															<ul class="link-check">
-																<li>
-																	<span>리스트 수</span>
-																</li>
-																<li class="active">
-																	<a href="#">10</a>
-																</li>
-																<li>
-																	<a href="#">20</a>
-																</li>
-																<li>
-																	<a href="#">50</a>
-																</li>
-															</ul>
-															<ul class="link-check">
-																<li>
-																	<span>정렬</span>
-																</li>
-																<li class="active">
-																	<a href="#">내림차순</a>
-																</li>
-																<li>
-																	<a href="#">오름차순</a>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</li>
 											</ul>
 										</div>
 									</div>
@@ -341,7 +307,7 @@
 								<c:otherwise>
 									<c:forEach var="mgrDomain" items="${requestScope.list}" varStatus="i">
 										<tr>
-											<th scope="row"><c:out value="${i.count}"/></th>
+											<th scope="row"><c:out value="${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }"/></th>
 											<c:choose>
 												<c:when test="${pageContext.request.queryString eq null or pageContext.request.queryString eq ''}">
 													<td><a href="${pageContext.request.contextPath}/mgr/manager/mgr_manager_detail_frm.do?managerId=${mgrDomain.managerId}"><c:out value="${mgrDomain.managerId}"/></a></td>
@@ -401,11 +367,11 @@
 </div>
 </div>
 <!-- dashlite 시작-->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
-<!-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
+<!-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
 <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
 <!-- dashlite 끝-->
 <script type="text/javascript">

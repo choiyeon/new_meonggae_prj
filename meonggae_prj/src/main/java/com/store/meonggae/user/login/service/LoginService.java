@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.store.meonggae.user.login.dao.LoginDAO;
 import com.store.meonggae.user.login.domain.LoginDomain;
+import com.store.meonggae.user.login.vo.LoginLogVO;
 import com.store.meonggae.user.login.vo.LoginVO;
 
 @Service
@@ -168,4 +170,37 @@ public class LoginService {
 			System.out.println("POST request not worked. Response Code: " + responseCode);
 		}
 	}
+	
+	// 로그인 시도시 로그인 로그 insert
+	public void addMemberLoginLog(LoginLogVO logVO) {
+		try {
+			lDAO.insertMemberLoginLog(logVO);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		} // end catch
+	} // addMemberLoginLog
+	
+	// 사용자의 접속 브라우저 얻기
+	public String getMemberBrowser(String userAgent) {
+        String browser = "";
+
+        if(userAgent.contains("Trident")) {												// IE
+            browser = "ie";
+        } else if(userAgent.contains("Edg")) {											// Edge
+            browser = "edge";
+        } else if(userAgent.contains("Whale")) { 										// Naver Whale
+            browser = "whale";
+        } else if(userAgent.contains("Opera") || userAgent.contains("OPR")) { 		// Opera
+            browser = "opera";
+        } else if(userAgent.contains("Firefox")) { 										 // Firefox
+            browser = "firefox";
+        } else if(userAgent.contains("Safari") && !userAgent.contains("Chrome")) {	 // Safari
+            browser = "safari";
+        } else if(userAgent.contains("Chrome")) {										 // Chrome
+            browser = "chrome";
+        } else {
+        	browser = "others";
+        } // end else 
+        return browser;
+    } // getMemberBrowser
 }

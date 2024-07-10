@@ -12,6 +12,8 @@ import com.store.meonggae.my.domain.InquiryCategoryDomain;
 import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
 import com.store.meonggae.my.domain.InquiryModifyDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
 
@@ -54,17 +56,33 @@ public class InquiryService {
 	/**
 	 * 문의 리스트 조회
 	 */
-	public List<InquiryDomain> searchInquiryList(String memnum){
+	public List<InquiryDomain> searchInquiryList(String memnum, int currentPage){
 		List<InquiryDomain> list = null;
 		
 		try {
-			list = iDAO.selectInquiryList(memnum);
+			SearchVO sVO = PaginationUtil.getInstance().startNum(memnum, currentPage, 10);
+			list = iDAO.selectInquiryList(sVO);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch
 		
 		return list;
 	}//searchInquiryList
+	
+	/**
+	 * 문의 count
+	 */
+	public int searchCount(String memnum){
+		int cnt = 0;
+		
+		try {
+			cnt = iDAO.selectCount(memnum);
+		} catch (PersistenceException pe) {
+			pe.printStackTrace();
+		}//end catch
+		
+		return cnt;
+	}//searchCount
 	
 	/**
 	 * 문의글 상세조회

@@ -7,7 +7,7 @@
 작성자: 김동섭
 작성일: 2024-06-01
 */%>
-<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/header.js"></script>
+<script src="${pageContext.request.contextPath}/mgr_common/assets/js/header.js"></script>
 <div class="nk-header nk-header-fixed is-light">
   <div class="container-fluid">
     <div class="nk-header-wrap">

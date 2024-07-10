@@ -1,8 +1,12 @@
 package com.store.meonggae.mgr.header.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -16,8 +20,11 @@ public class MgrHeaderController {
 	private MgrHeaderService mhService;
 	
 	// 로그아웃
-	@GetMapping("/mgr/logout.do")
-	public String logout(SessionStatus ss) {
+	@RequestMapping(value = "/mgr/logout.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String logout(HttpSession session, SessionStatus ss) {
+		session.removeAttribute("mgr");
+		session.removeAttribute("flagMgrLogin");
+		session.invalidate();
 		ss.setComplete();
 		return "redirect:login/mgr_login_frm.do";	// 이거 그냥 쓰면 안 됨!!!
 	} // adminMain

@@ -37,13 +37,6 @@
 
 <script type="text/javascript">
 	$(function(){
-		/* $('#pagination-demo').twbsPagination({
-	        totalPages: 6,
-	        visiblePages: 10,
-	        onPageClick: function (event, page) {
-	            $('#page-content').text('Page ' + page);
-	        }
-	    }); */
 	});//ready
 </script>
 
@@ -63,7 +56,7 @@ String nick = request.getParameter("nick");
 	</div>
 		<span id="storeMenu" class="storeMenu">
 			<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
-			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>　　　
+			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>			
 		</span>
 	<hr>
 	
@@ -96,8 +89,7 @@ String nick = request.getParameter("nick");
 			</div>
 		</div>
 	</div>
-	
-	<ul id="pagination-demo" class="pagination-sm"></ul>
+	<div class="pagination" style="display: flex; justify-content: center;">${pagination}</div>
 	</c:when>
 	<c:otherwise>
 		

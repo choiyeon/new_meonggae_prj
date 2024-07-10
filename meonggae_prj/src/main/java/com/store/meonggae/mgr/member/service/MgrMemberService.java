@@ -114,7 +114,7 @@ public class MgrMemberService {
 	} // searchListReviewList
 	
 	// 회원 상세 조회 - 개인정보
-	public MgrMemberPersonalDomain selectOneMemberPersonal(int memNum) {
+	public MgrMemberPersonalDomain searchOneMemberPersonal(int memNum) {
 		
 		MgrMemberPersonalDomain mmpDomain = null;
 		

@@ -16,7 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MgrGoodsSearchVO extends MgrSearchVO {
+public class MgrGoodsSearchVO extends MgrSearchVO{
 	private String startDate, endDate;
 	private String categoryNum, parentCategoryNum;
 	private String tradeMethodCode, qualityCode, sellStatusCode; 

@@ -11,6 +11,7 @@ import com.store.meonggae.dao.MybatisDAO;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
 import com.store.meonggae.product.domain.SearchProductDomain;
 import com.store.meonggae.product.domain.SellerInfoDomain;
+import com.store.meonggae.product.vo.ProductAddVO;
 import com.store.meonggae.product.vo.SearchProductVO;
 
 
@@ -25,6 +26,12 @@ public class SearchProductDAO {
 	public List<SearchProductDomain> selectAllProduct()throws PersistenceException {
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
 			return ss.selectList("com.store.meonggae.product.selectAllProduct");
+		}
+	};//selectAllProduct
+	public List<SearchProductDomain> selectAllProduct2(int start, int end)throws PersistenceException {
+		ProductAddVO pageVO = new ProductAddVO(start, end);//start = mem_num_sell, end = mem_num_buy
+		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+			return ss.selectList("com.store.meonggae.product.selectAllProduct2", pageVO);
 		}
 	};//selectAllProduct
 	

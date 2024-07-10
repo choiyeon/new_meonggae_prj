@@ -218,6 +218,9 @@
 #frm > .btn {
 	width: 150px;
 }
+input#id:read-only, input#nick:read-only{
+	background-color: #e5e5e5;
+}
 /* 폼 내 버튼 */
 /* 제출 취소버튼 슬라이드*/
 .joinBtn {

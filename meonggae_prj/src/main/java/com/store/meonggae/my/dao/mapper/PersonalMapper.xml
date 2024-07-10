@@ -13,7 +13,7 @@ where   MEM_NUM='${memnum}'
 
 <!-- 개인정보 조회 -->
 <select id="selectPersonal" resultType="personalDomain" parameterType="String">
-select	NAME, ADDR, ADDR_DETAIL addrDetail, TEL, ZIPCODE
+select	NAME, ADDR, ADDR_DETAIL addrDetail, TEL, ZIPCODE, EMAIL
 from    MEMBER_DETAIL
 where   MEM_NUM='${memnum}'
 </select>
@@ -37,7 +37,7 @@ where	nick='${nick}'
 <!-- member_detail 테이블 -->
 <update id="updateMemberDetail" parameterType="piVO">
 update	MEMBER_DETAIL
-set     ADDR='${addr0}', ADDR_DETAIL='${addr1}', ZIPCODE='${zipcode}', TEL='${tel}'
+set     ADDR='${addr0}', ADDR_DETAIL='${addr1}', ZIPCODE='${zipcode}', TEL='${tel}', EMAIL='${email}'
 where   MEM_NUM='${memnun}'
 </update>
 

@@ -14,8 +14,9 @@ public class MgrInterceptor implements HandlerInterceptor {
 		
 		Object mgr = WebUtils.getSessionAttribute(request, "mgr");
 		Object flagMgrLogin = WebUtils.getSessionAttribute(request, "flagMgrLogin");
+		Object mgrSecondAuth = WebUtils.getSessionAttribute(request, "mgrSecondAuth");
 		
-		boolean flag = (mgr != null) && (flagMgrLogin != null ? (boolean)flagMgrLogin : false);	// session이 있으면 true, 없으면 false
+		boolean flag = (mgr != null) && (flagMgrLogin != null ? (boolean)flagMgrLogin : false) && (mgrSecondAuth != null ? (boolean)mgrSecondAuth : false);	// session이 있으면 true, 없으면 false
 		
 		if(!flag) {	 // 세션이 없으면 로그인 폼으로 이동
 			response.sendRedirect("http://localhost/meonggae_prj/mgr/login/mgr_login_frm.do");
