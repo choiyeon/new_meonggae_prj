@@ -7,16 +7,16 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/My/mypage/personal/close.do";
+			location.href="${pageContext.request.contextPath}/My/mypage/personal/close.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_pw.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_pw.css">
 <!-- CSS -->
 
 <style type="text/css">
@@ -55,7 +55,7 @@
 </script>
 </head>
 <body>
-<form id="modifyPw" action="http://localhost/meonggae_prj/My/mypage/personal/doPasswordModify.do" method="get">
+<form id="modifyPw" action="${pageContext.request.contextPath}/My/mypage/personal/doPasswordModify.do" method="get">
 	<div id="back">
 		<div id="title">비밀번호 변경</div>
 		<div id="subTitle">안전한 비밀번호로 내 정보를 보호하세요</div>

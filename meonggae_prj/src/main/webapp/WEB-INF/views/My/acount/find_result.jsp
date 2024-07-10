@@ -4,25 +4,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- 아이디나, 비밀번호 정보가 없으면 비정상접근처리 -->
+<c:if test="${ empty id && empty pw }">
+<script type="text/javascript">
+	alert("비정상적인 접근입니다.");
+	location.href="${pageContext.request.contextPath}/index.do";
+</script>
+</c:if>
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_acount.css?4331">
+<link rel="stylesheet" href="../../common/CSS/style.css">
+<link rel="stylesheet" href="../../common/My/css/style_acount.css?4331">
 <!-- CSS -->
 
 <script type="text/javascript">
 	$(function(){
 		
 		$("#mainBtn").click(function(){
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		});
 		$("#findPw").click(function(){
-			location.href="http://localhost/meonggae_prj/My/acount/acount.do";
+			location.href="${pageContext.request.contextPath}/My/acount/acount.do";
 		});
 		
 	});//ready

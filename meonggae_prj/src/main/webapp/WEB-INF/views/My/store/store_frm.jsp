@@ -11,13 +11,13 @@
 		<c:when test="${ empty user }">
 			<script type="text/javascript">
 				alert("로그인이 필요한 서비스입니다.");
-				location.href="http://localhost/meonggae_prj/index.do";
+				location.href="${pageContext.request.contextPath}/index.do";
 			</script>
 		</c:when>
 		<c:otherwise>
 			<script type="text/javascript">
 				alert("비정상적인 접근입니다.");
-				location.href="http://localhost/meonggae_prj/index.do";
+				location.href="${pageContext.request.contextPath}/index.do";
 			</script>
 		</c:otherwise>
 		</c:choose>
@@ -26,17 +26,21 @@
 <!-- 로그인 세션 설정 끝 -->
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_store.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_store.css">
 <!-- CSS -->
 
 <script type="text/javascript">
 	$(function(){
+		var img_elm = document.getElementById("#profileImg");
+		img_elm.onerror = function() {
+			this.scr = "${pageContext.request.contextPath}/common/My/image/loading.png";
+		}
 	});//ready
 </script>
 
@@ -47,7 +51,8 @@ String nick = request.getParameter("nick");
 <div class="container">
 	<div id="storeBanner" class="storeBanner">
 		<div id="profileImg" class="profileImg">
-		<img src="http://localhost/meonggae_prj/profile-img/${ profile }" class="img-circle" style="width: 100px; height: 100px"/>
+		<img src="${ pageContext.request.contextPath }/profile-img/${ profile }" class="img-circle" style="width: 100px; height: 100px"
+				id="profileImg" onError="this.src='${pageContext.request.contextPath}/common/My/image/loading.png';"/>
 		</div>
 		<div id="userInfo" class="userInfo">
 			<div id="nick" class="nick"><%= nick %>님의 상점</div>
@@ -55,8 +60,8 @@ String nick = request.getParameter("nick");
 		</div>
 	</div>
 		<span id="storeMenu" class="storeMenu">
-			<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
-			<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>			
+			<a href="${ pageContext.request.contextPath }/My/store/store_frm.do?nick=${param.nick}" id="selected">상품</a> | 
+			<a href="${ pageContext.request.contextPath }/My/store/store_review_frm.do?nick=${param.nick}" id="unSelected">후기</a>			
 		</span>
 	<hr>
 	
@@ -71,7 +76,7 @@ String nick = request.getParameter("nick");
 					<div class="single-product">
 						<div class="product-block">
 						
-						<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
+						<a href="${pageContext.request.contextPath}/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
 							<img src="../../products-img/${ is.img }" class="thumbnail">
 							<div class="product-description text-left">
 								<p class="title"><c:out value="${ is.name }"/></p>
