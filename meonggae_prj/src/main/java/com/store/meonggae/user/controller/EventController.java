@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class EventController {
     						@RequestParam(name = "event-type", required = true, defaultValue = "진행중") String eventType,
                             @RequestParam(name = "currentPage", defaultValue = "1") int currentPage, 
                             @RequestParam(name = "keyword", required = false) String keyword, 
-                            @RequestParam(name = "field", required = false) String field) {
+                            @RequestParam(name = "field", required = false) String field,
+                            HttpServletRequest request) {
     	PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage, eventType);
     	
         
@@ -43,12 +45,15 @@ public class EventController {
         }
         List<EventDomain> eventList = eventService.selectEvent(pVO);
 
+        String contextPath = request.getContextPath();
+        String url = contextPath + "/event_page/event_main.do";
+        
         model.addAttribute("eventList", eventList);
         model.addAttribute("totalCnt", pVO.getTotalCount());
         model.addAttribute("pageScale", pVO.getPageScale());
         model.addAttribute("currentPage", pVO.getCurrentPage());
         model.addAttribute("totalPage", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()));
-        model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", param, (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
+        model.addAttribute("paging", eventService.pageNation(url, param, (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
         
         
         return "event_page/event_main";
@@ -60,17 +65,26 @@ public class EventController {
     		@RequestParam(name = "event-type", required = true) String eventType,
     		@RequestParam(name = "currentPage", defaultValue = "1") int currentPage, 
     		@RequestParam(name = "keyword", required = false) String keyword, 
-    		@RequestParam(name = "field", required = false) String field) {
+    		@RequestParam(name = "field", required = false) String field,
+    		HttpServletRequest request) {
     	PagingVO pVO = eventService.createPagingVO(keyword, field, currentPage, eventType);
     	
+    	String param = "&event-type="+eventType;
+        if( keyword != null && field != null ) {
+        	param += "&keyword="+keyword+"&field="+field;
+        }
+    	
     	List<EventDomain> eventList = eventService.selectEvent(pVO);
+    	
+    	String contextPath = request.getContextPath();
+        String url = contextPath + "/event_page/event_main.do";
     	
     	model.addAttribute("eventList", eventList);
     	model.addAttribute("currentPage", currentPage);
     	model.addAttribute("pageScale", pVO.getPageScale());
     	model.addAttribute("eventType", eventType);
     	model.addAttribute("totalPage", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()));
-    	model.addAttribute("paging", eventService.pageNation("http://localhost//meonggae_prj/event_page/event_main.do", "", (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
+    	model.addAttribute("paging", eventService.pageNation(url, param, (int) Math.ceil((double) pVO.getTotalCount() / pVO.getPageScale()), pVO.getCurrentPage()));
     	
     	return "event_page/event_handler";
     }//eventHandler

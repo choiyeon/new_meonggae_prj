@@ -42,10 +42,10 @@
 					var result = data.result;
 					if(result == "success"){
 						alert("탈퇴 완료되었습니다.");
-						location.href="http://localhost//meonggae_prj/index.do";
+						location.href="${pageContext.request.contextPath}/index.do";
 					}else{
 						alert("로그인이 필요한 서비스입니다.");
-						location.href="http://localhost//meonggae_prj/index.do";
+						location.href="${pageContext.request.contextPath}/index.do";
 					}//else
 					
 				}//success
@@ -54,7 +54,7 @@
 		
 		$("#mainBtn").click(function(){
 			//메인으로
-			location.href="http://localhost//meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		});
 	});//ready
 </script>

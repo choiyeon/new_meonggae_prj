@@ -50,7 +50,8 @@ public class InquiryController {
 		int totalCount = is.searchCount(memNum);
 		if(totalCount > 10) {
 			String param = "";
-			String url = "http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_frm.do";
+			String contextPath = request.getContextPath();
+			String url = contextPath + "/My/mypage/inquiry/inquiry_frm.do";
 			int totalPage = (int)Math.ceil((double)totalCount/10);
 			String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 			model.addAttribute("pagination", pagination);

@@ -62,6 +62,11 @@ jQuery(document).ready(function($) {
 		var buyerNick = $(this).text().trim();
 		location.href='http://localhost/meonggae_prj/My/store/store_frm.do?nick='+buyerNick;
 	});//buyer-btn.click
+	
+	
+	/////////////// 쿠키 설정/////////////////////////////////////////
+	// 페이지 로드 이벤트 리스너 등록
+	window.addEventListener('load', onPageLoad);
 });//ready
 
 //select 카테고리로 검색 - 부모
@@ -141,5 +146,67 @@ function updateSteamToN(){
 		}//success
 	});//ajax
 }//updateSteamToN
+
+
+
+//////////////// 쿠기 설정 ///////////////////////////////////
+// 페이지 로드 후 실행할 함수
+function onPageLoad() {
+  var url = window.location.href;
+  var goodsNum = getGoodsNumFromURL(url);
+  console.log("goodsNum::" + goodsNum);
+
+  if (goodsNum) {
+  	var recentGoods = getCookie('recent_goods');
+  	
+  	if (recentGoods !== goodsNum) {
+    // 쿠키에 단일 goodsNum 저장 (유효기간: 24시간)
+    var expirationDate = new Date();
+    expirationDate.setTime(expirationDate.getTime() + (24 * 60 * 60 * 1000));
+    console.log("expirationDate::" + expirationDate);
+
+    setCookie('recent_goods', goodsNum, expirationDate);
+    }
+  }
+}
+
+//쿠키 설정
+function setCookie(cookieName, value, expirationDate) {
+  var cookieValue = escape(value) + ((expirationDate == null) ? '' : '; expires=' + expirationDate.toUTCString());
+  document.cookie = cookieName + '=' + cookieValue;
+}
+
+//현재 쿠키 가져오기
+function getCookie(cookieName) {
+  //document.cookie에서 찾을 쿠키의 패턴
+  var name = cookieName + '=';
+  
+  //현재 문서의 모든 쿠키 값을 해독하고, decodedCookie에 저장
+  var decodedCookie = decodeURIComponent(document.cookie);
+  
+  //decodedCookie 문자열을 ; 기준으로 분할한 배열
+  var cookieArray = decodedCookie.split(';');
+
+  for (var i = 0; i < cookieArray.length; i++) {
+    var cookie = cookieArray[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(name) == 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+  return '';
+}
+
+// URL에서 goodsNum를 가져오는 함수
+function getGoodsNumFromURL(url) {
+  var regex = /[?&]goodsNum=(\d+)/;
+  var match = regex.exec(url);
+  if (match && match[1]) {
+    return match[1];
+  }
+  return null;
+}
 
 

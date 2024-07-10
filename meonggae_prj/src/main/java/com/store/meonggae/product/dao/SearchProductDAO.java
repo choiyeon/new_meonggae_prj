@@ -11,7 +11,7 @@ import com.store.meonggae.dao.MybatisDAO;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
 import com.store.meonggae.product.domain.SearchProductDomain;
 import com.store.meonggae.product.domain.SellerInfoDomain;
-import com.store.meonggae.product.vo.ProductAddVO;
+import com.store.meonggae.product.vo.InfiniteScrollVO;
 import com.store.meonggae.product.vo.SearchProductVO;
 
 
@@ -28,12 +28,19 @@ public class SearchProductDAO {
 			return ss.selectList("com.store.meonggae.product.selectAllProduct");
 		}
 	};//selectAllProduct
-	public List<SearchProductDomain> selectAllProduct2(int start, int end)throws PersistenceException {
-		ProductAddVO pageVO = new ProductAddVO(start, end);//start = mem_num_sell, end = mem_num_buy
+	//전체 상품 조회 - 무한스크롤
+	public List<SearchProductDomain> selectAllPrdInfiniteScroll(int start, int end)throws PersistenceException {
+		InfiniteScrollVO infiniteScroll = new InfiniteScrollVO(start, end);
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
-			return ss.selectList("com.store.meonggae.product.selectAllProduct2", pageVO);
+			return ss.selectList("com.store.meonggae.product.selectAllPrdInfiniteScroll", infiniteScroll);
 		}
-	};//selectAllProduct
+	};//selectAllProduct2
+	//최근 본 상품 조회
+	public SearchProductDomain selectRecentProduct(String goodsNum)throws PersistenceException {
+		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+			return ss.selectOne("com.store.meonggae.product.selectRecentProduct", goodsNum);
+		}
+	};//selectRecentProduct
 	
 	//키워드(상품명&지역) 조회
 	public List<SearchProductDomain> selectPrdKey(String keyword)throws PersistenceException {

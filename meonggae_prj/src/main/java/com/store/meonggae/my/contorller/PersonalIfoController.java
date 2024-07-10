@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.store.meonggae.my.domain.PersonalDomain;
@@ -189,6 +191,7 @@ public class PersonalIfoController {
 		
 		String memNum = String.valueOf(userSession.getMemNum());
 		String profile = userSession.getimg();
+		
 		
 		// 파일업로드
 		File saveDir = new File(fileDir);

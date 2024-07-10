@@ -19,6 +19,10 @@ public class ProductDetailInfoService {
     @Autowired
     private ProductDetailInfoDAO pdiDAO;
     
+//	퀵메뉴 - 회원의 찜 개수
+    public int countMemSteam(String memNum){
+    	return pdiDAO.countMemSteam(memNum);
+    }//countAllSteam
 //	상품의 전체 찜 횟수 조회
     public int countAllSteam(String goodsNum){
     	return pdiDAO.countAllSteam(goodsNum);

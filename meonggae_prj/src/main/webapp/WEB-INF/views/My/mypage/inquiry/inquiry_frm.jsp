@@ -8,22 +8,22 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href = "http://localhost/meonggae_prj/index.do";
+			location.href = "${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 		<!-- 로그인 세션 설정 끝 -->
 
 		<!-- header -->
-		<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp" />
+		<c:import url="/common/My/css/css.jsp" />
 		<c:import url="/WEB-INF/views/header/header.jsp" />
 		<!-- header -->
 
 		<!-- CSS -->
 		<link rel="stylesheet"
-			href="http://localhost/meonggae_prj/common/CSS/style.css">
+			href="${pageContext.request.contextPath}/common/CSS/style.css">
 		<link rel="stylesheet"
-			href="http://localhost/meonggae_prj/common/My/css/style_mypage.css">
+			href="${pageContext.request.contextPath}/common/My/css/style_mypage.css">
 		<!-- CSS -->
 
 		<script type="text/javascript">
@@ -31,7 +31,7 @@
 				$("#inquiryWriteBtn")
 						.click(
 								function() {
-									location.href = "http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_add_frm.do"
+									location.href = "${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_add_frm.do"
 								});//click
 			});//ready
 		</script>
@@ -64,7 +64,7 @@
 						<c:forEach items="${ inquiryList }" var="il">
 							<tr>
 								<td><a
-									href="http://localhost/meonggae_prj/My/mypage/inquiry/inquiry_detail.do?inquiryNum=${ il.inquiryNum }">
+									href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_detail.do?inquiryNum=${ il.inquiryNum }">
 										<c:out value="${ il.title }" />
 								</a></td>
 								<td>${ il.answerFlag eq 'N'?'답변 대기중':'답변 완료' }</td>

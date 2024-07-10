@@ -7,20 +7,20 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css?">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_mypage.css?">
 <!-- CSS -->
 
 <script type="text/javascript">
@@ -42,7 +42,7 @@
 		<!-- 메뉴목록 -->
 	</div>
 		
-	<a href="http://localhost/meonggae_prj/My/mypage/dibs/dibsGoods_frm.do">
+	<a href="${pageContext.request.contextPath}/My/mypage/dibs/dibsGoods_frm.do">
 	<div id="dibListTitle" class="dibList">♥ 찜 목록</div>
 	</a>
 	
@@ -57,8 +57,8 @@
 					<div class="col-md-3 col-sm-4">
 						<div class="single-product">
 							<div class="product-block">
-								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
-									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
+								<a href="${pageContext.request.contextPath}/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
+									<img src="${pageContext.request.contextPath}/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
 										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
@@ -83,7 +83,7 @@
 	</c:choose>
 	</div>
 	
-	<a href="http://localhost/meonggae_prj/My/mypage/sales_list/soldDetails_frm.do">
+	<a href="${pageContext.request.contextPath}/My/mypage/sales_list/soldDetails_frm.do">
 	<div id="soldListTitle" class="soldList">판매 완료 목록</div>
 	</a>
 	
@@ -98,8 +98,8 @@
 					<div class="col-md-3 col-sm-4">
 						<div class="single-product">
 							<div class="product-block">
-								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
-									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
+								<a href="${pageContext.request.contextPath}/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
+									<img src="${pageContext.request.contextPath}/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
 										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
@@ -124,7 +124,7 @@
 	</c:choose>
 	</div>
 	
-	<a href="http://localhost/meonggae_prj/My/mypage/sales_list/boughtDetails_frm.do">
+	<a href="${pageContext.request.contextPath}/My/mypage/sales_list/boughtDetails_frm.do">
 	<div id="boughtListTitle" class="boughtList">구매 완료 목록</div>
 	</a>
 	
@@ -139,8 +139,8 @@
 					<div class="col-md-3 col-sm-4">
 						<div class="single-product">
 							<div class="product-block">
-								<a href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
-									<img src="http://localhost/meonggae_prj/products-img/${ is.img }" class="thumbnail">
+								<a href="${pageContext.request.contextPath}/main_page/products_detail.do?goodsNum=${ is.goodsNum }">
+									<img src="${pageContext.request.contextPath}/products-img/${ is.img }" class="thumbnail">
 									<div class="product-description text-left">
 										<p class="title"><c:out value="${ is.name }"/></p>
 										<div style="overflow: hidden;">
