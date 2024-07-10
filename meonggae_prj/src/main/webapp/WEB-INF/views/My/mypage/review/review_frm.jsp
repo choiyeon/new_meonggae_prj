@@ -8,20 +8,20 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css?asdf">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_mypage.css?asdf">
 <!-- CSS -->
 
 <script type="text/javascript">
@@ -37,7 +37,7 @@
 			}//if
 			
 			$.ajax({
-				url: "http://localhost/meonggae_prj/My/mypage/review/write_review.do",
+				url: "${pageContext.request.contextPath}/My/mypage/review/write_review.do",
 				type: "POST",
 				dataType: "JSON",
 				data: {
@@ -53,10 +53,10 @@
 					if(result == "success"){
 						alert("후기가 작성되었습니다");
 						location.reload();
-						/* loaction.href="http://localhost/meonggae_prj/My/mypage/review/review_frm.do"; */
+						/* loaction.href="${pageContext.request.contextPath}/My/mypage/review/review_frm.do"; */
 					}else if(result == "noSession"){
 						alert("로그인이 필요한 서비스입니다.");
-						location.href="http://localhost/meonggae_prj/index.do";
+						location.href="${pageContext.request.contextPath}/index.do";
 					}else{
 						alert("오류가 발생하였습니다. 잠시 후에 다시 시도해주세요.");
 					}//else
@@ -78,7 +78,7 @@
 		}//if
 		
 		$.ajax({
-			url: "http://localhost/meonggae_prj/My/mypage/review/delete_review_process.do",
+			url: "${pageContext.request.contextPath}/My/mypage/review/delete_review_process.do",
 			type: "POST",
 			dataType: "JSON",
 			data: {sendData : goodsNum},
@@ -92,7 +92,7 @@
 					location.reload();
 				}else if(result == "noSession"){
 					alert("로그인이 필요한 서비스입니다.");
-					location.href="http://localhost/meonggae_prj/index.do";
+					location.href="${pageContext.request.contextPath}/index.do";
 				}else{
 					alert("오류가 발생하였습니다. 다시 시도해주세요.");
 				}//else

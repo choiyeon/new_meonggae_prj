@@ -7,20 +7,20 @@
 	<c:when test="${ empty user }">
 		<script type="text/javascript">
 			alert("로그인이 필요한 서비스입니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:otherwise>
 <!-- 로그인 세션 설정 끝 -->
 
 <!-- header -->
-<c:import url="http://localhost/meonggae_prj/common/My/css/css.jsp"/>
+<c:import url="/common/My/css/css.jsp"/>
 <c:import url="/WEB-INF/views/header/header.jsp"/>
 <!-- header -->
 
 <!-- CSS -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/My/css/style_mypage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/My/css/style_mypage.css">
 <!-- CSS -->
 
 <!--다음 우편번호 API 시작-->
@@ -44,7 +44,6 @@
 				}//end if
 				chkNull();
 			}
-			
 		});
 		
 		// 닉네임 변경
@@ -141,7 +140,7 @@
 			var formData = new FormData(form);
 			
 			$.ajax({
-				url: "http://localhost/meonggae_prj/My/mypage/personal/update_personal_info_process.do",
+				url: "${pageContext.request.contextPath}/My/mypage/personal/update_personal_info_process.do",
 				type: "POST",
 				data: formData,
 				dataType: "JSON",
@@ -157,7 +156,7 @@
 					}
 					if(data.result == "noSession"){
 						alert("로그인이 필요한 서비스입니다.");
-						location.href="http://localhost/meonggae_prj/index.do";
+						location.href="${pageContext.request.contextPath}/index.do";
 					}
 					if(data.result == "tooBig"){
 						alert("업로드한 파일의 크기가 큽니다. 다른 이미지를 올려주세요.")
@@ -169,13 +168,13 @@
 	}//chkNull
 	
 	function chkNick(){
-		window.open("http://localhost/meonggae_prj/My/mypage/personal/chkNick.do",
+		window.open("${pageContext.request.contextPath}/My/mypage/personal/chkNick.do",
 				"닉네임 중복확인",
 				"width=501, height=281");
 	}//pwModify
 	
 	function pwModify(){
-		window.open("http://localhost/meonggae_prj/My/mypage/personal/passwordModify.do",
+		window.open("${pageContext.request.contextPath}/My/mypage/personal/passwordModify.do",
 				"비밀번호 변경",
 				"width=501, height=276");
 	}//pwModify
@@ -216,6 +215,11 @@
 			}
 		}).open();
 	};//zipcodeApi
+	
+	var img_elm = document.getElementById("#profileImg");
+	img_elm.onerror = function() {
+		this.scr = "${pageContext.request.contextPath}/common/My/image/loading.png";
+	}
 </script>
 
 <!-- 내용 시작 -->
@@ -236,7 +240,8 @@
 		<tr>
 			<td id="tableTitle1" class="tableTitle1">프로필 사진</td>
 			<td>
-			<img src="http://localhost/meonggae_prj/profile-img/${ user.img }" class="img-circle" style="width: 100px; height: 100px"/><br/><br/>
+			<img src="${pageContext.request.contextPath}/profile-img/${ user.img }" class="img-circle" style="width: 100px; height: 100px"
+						id="profileImg" onError="this.src='${pageContext.request.contextPath}/common/My/image/loading.png';"/><br/><br/>
 			<input type="file" name="upfile" id ="upfile">
 			<div id="imgGuide">.png, .jpg, .jpge 확장자 파일만 등록 가능합니다.</div>
 			</td>

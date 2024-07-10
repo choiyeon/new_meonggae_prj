@@ -50,7 +50,8 @@ public class ReviewController {
 		
 		if(totalCount > 10) {
 			String param = "";
-			String url = "http://localhost/meonggae_prj/My/mypage/review/review_frm.do";
+			String contextPath = request.getContextPath();
+			String url = contextPath + "/My/mypage/review/review_frm.do";
 			int totalPage = (int)Math.ceil((double)totalCount/10);
 			String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 			model.addAttribute("pagination", pagination);

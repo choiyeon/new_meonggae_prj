@@ -23,14 +23,13 @@ $(function() {
     const itemContainer = $('.single-products'); // 아이템을 추가할 div 컨테이너
 
     const callNextPage = () => {
-        console.log("페이지: " + page);
         addList(); // 다음 페이지 아이템을 불러오는 함수 호출
     };
 
     const observer = observerIntersection(callNextPage); // Intersection Observer 생성 및 초기화
 
     function addList() {
-        console.log("추가 리스트 불러오기");
+    	//추가 리스트 불러오기
         $.ajax({
             url: 'infiniteScroll.do',
             data: { page: page, size: size },
@@ -44,7 +43,6 @@ $(function() {
                                     '</div>');
             },
             success: function(result) {
-                console.log("성공: " + result);
                 if(result.length === 0 || result == '') {
                 	// 리스트가 비어있으면 감지 div 숨기기
                     $("#listEnd").hide();
@@ -84,7 +82,7 @@ $(function() {
                 }//end else 리스트가 비어있지 않음.
             },
             error: function(xhr) {
-                console.log('추가 리스트 불러오기 실패', xhr.status);
+                //console.log('추가 리스트 불러오기 실패', xhr.status);
             },
             complete: function () {
             	// AJAX 요청 완료 후 로딩 숨김
@@ -95,4 +93,17 @@ $(function() {
 	
 	// 초기에 #listEnd를 감시하기 위해 Intersection Observer 설정
     observer.observe(document.querySelector("#listEnd"));
-});
+    
+    
+    
+    
+    
+    
+    
+//****************** 퀵메뉴 js ****************************************//
+    var currentPosition = parseInt($(".quickmenu").css("top"));
+  	$(window).scroll(function() {
+    	var position = $(window).scrollTop(); 
+    	$(".quickmenu").stop().animate({"top":position+currentPosition+"px"},1000);
+  	});//scroll
+});//ready

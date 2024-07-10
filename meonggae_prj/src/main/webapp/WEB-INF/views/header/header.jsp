@@ -9,10 +9,10 @@
 				<div class="action pull-right">
 					<ul>
 						<li class="login"><a
-							href="http://localhost/meonggae_prj/logout.do"
+							href="${pageContext.request.contextPath}/logout.do"
 							class="login-btn"> <i class="fa fa-sign-out"></i>로그아웃
 						</a> / <a
-							href="http://localhost/meonggae_prj/My/mypage/main/myPageMain_frm.do"
+							href="${pageContext.request.contextPath}/My/mypage/main/myPageMain_frm.do"
 							class="login-btn"> <i class="fa fa-user"></i>마이페이지
 						</a></li>
 					</ul>
@@ -48,8 +48,8 @@
 		<div class="row">
 			<div class="col-md-3 col-sm-3">
 				<div class="logo">
-					<a href="http://localhost/meonggae_prj/index.do"> <img
-						src="http://localhost/meonggae_prj/common/images/meonggaelogo.png">
+					<a href="${pageContext.request.contextPath}/index.do"> <img
+						src="${pageContext.request.contextPath}/common/images/meonggaelogo.png">
 					</a>
 				</div>
 			</div>
@@ -65,23 +65,23 @@
 			</div>
 			<div class="col-md-3 col-sm-4">
 				<div class="col-md-4 col-sm-4">
-					<a href="http://localhost/meonggae_prj/product_page/product_add.do"
+					<a href="${pageContext.request.contextPath}/product_page/product_add.do"
 						class="icons"> <img
-						src="http://localhost/meonggae_prj/common/images/meonggaesale.png"
+						src="${pageContext.request.contextPath}/common/images/meonggaesale.png"
 						alt="판매하기 이미지"> <span class="icons-text">판매하기</span>
 					</a>
 				</div>
 				<div class="col-md-4 col-sm-4">
-					<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${user.nick}"
+					<a href="${pageContext.request.contextPath}/My/store/store_frm.do?nick=${user.nick}"
 						class="icons"> <img
-						src="http://localhost/meonggae_prj/common/images/meonggaeStore.png"
+						src="${pageContext.request.contextPath}/common/images/meonggaeStore.png"
 						alt="내상점 이미지"> <span class="icons-text">내 상점</span>
 					</a>
 				</div>
 				<div class="col-md-4 col-sm-4">
-					<a href="http://localhost/meonggae_prj/meongae_talk/talk_page.do"
+					<a href="${pageContext.request.contextPath}/meongae_talk/talk_page.do"
 						class="icons"> <img
-						src="http://localhost/meonggae_prj/common/images/meonggaeTalk.png"
+						src="${pageContext.request.contextPath}/common/images/meonggaeTalk.png"
 						alt="멍게톡 이미지"> <span class="icons-text">멍게톡</span>
 					</a>
 				</div>

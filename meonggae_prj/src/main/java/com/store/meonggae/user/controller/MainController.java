@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.session.SqlSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.store.meonggae.event.domain.EventDomain;
+import com.store.meonggae.event.service.EventService;
 import com.store.meonggae.product.domain.CategoryDomain;
 import com.store.meonggae.product.domain.SearchProductDetailDomain;
 import com.store.meonggae.product.domain.SearchProductDomain;
@@ -30,10 +31,9 @@ import com.store.meonggae.product.domain.SearchReviewDomain;
 import com.store.meonggae.product.domain.SellOtherPrdDomain;
 import com.store.meonggae.product.domain.SellerInfoDomain;
 import com.store.meonggae.product.service.CategoryService;
-import com.store.meonggae.product.service.SearchProductService;
 import com.store.meonggae.product.service.ProductDetailInfoService;
-import com.store.meonggae.event.domain.EventDomain;
-import com.store.meonggae.event.service.EventService;
+import com.store.meonggae.product.service.SearchProductService;
+import com.store.meonggae.product.vo.QuickSteamVO;
 import com.store.meonggae.product.vo.SearchProductVO;
 import com.store.meonggae.product.vo.SteamVO;
 import com.store.meonggae.user.login.domain.LoginDomain;
@@ -53,25 +53,10 @@ public class MainController {
 	@Autowired(required = false)
 	private VisitorCntService vcService;
 
-	// 원래 코드 : 삭제하면 죽음뿐
-//	@RequestMapping(value = "/index.do", method = { GET, POST })
-//	public String main(Model model) {
-//		// 전체상품 조회
-//		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
-//		// 이벤트 캐러셀 조회
-//		List<EventDomain> eventList = EventService.eventCarousel();
-//		model.addAttribute("prdAllList", list);
-//		model.addAttribute("eventList", eventList);
-//		return "main_page/main_contents";
-//	}
-
 	@RequestMapping(value = "/index.do", method = { GET, POST })
-	public String main(Model model, HttpSession session) {
-		// 전체상품 조회
-		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
+	public String main(Model model, HttpSession session, HttpServletRequest request) {
 		// 이벤트 캐러셀 조회
 		List<EventDomain> eventList = EventService.eventCarousel();
-//		model.addAttribute("prdAllList", list);
 		model.addAttribute("eventList", eventList);
 		
 		// 사이트 방문자수 ++용
@@ -95,16 +80,43 @@ public class MainController {
 			} // end if
 		} // end else
 		
+		
+		//퀵메뉴 - 찜
+		// 사용자 정보를 세션에서 가져옴
+		LoginDomain loginUser = (LoginDomain) session.getAttribute("user"); 
+		if( loginUser != null ) {
+			//로그인을 했다면 찜 조회
+			String memNum = String.valueOf(loginUser.getMemNum());
+			int steamCnt = ProductDetailInfoService.countMemSteam(memNum);
+			QuickSteamVO steamList = new QuickSteamVO(memNum, steamCnt);
+			model.addAttribute("steamList", steamList);
+		}
+		
+		//퀵메뉴 - 최근 본 상품 이미지링크
+		//쿠키 가져오기
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for( Cookie cs : cookies ) {
+				if("goodsNum".equals(cs.getName())) {
+					String goodsNum = cs.getValue();
+					SearchProductDomain recentPrd = SearchProductService.selectRecentProduct(goodsNum);
+					model.addAttribute("recentPrd", recentPrd);
+				}//end if
+			}//end for
+		}//end if
+		
+		
 		return "main_page/main_contents";
-	}
+	}//main
 
+	//무한 스크롤
 	@ResponseBody//json형식으로 변환하여 클라이언트에게 전달.
 	@RequestMapping(value = "/infiniteScroll.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public String infiniteScroll(@RequestParam int page, @RequestParam int size) {
 		int start = (page - 1) * size + 1;
 		int end = start + size - 1;
 		// 전체상품 조회
-		List<SearchProductDomain> list = SearchProductService.selectAllProduct2(start, end);
+		List<SearchProductDomain> list = SearchProductService.selectAllPrdInfiniteScroll(start, end);
 
 		JSONArray jsonArr = new JSONArray();
 		for (SearchProductDomain products : list) {
@@ -170,6 +182,7 @@ public class MainController {
 	@GetMapping("/main_page/products_detail.do")
 	public String productDetail(HttpSession session, @RequestParam(name = "goodsNum", required = false) String goodsNum,
 			Model model, HttpServletResponse response) {
+		
 		// 조회한 페이지인지 확인
 		Object cntSession = session.getAttribute("cntFlag");
 		boolean cntFlag = false;
@@ -183,7 +196,8 @@ public class MainController {
 			ProductDetailInfoService.updateCnt(goodsNum);
 			session.setAttribute("cntFlag", session.getAttribute("cntFlag") + "," + goodsNum);
 		} // end if
-			// 사용자 정보를 세션에서 가져옴
+		
+		// 사용자 정보를 세션에서 가져옴
 		LoginDomain loginUser = (LoginDomain) session.getAttribute("user");
 
 		// 상품 상세 조회
@@ -256,3 +270,48 @@ public class MainController {
 		return "/join_page/mem_join";
 	}
 }
+
+// 원래 코드 : 삭제하면 죽음뿐
+//@RequestMapping(value = "/index.do", method = { GET, POST })
+//public String main(Model model) {
+//	// 전체상품 조회
+//	List<SearchProductDomain> list = SearchProductService.selectAllProduct();
+//	// 이벤트 캐러셀 조회
+//	List<EventDomain> eventList = EventService.eventCarousel();
+//	model.addAttribute("prdAllList", list);
+//	model.addAttribute("eventList", eventList);
+//	return "main_page/main_contents";
+//}
+// 무한스크롤+방문자수 코드 : 삭제하면 죽음뿐
+//@RequestMapping(value = "/index.do", method = { GET, POST })
+//public String main(Model model, HttpSession session) {
+//	// 전체상품 조회
+//	List<SearchProductDomain> list = SearchProductService.selectAllProduct();
+//	// 이벤트 캐러셀 조회
+//	List<EventDomain> eventList = EventService.eventCarousel();
+////	model.addAttribute("prdAllList", list);
+//	model.addAttribute("eventList", eventList);
+//	
+//	// 사이트 방문자수 ++용
+//	boolean flagMemberVisit = false;
+//	if(session.getAttribute("flagMemberVisit") == null) {	// 아예 방문한 적이 없으면
+//		if(session.getAttribute("user") == null) {	// 로그인 세션이 null이면 (비로그인)
+//			session.setAttribute("flagMemberVisit", false);
+//		} else { // 혹시라도 로그인 세션이 null이 아니면 (로그인한 회원)
+//			session.setAttribute("flagMemberVisit", true);
+//			// 회원 방문자수 ++
+//			vcService.updateVisitorCnt(true);
+//		} // end else
+//		// 전체 방문자수 ++
+//		vcService.updateVisitorCnt(false);
+//	} else {	// 방문한 적이 있으면
+//		flagMemberVisit = (boolean)session.getAttribute("flagMemberVisit");
+//		if(flagMemberVisit == false && session.getAttribute("user") != null) {	// 사이트 접속하고 로그인한 경우
+//			session.setAttribute("flagMemberVisit", true);
+//			// 회원 방문자수 ++
+//			vcService.updateVisitorCnt(true);
+//		} // end if
+//	} // end else
+//	
+//	return "main_page/main_contents";
+//}//main

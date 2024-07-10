@@ -25,8 +25,13 @@ public class SearchProductService {
     public List<SearchProductDomain> selectAllProduct(){
     	return spDAO.selectAllProduct();
     }
-    public List<SearchProductDomain> selectAllProduct2(int start, int end){
-    	return spDAO.selectAllProduct2(start, end);
+    //상품전체조회 - 무한스크롤
+    public List<SearchProductDomain> selectAllPrdInfiniteScroll(int start, int end){
+    	return spDAO.selectAllPrdInfiniteScroll(start, end);
+    }
+    //최근 본 상품 조회
+    public SearchProductDomain selectRecentProduct(String goodsNum){
+    	return spDAO.selectRecentProduct(goodsNum);
     }
     //상품 키워드 검색
     public List<SearchProductDomain> selectPrdKey(String keyword){

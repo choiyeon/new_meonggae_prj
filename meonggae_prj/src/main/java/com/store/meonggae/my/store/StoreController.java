@@ -2,18 +2,18 @@ package com.store.meonggae.my.store;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.store.meonggae.my.pagination.PaginationUtil;
-import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.store.domain.ReviewDomain;
 import com.store.meonggae.my.store.domain.StoreMainDomain;
 import com.store.meonggae.my.store.service.StoreService;
@@ -28,14 +28,17 @@ public class StoreController {
 	 * 내 상점 : 메인
 	 */
 	@GetMapping("/store_frm.do")
-	public String storeMain(@RequestParam("nick") String nick,
+	public String storeMain(HttpServletRequest request,
+							@RequestParam("nick") String nick,
 							@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
 							Model model) {
 		
 		String profile = ss.searchProfile(nick);
 		model.addAttribute("profile", profile);
 		
-		String url = "http://localhost/meonggae_prj/My/store/store_frm.do";
+		
+		String contextPath = request.getContextPath();
+		String url = contextPath + "/My/store/store_frm.do";
 		String param = "&nick=" + nick;
 		int totalPage = (int)Math.ceil((double)ss.searchCount(nick)/PaginationUtil.getInstance().pageScale());
 		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);

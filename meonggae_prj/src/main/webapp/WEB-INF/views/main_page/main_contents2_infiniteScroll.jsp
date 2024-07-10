@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터</title>
-<link rel="icon" href="http://localhost/meonggae_prj/common/tamcatIcon.ico"/>
+<link rel="icon" href="${pageContext.request.contextPath}/common/tamcatIcon.ico"/>
 
 <!-- jQuery CDN -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -22,10 +22,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src ="http://localhost/meonggae_prj/common/JS/script.js"></script>
-<!-- <script src ="http://localhost/meonggae_prj/common/JS/infinite_scroll.js"></script> -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+<script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
+<script src ="${pageContext.request.contextPath}/common/JS/infinite_scroll.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/infinite_scroll.css">
 </head>
 <body>
 <!-- header 시작 -->
@@ -68,41 +69,16 @@
 
     <div class="featured-items">
 
-        <div class="container">
-
-            <div class="row" style="width: 1140px">
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="trending">
 
                     	<div class="single-products">
-							<c:forEach var="pd" items="${requestScope.prdAllList}" varStatus="i">
-                            	<div class="single-product prevent-overflow">
-                            		<div class="product-block">
-                            			<a href="main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
-                            				<!-- 상세페이지로 이동 -->
-											<img src="http://localhost/meonggae_prj/products-img/${ pd.imgName }" alt="" class="thumbnail">
-											<div class="product-description">
-												<p class="title">${ pd.goodsName }</p>
-												<div style="overflow: hidden;">
-													<p class="price" style="float: left;">${ pd.priceFm }원</p>
-													<p class="location" style="float: left;"><i class="fa fa-map-marker" aria-hidden="true"></i>${ pd.locationStr }</p>
-													<p class="time-ago" style="float: right;">${ pd.timeAgo }</p>
-												</div>
-											</div>
-                            			</a>
-									</div>
-								</div>
-							</c:forEach>
 							<div id="listEnd"></div>
 						</div>
                    	</div>
 
 				</div>
-
-			</div>
-
-		</div>
 
 	</div>
 
