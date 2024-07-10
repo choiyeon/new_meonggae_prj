@@ -33,7 +33,6 @@
     type="text/css">
 <!-- Theme Stylesheet -->
 <script src="../common/JS/script.js"></script>
-<script src="../common/JS/tab.js"></script>
 <script src="../common/JS/product_add.js"></script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {
@@ -119,14 +118,14 @@ $(document).on('click', '#add', function() {
 });
 </script>
 <link rel="stylesheet"
-    href="http://localhost/meonggae_prj/common/CSS/style.css">
+    href="${pageContext.request.contextPath}/common/CSS/style.css">
 <!-- <link rel="stylesheet" -->
-<!--     href="http://localhost/meonggae_prj/common/CSS/style.css?v=1.0"> -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+<!--     href="${pageContext.request.contextPath}/common/CSS/style.css?v=1.0"> -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 <link rel="stylesheet"
-    href="http://localhost/meonggae_prj/common/CSS/tab.css?v=1.0">
+    href="${pageContext.request.contextPath}/common/CSS/tab.css?v=1.0">
 <link rel="stylesheet"
-    href="http://localhost/meonggae_prj/common/CSS/product_add.css?v=1.0">
+    href="${pageContext.request.contextPath}/common/CSS/product_add.css?v=1.0">
 </head>
 <c:choose>
 	<c:when test="${ not empty uploadFlag && uploadFlag == true }">
@@ -137,7 +136,7 @@ $(document).on('click', '#add', function() {
 	<c:when test="${ not empty uploadFlag && uploadFlag == false }">
 		<script>
 			alert("상품 등록에 실패했습니다. 잠시후 다시 시도해주세요.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 </c:choose>

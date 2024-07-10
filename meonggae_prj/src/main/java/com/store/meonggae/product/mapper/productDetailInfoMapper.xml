@@ -9,9 +9,17 @@
 select count(*)
 from STEAM s
 JOIN MEMBER m ON s.MEM_NUM = m.MEM_NUM
-where m.MEM_STATUS in ('N', 'S')
+JOIN GOODS g ON s.GOODS_NUM = g.GOODS_NUM
+where m.MEM_STATUS='N'
+and g.SELL_STATUS_CODE != 'S'
 and s.steam_flag='Y'
 </sql>
+
+<!-- 퀵메뉴 회원의 찜 전체 개수 조회 -->
+<select id="countMemSteam" resultType="int" parameterType="String">
+<include refid="countSteam"/>
+and s.mem_num=#{ memNum }
+</select>
 
 <!-- 상품의 전체 찜 횟수 조회 -->
 <select id="countAllSteam" resultType="int" parameterType="String">

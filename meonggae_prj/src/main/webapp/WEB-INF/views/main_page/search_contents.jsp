@@ -34,11 +34,11 @@
 	type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src="http://localhost/meonggae_prj/common/JS/script.js"></script>
+<script src="${pageContext.request.contextPath}/common/JS/script.js"></script>
 <link rel="stylesheet"
-	href="http://localhost/meonggae_prj/common/CSS/style.css">
+	href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet"
-	href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+	href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 </head>
 <body>
 	<!-- header 시작 -->
@@ -62,7 +62,7 @@
 											</c:if>
 										</c:forEach>
 										<a
-											href="http://localhost/meonggae_prj/main_page/search_contents.do?kw=${requestScope.keyword}&cn=${entry.key}"
+											href="${pageContext.request.contextPath}/main_page/search_contents.do?kw=${requestScope.keyword}&cn=${entry.key}"
 											class="category-one2"> > ${categoryName} +${entry.value}
 										</a>
 									</div>
@@ -82,7 +82,7 @@
 										</c:if>
 									</c:forEach>
 									<a
-										href="http://localhost/meonggae_prj/main_page/search_contents.do?kw=${requestScope.keyword}&cn=${entry.key}"
+										href="${pageContext.request.contextPath}/main_page/search_contents.do?kw=${requestScope.keyword}&cn=${entry.key}"
 										class="category-one"> ${categoryName} +${entry.value} </a>
 								</div>
 							</c:if>
@@ -108,9 +108,9 @@
 								<div class="single-product">
 									<div class="product-block">
 										<a
-											href="http://localhost/meonggae_prj/main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
+											href="${pageContext.request.contextPath}/main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
 											<!-- 상세페이지로 이동 --> <img
-											src="http://localhost/meonggae_prj/products-img/${ pd.imgName }"
+											src="${pageContext.request.contextPath}/products-img/${ pd.imgName }"
 											alt="" class="thumbnail">
 											<div class="product-description ">
 												<p class="title">${ pd.goodsName }</p>
@@ -143,10 +143,10 @@
 			</div>
 			<c:forEach var="store" items="${storeList}" varStatus="i">
 				<div class="product-sellerStyle" style="margin: 0 0 30px 0;!important">
-					<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${ store.nick }">
+					<a href="${pageContext.request.contextPath}/My/store/store_frm.do?nick=${ store.nick }">
 						<button class="store-btn" style="border: 1px solid #333; margin: 0px; ! important; color: black;">
 							<div class="profile">
-								<img class="profile-pic" src="http://localhost/meonggae_prj/profile-img/${ store.img }" alt="판매자 이미지">
+								<img class="profile-pic" src="${pageContext.request.contextPath}/profile-img/${ store.img }" alt="판매자 이미지">
 							</div>
 							${ store.nick }
 						</button>
