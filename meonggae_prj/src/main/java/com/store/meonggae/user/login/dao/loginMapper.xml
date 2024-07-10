@@ -44,5 +44,11 @@
 		insert into member_detail(mem_id, mem_num, pass)
 		values(#{id, jdbcType=VARCHAR}, #{memNum}, #{pass})
 	</insert>
+	
+	<!-- 로그인 시도시 로그인 로그 insert -->
+	<insert id="insertMemberLoginLog" parameterType="com.store.meonggae.user.login.vo.LoginLogVO">
+		insert into	MEMBER_LOGIN_LOG(MEM_NUM, IP, INPUT_DATE, OS, BROWSER, MEM_STATUS)
+		values		(#{memNum}, #{ip}, sysdate, #{os}, #{browser}, #{memStatus})
+	</insert>
 
 </mapper>

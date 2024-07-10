@@ -300,40 +300,6 @@
 										</a>
 										<div class="toggle-content" data-content="cardTools">
 											<ul class="btn-toolbar gx-1">
-												<li>
-													<div class="dropdown">
-														<a href="#" class="btn btn-trigger btn-icon dropdown-toggle" data-bs-toggle="dropdown">
-															<em class="icon ni ni-setting"></em>
-														</a>
-														<div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
-															<ul class="link-check">
-																<li>
-																	<span>리스트 수</span>
-																</li>
-																<li class="active">
-																	<a href="#">10</a>
-																</li>
-																<li>
-																	<a href="#">20</a>
-																</li>
-																<li>
-																	<a href="#">50</a>
-																</li>
-															</ul>
-															<ul class="link-check">
-																<li>
-																	<span>정렬</span>
-																</li>
-																<li class="active">
-																	<a href="#">내림차순</a>
-																</li>
-																<li>
-																	<a href="#">오름차순</a>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</li>
 											</ul>
 										</div>
 									</div>
@@ -379,7 +345,7 @@
 								<c:otherwise>
 									<c:forEach var="reviewDomain" items="${requestScope.list}" varStatus="i">
 										<tr>
-											<th scope="row"><c:out value="${i.count}"/></th>
+											<th scope="row"><c:out value="${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }"/></th>
 											
 											<c:choose>
 												<c:when test="${pageContext.request.queryString eq null or pageContext.request.queryString eq ''}">

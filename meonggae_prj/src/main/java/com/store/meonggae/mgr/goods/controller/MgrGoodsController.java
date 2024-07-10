@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
+import com.store.meonggae.mgr.common.service.FilterParamService;
 import com.store.meonggae.mgr.goods.domain.MgrGoodsDomain;
 import com.store.meonggae.mgr.goods.domain.MgrOtherGoodsDomain;
 import com.store.meonggae.mgr.goods.domain.MgrSellerReviewDomain;
@@ -26,6 +27,8 @@ public class MgrGoodsController {
 	private BoardUtilService boardUtilService;
 	@Autowired(required = false)
 	private MgrReviewService mrService;
+	@Autowired(required = false)
+	private FilterParamService filterService;
 	
 	// 물품 관리 - 리스트 조회
 	@GetMapping("/mgr/goods/mgr_goods_list_frm.do")
@@ -51,11 +54,12 @@ public class MgrGoodsController {
 		sVO.setEndNum(endNum);
 		
 		list = mgService.searchListGoodsList(sVO);
-
+		
 		String param = "";
 		if(sVO.getKeyword() != null) {
 			param = "&field=" + sVO.getField() + "&keyword=" + sVO.getKeyword();
 		} // end if
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/goods/mgr_goods_list_frm.do", param, totalPage, currentPage);
 		
 		List<MgrCategoryDomain> listCategoryUpper = mrService.searchListCategoryList(0); 
@@ -104,7 +108,7 @@ public class MgrGoodsController {
 	// 물품 삭제
 	@GetMapping("/mgr/goods/mgr_goods_delete_process.do")
 	public String removeGoodsProcess(String goodsNum, MgrGoodsSearchVO sVO, RedirectAttributes redirectAttributes) {
-		int cnt = mgService.removeReview(goodsNum);
+		int cnt = mgService.removeOneGoods(goodsNum);
 		boolean flagDelete = cnt == 1 ? true : false;
 		
 		redirectAttributes.addAttribute("parentCategoryNum", sVO.getParentCategoryNum());

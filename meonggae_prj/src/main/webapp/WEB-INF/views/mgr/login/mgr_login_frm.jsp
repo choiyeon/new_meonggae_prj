@@ -39,9 +39,15 @@
 <script type="text/javascript">
 
 	$(function() {
+		$("#manager_id").focus();
 		$("#btn").click(function() {
 			chkNull();
 		}); // click
+		$(".login").keydown(function (evt) {
+			if(evt.which == 13) {
+				chkNull();
+			} // end if
+		}); // keydown
 	}); // $(document).ready(function() { })
 	
 	function chkNull() {
@@ -98,6 +104,7 @@
 										</div>
 										<div class="form-control-wrap">
 											<input autocomplete="off" type="text" class="form-control form-control-lg" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value="super">
+<!-- 											<input autocomplete="off" type="text" class="form-control form-control-lg login" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value=""> -->
 										</div>
 									</div>
 									<div class="form-group">
@@ -106,6 +113,7 @@
 										</div>
 										<div class="form-control-wrap">
 											<input autocomplete="new-password" type="password" class="form-control form-control-lg" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value="qwer1234!">
+<!-- 											<input autocomplete="new-password" type="password" class="form-control form-control-lg login" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value=""> -->
 										</div>
 									</div>
 									<div>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
+import com.store.meonggae.mgr.common.service.FilterParamService;
 import com.store.meonggae.mgr.goods.domain.MgrGoodsDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberDomain;
 import com.store.meonggae.mgr.member.domain.MgrMemberInqiryDomain;
@@ -39,6 +40,8 @@ public class MgrMemberController {
 	private BoardUtilService boardUtilService;
 	@Autowired(required = false)
 	private MgrReviewService mrService;
+	@Autowired(required = false)
+	private FilterParamService filterService;
 	
 	// 회원 관리 리스트 조회
 	@GetMapping("/mgr/member/mgr_member_list_frm.do")
@@ -69,6 +72,7 @@ public class MgrMemberController {
 		if(sVO.getKeyword() != null) {
 			param = "&field=" + sVO.getField() + "&keyword=" + sVO.getKeyword();
 		} // end if
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -82,22 +86,22 @@ public class MgrMemberController {
 	} // mgrDashFrm
 	
 	// 회원 관리 - 회원 상세 조회
-	@GetMapping("/mgr/member/mgr_member_detail_frm_orig.do")
-	public String searchOneMemberOriginal(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
-			@RequestParam(required=false, defaultValue="0") int t) {
-		
-		MgrMemberPersonalDomain memberPersonalDomain = mmService.selectOneMemberPersonal(memNum);
-		
-		model.addAttribute("memberPersonalDomain", memberPersonalDomain);
-		return "mgr/member/mgr_member_detail_frm";
-	}
+//	@GetMapping("/mgr/member/mgr_member_detail_frm_orig.do")
+//	public String searchOneMemberOriginal(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
+//			@RequestParam(required=false, defaultValue="0") int t) {
+//		
+//		MgrMemberPersonalDomain memberPersonalDomain = mmService.selectOneMemberPersonal(memNum);
+//		
+//		model.addAttribute("memberPersonalDomain", memberPersonalDomain);
+//		return "mgr/member/mgr_member_detail_frm";
+//	}
 	
 	// 회원 관리 - 회원 상세 조회
 	@GetMapping("/mgr/member/mgr_member_detail_frm.do")
 	public String searchOneMember(Model model, @RequestParam(required=true, defaultValue="0") int memNum,
 			@RequestParam(required=false, defaultValue="0") int t) {
 		
-		MgrMemberPersonalDomain memberPersonalDomain = mmService.selectOneMemberPersonal(memNum);
+		MgrMemberPersonalDomain memberPersonalDomain = mmService.searchOneMemberPersonal(memNum);
 		
 		model.addAttribute("memberPersonalDomain", memberPersonalDomain);
 		
@@ -161,10 +165,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListTrade(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=1&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=1&memNum=" + memNum;
+//		} // end if
+		String param = "&t=1&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		List<MgrCategoryDomain> listCategoryUpper = mrService.searchListCategoryList(0); 
@@ -213,10 +219,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListReport(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=2&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=2&memNum=" + memNum;
+//		} // end if
+		String param = "&t=2&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -254,10 +262,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListInquiry(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=3&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=3&memNum=" + memNum;
+//		} // end if
+		String param = "&t=3&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -295,10 +305,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListReview(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=4&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=4&memNum=" + memNum;
+//		} // end if
+		String param = "&t=4&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -337,10 +349,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListSteam(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=5&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=5&memNum=" + memNum;
+//		} // end if
+		String param = "&t=5&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -379,10 +393,12 @@ public class MgrMemberController {
 		
 		list = mmService.searchListLoginLog(sVO);
 
-		String param = "";
-		if(sVO.getKeyword() != null) {
-			param = "&t=6&memNum=" + memNum;
-		} // end if
+//		String param = "";
+//		if(sVO.getKeyword() != null) {
+//			param = "&t=6&memNum=" + memNum;
+//		} // end if
+		String param = "&t=6&memNum=" + memNum;
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/member/mgr_member_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);

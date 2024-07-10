@@ -13,6 +13,8 @@ public class MgrLoginDAO {
 	@Autowired(required = false)
 	private MyBatisDAO mbDAO;
 	
+	
+	// 관리자 로그인 1차 
 	public MgrDomain selectOneManager(MgrVO mgrVO) throws PersistenceException {
 		MgrDomain mgrDomain = null;
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
@@ -21,4 +23,12 @@ public class MgrLoginDAO {
 		
 		return mgrDomain;
 	} // selectOneManager
+	
+	// 관리자 2차 인증 키 조회
+	public String selectOneManager2ndAuthKey(String managerId) {
+		String secondAuthKey = "";
+		SqlSession ss = mbDAO.getMyBatisHandler(true);
+		secondAuthKey = ss.selectOne("com.store.meonggae.mgr.login.selectOneManager2ndAuthKey", managerId);
+		return secondAuthKey;
+	}
 } // class

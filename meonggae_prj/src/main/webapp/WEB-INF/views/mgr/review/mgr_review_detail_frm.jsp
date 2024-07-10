@@ -118,7 +118,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">작성자</span>
-								<span class="data-value"><c:out value="${requestScope.reviewDomain.nickBuy }"/></span>
+								<span class="data-value"><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do?memNum=${requestScope.reviewDomain.memNumBuy}"><c:out value="${requestScope.reviewDomain.nickBuy }"/></a></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -154,7 +154,7 @@
 						<div class="data-item">
 							<div class="data-col">
 								<span class="data-label max-width-220">판매자</span>
-								<span class="data-value"><c:out value="${requestScope.reviewDomain.nickSell }"/></span>
+								<span class="data-value"><a href="${pageContext.request.contextPath}/mgr/member/mgr_member_detail_frm.do?memNum=${requestScope.reviewDomain.memNumSell}"><c:out value="${requestScope.reviewDomain.nickSell }"/></a></span>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
@@ -163,7 +163,7 @@
 							<div class="data-col">
 								<span class="data-label max-width-220">상품명</span>
 								<img src="http://211.63.89.136${pageContext.request.contextPath}/products-img/${requestScope.reviewDomain.goodsImg}" style="max-width:15%; height:auto;"/>
-								<span class="data-value"><c:out value="${requestScope.reviewDomain.goodsTitle }"/></span>
+								<span class="data-value"><a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?&goodsNum=${requestScope.reviewDomain.goodsNum}"><c:out value="${requestScope.reviewDomain.goodsTitle }"/></a></span>
 							</div>
 							<div class="data-col data-col-end" style="width:1px;">
 							</div>

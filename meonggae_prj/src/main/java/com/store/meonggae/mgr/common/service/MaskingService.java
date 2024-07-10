@@ -101,7 +101,7 @@ public class MaskingService {
 		return phoneNo;
 	} // phoneMasking
 	
-	public static void main (String[] args) throws Exception {
-		System.out.println(new MaskingService().birthMasking("1999.12.31"));
-	}
+//	public static void main (String[] args) throws Exception {
+//		System.out.println(new MaskingService().birthMasking("1999.12.31"));
+//	}
 } // class
