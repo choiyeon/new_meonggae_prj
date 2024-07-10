@@ -21,9 +21,11 @@ public class MgrHeaderController {
 	
 	// 로그아웃
 	@RequestMapping(value = "/mgr/logout.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, SessionStatus ss) {
 		session.removeAttribute("mgr");
 		session.removeAttribute("flagMgrLogin");
+		session.invalidate();
+		ss.setComplete();
 		return "redirect:login/mgr_login_frm.do";	// 이거 그냥 쓰면 안 됨!!!
 	} // adminMain
 	
