@@ -29,7 +29,6 @@ public class MgrLoginController {
 	// 로그인 폼 페이지로의 이동
 	@RequestMapping(value="/mgr/login/mgr_login_frm.do", method={GET, POST})
 	public String mgrLoginFrm(HttpServletRequest request) {
-		
 		String retDo = "mgr/login/mgr_login_frm";
 		if(!mls.chkIp(request.getRemoteAddr())) {
 			retDo = "mgr/error/err-no-permission";

@@ -36,7 +36,7 @@
 	$(function() {
 		$("#btn").click(function() {
 			$.ajax({
-				url: "http://localhost${pageContext.request.contextPath}/day0611/ajax_result.do",
+				url: "${pageContext.request.contextPath}/day0611/ajax_result.do",
 				type: "GET",
 				dataType: "JSON",
 				error: function(xhr) {
@@ -59,7 +59,7 @@
 		
 		$("#btn2").click(function() {
 			$.ajax({
-				url: "http://localhost${pageContext.request.contextPath}/day0611/ajax_responsebody.do",
+				url: "${pageContext.request.contextPath}/day0611/ajax_responsebody.do",
 				type: "GET",
 				dataType: "JSON",
 				error: function(xhr) {
