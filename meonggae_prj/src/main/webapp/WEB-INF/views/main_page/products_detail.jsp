@@ -21,10 +21,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src ="http://localhost/meonggae_prj/common/JS/script.js"></script>
-<script src ="http://localhost/meonggae_prj/common/JS/product_detail.js"></script>
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+<script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
+<script src ="${pageContext.request.contextPath}/common/JS/product_detail.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 </head>
 <body>
 <!-- header 시작 -->
@@ -74,7 +74,7 @@
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
 
-                            <div class="thumb-main-image"><a href=""><img src="http://localhost/meonggae_prj/products-img/${ spd.imgName }" alt=""></a></div>
+                            <div class="thumb-main-image"><a href=""><img src="${pageContext.request.contextPath}/products-img/${ spd.imgName }" alt=""></a></div>
 
                         </div>
 
@@ -154,7 +154,7 @@
 				<div class="product-sellerStyle">
 					<button class="store-btn">
 						<div class="profile">
-							<img class="profile-pic" src="http://localhost/meonggae_prj/profile-img/${ sellerInfo.img }" alt="판매자 이미지">
+							<img class="profile-pic" src="${pageContext.request.contextPath}/profile-img/${ sellerInfo.img }" alt="판매자 이미지">
 						</div>
 							${ sellerInfo.nick }
 					</button>
@@ -163,7 +163,7 @@
 					<c:if test="${i.index < 6}">
 						<div class="other-product">
 							<a href="products_detail.do?goodsNum=${ list.goodsNum }">
-								<img src="http://localhost/meonggae_prj/products-img/${ list.imgName }" alt="" class="other-product-thumbnail">
+								<img src="${pageContext.request.contextPath}/products-img/${ list.imgName }" alt="" class="other-product-thumbnail">
 								<span class="other-product-price">${ list.priceFm }원</span>
 							</a>
 						</div>
@@ -171,7 +171,7 @@
 					</c:forEach>
 					</div>
 					<div class="other-products-more">
-						<a href="http://localhost/meonggae_prj/My/store/store_frm.do?nick=${ sellerInfo.nick }">판매자의 상품 더보기	></a>
+						<a href="${pageContext.request.contextPath}/My/store/store_frm.do?nick=${ sellerInfo.nick }">판매자의 상품 더보기	></a>
 					</div>
 				</div>
 						
@@ -184,7 +184,7 @@
 					<div class="one-review">
 						<button class="buyer-btn">
 							<div class="buyer-profile">
-								<img class="buyer-pic" src="http://localhost/meonggae_prj/profile-img/${ list.buyerImg }" alt="리뷰작성자 이미지">
+								<img class="buyer-pic" src="${pageContext.request.contextPath}/profile-img/${ list.buyerImg }" alt="리뷰작성자 이미지">
 							</div>
 								${ list.buyerNick }
 						</button>
@@ -208,7 +208,7 @@
 				</c:if>
 				</c:forEach>
 					<div class="review-more">
-						<a href="http://localhost/meonggae_prj/My/store/store_review_frm.do?nick=${ sellerInfo.nick }">상점후기 더보기	></a>
+						<a href="${pageContext.request.contextPath}/My/store/store_review_frm.do?nick=${ sellerInfo.nick }">상점후기 더보기	></a>
 					</div>
 				</div>
 			</div>
@@ -225,7 +225,7 @@
         <h3 class="modal-title"><strong>신고하기</strong></h3>
       </div>
       <div class="modal-body">
-        <form action="http://localhost/meonggae_prj/insertReport.do" method="post" id="reportFrm" name="reportFrm">
+        <form action="${pageContext.request.contextPath}/insertReport.do" method="post" id="reportFrm" name="reportFrm">
         	<input type="hidden" name="iGoodsNum" value="${ spd.goodsNum }">
         	<input type="hidden" name="iMemNumRep" value="${ user.memNum }">
 			<select id="report-category" name="iCategory">

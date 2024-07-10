@@ -21,6 +21,12 @@ public class ProductDetailInfoDAO {
 	@Autowired
 	private MybatisDAO mbDAO;
 	
+//	퀵메뉴 - 회원의 찜 개수
+	public int countMemSteam(String memNum)throws PersistenceException {
+		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+			return ss.selectOne("com.store.meonggae.product.ProductDetailInfoMapper.countMemSteam", memNum);
+		}
+	};//countAllSteam
 //	상품의 전체 찜 횟수 조회
 	public int countAllSteam(String goodsNum)throws PersistenceException {
 		try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {

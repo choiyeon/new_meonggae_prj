@@ -102,7 +102,7 @@ $(function() {
             <c:forEach var="product" items="${productList}">
                 <tr>
                     <td><img alt="상품 정보"
-                        src="http://localhost/meonggae_prj/products-img/${product.img}"></td>
+                        src="${pageContext.request.contextPath}/products-img/${product.img}"></td>
                     <td><select name="sellStatus" class="sellStatus">
                             <option value="N"
                                 <c:if test="${product.sell_status_code == 'N'}">selected</c:if>>판매중</option>

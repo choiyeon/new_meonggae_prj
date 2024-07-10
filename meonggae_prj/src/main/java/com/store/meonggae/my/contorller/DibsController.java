@@ -41,7 +41,8 @@ public class DibsController {
 		
 		String memNum = String.valueOf(userSession.getMemNum());
 		String param = "";
-		String url = "http://localhost/meonggae_prj/My/mypage/dibs/dibsGoods_frm.do";
+		String contextPath = request.getContextPath();
+		String url = contextPath + "/My/mypage/dibs/dibsGoods_frm.do";
 		int totalPage = (int)Math.ceil((double)ds.searchCount(memNum)/PaginationUtil.getInstance().pageScale());
 		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 		model.addAttribute("pagination", pagination);

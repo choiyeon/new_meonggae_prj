@@ -23,10 +23,9 @@
 <!-- Theme Stylesheet -->
 
 <script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
-<script src ="${pageContext.request.contextPath}/common/JS/infinite_scroll.js"></script><!-- 퀵메뉴js포함 -->
+<!-- <script src ="${pageContext.request.contextPath}/common/JS/infinite_scroll.js"></script> -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/infinite_scroll.css"><!-- 퀵메뉴css포함 -->
 </head>
 <body>
 <!-- header 시작 -->
@@ -66,66 +65,44 @@
 		</div>
 		<!-- 캐러셀 끝 -->
 	</div>
-	<!--퀵메뉴 시작 -->
-	<div class="quickmenu">
-  		<ul class="steamCount">
-  			<c:if test="${ empty steamList }">
-    		<li>
-    			<a href="#void">찜한 상품<br>
-    			<i class="fa fa-heart-o"></i> 
-    			<span>0</span>
-    			</a>
-    		</li>
-    		</c:if>
-  			<c:if test="${ not empty steamList && steamList.steamCnt != 0 }">
-    		<li>
-    			<a href="${pageContext.request.contextPath}/My/mypage/dibs/dibsGoods_frm.do">찜한 상품<br>
-    			<i class="fa fa-heart"></i> 
-    			<span>${ steamList.steamCnt }</span>
-    			</a>
-    		</li>
-    		</c:if>
-  		</ul>
-  		<ul class="recentPrd">
-    		<c:if test="${ empty recentPrd }">
-    		<li><a href="#void">최근 본 상품
-    		<div class="recentPic">
-    			<img src="${pageContext.request.contextPath}/common/images/eye.png" alt="빈 최근본상품 아이콘" >
-    			<div class="recentMsg">
-    				<p>최근 본 상품이<br> 없습니다.</p>
-    			</div>
-    		</div>
-    		</a>
-    		</li>
-    		</c:if>
-    		<c:if test="${not empty recentPrd }">
-    		<li><a href="main_page/products_detail.do?goodsNum=${recentPrd.goodsNum}">최근 본 상품
-    		<div class="recentPic notEmpty">
-    			<img src="${pageContext.request.contextPath}/products-img/${recentPrd.imgName}" alt="최근본상품 이미지" >
-    		</div>
-    		</a>
-    		</li>
-    		</c:if>
-  		</ul>
-  		<ul class="toTheTop">
-    		<li><a href="#">TOP</a></li>
-  		</ul>
-	</div>
-	<!--퀵메뉴 끝 -->
 
     <div class="featured-items">
 
+        <div class="container">
+
+            <div class="row" style="width: 1140px">
                 <div class="tab-content">
 
                     <div class="tab-pane active" id="trending">
-						<!--상품 하나 -->
+
                     	<div class="single-products">
-							<!--무한스크롤 감지 -->
+							<c:forEach var="pd" items="${requestScope.prdAllList}" varStatus="i">
+                            	<div class="single-product prevent-overflow">
+                            		<div class="product-block">
+                            			<a href="main_page/products_detail.do?goodsNum=${ pd.goodsNum }">
+                            				<!-- 상세페이지로 이동 -->
+											<img src="${pageContext.request.contextPath}/products-img/${ pd.imgName }" alt="" class="thumbnail">
+											<div class="product-description">
+												<p class="title">${ pd.goodsName }</p>
+												<div style="overflow: hidden;">
+													<p class="price" style="float: left;">${ pd.priceFm }원</p>
+													<p class="location" style="float: left;"><i class="fa fa-map-marker" aria-hidden="true"></i>${ pd.locationStr }</p>
+													<p class="time-ago" style="float: right;">${ pd.timeAgo }</p>
+												</div>
+											</div>
+                            			</a>
+									</div>
+								</div>
+							</c:forEach>
 							<div id="listEnd"></div>
 						</div>
                    	</div>
 
 				</div>
+
+			</div>
+
+		</div>
 
 	</div>
 
