@@ -15,6 +15,7 @@ import com.store.meonggae.my.domain.InquiryDetailDomain;
 import com.store.meonggae.my.domain.InquiryDomain;
 import com.store.meonggae.my.domain.InquiryModifyDomain;
 import com.store.meonggae.my.domain.PersonalDomain;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.vo.InquiryModifyVO;
 import com.store.meonggae.my.vo.InquiryVO;
 import com.store.meonggae.my.vo.PersonalInfoVO;
@@ -54,15 +55,27 @@ public class InquiryDAO {
 	/**
 	 * 문의 리스트 조회
 	 */
-	public List<InquiryDomain> selectInquiryList(String memnum) throws PersistenceException{
+	public List<InquiryDomain> selectInquiryList(SearchVO sVO) throws PersistenceException{
 		List<InquiryDomain> list = new ArrayList<InquiryDomain>();
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
-		list = ss.selectList("com.store.meonggae.Inquiry.selectInquiryList", memnum);
+		list = ss.selectList("com.store.meonggae.Inquiry.selectInquiryList", sVO);
 		mbDAO.CloseHandler(ss);
 		
 		return list;
 	}//selectInquiryList
+	
+	/**
+	 *  문의 count
+	 */
+	public int selectCount(String memnum) throws PersistenceException{
+		int count = 0;
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		count = ss.selectOne("com.store.meonggae.Inquiry.inquiryCount", memnum);
+		mbDAO.CloseHandler(ss);
+		
+		return count;
+	}//selectCount
 	
 	/**
 	 * 문의글 상세조회

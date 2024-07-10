@@ -51,11 +51,11 @@
 				method="post" id="loginFrm">
 				<div id="inputBox">
 					<div class="input-form-box">
-						<span>아이디 </span> <input type="text" id="uid" name="uid"
+						<span>아이디 </span> <input type="text" id="uid" name="uid" 
 							class="form-control" required>
 					</div>
 					<div class="input-form-box">
-						<span>비밀번호 </span> <input type="password" id="upw" name="upw"
+						<span>비밀번호 </span> <input type="password" id="upw" name="upw" 
 							class="form-control" required>
 					</div>
 					<div class="button-login-box">
@@ -78,7 +78,8 @@
 						<br> -->
 						<!-- 구글 로그인 버튼 끝-->
 						<a href="http://localhost/meonggae_prj/join_page/mem_join.do">소셜
-							인증 없이 회원가입 하기</a>
+							인증 없이 회원가입 하기</a><br>
+						<a href="http://localhost/meonggae_prj/My/acount/acount.do">아이디/비밀번호 찾기</a>
 						<div style="padding-top: 10px;">
 							<input type="button" class="btn btn-success" id="login"
 								value="로그인">

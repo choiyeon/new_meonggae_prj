@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.store.meonggae.my.domain.GoodsDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
 import com.store.meonggae.my.service.SalesListService;
 import com.store.meonggae.user.login.domain.LoginDomain;
 
@@ -26,7 +28,9 @@ public class SalesListController {
 	 * 마이페이지 : 거래내역_판매중
 	 */
 	@GetMapping("/sales_list/salesDetails_frm.do")
-	public String salesDetailSales(HttpServletRequest request, Model model) {
+	public String salesDetailSales(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -35,8 +39,13 @@ public class SalesListController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		String param = "";
+		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/salesDetails_frm.do";
+		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
 		
-		List<GoodsDomain> salesList = sl.searchAllSalesList(memNum);
+		List<GoodsDomain> salesList = sl.searchAllSalesList(memNum, currentPage);
 		model.addAttribute("salesList", salesList);
 		
 		return "/My/mypage/sales_list/salesDetails_frm";
@@ -46,7 +55,9 @@ public class SalesListController {
 	 * 마이페이지 : 거래내역_판매완료
 	 */
 	@GetMapping("/sales_list/soldDetails_frm.do")
-	public String salesDetailSold(HttpServletRequest request, Model model) {
+	public String salesDetailSold(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -55,8 +66,13 @@ public class SalesListController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		String param = "";
+		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/soldDetails_frm.do";
+		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
 		
-		List<GoodsDomain> soldList = sl.searchAllSoldList(memNum);
+		List<GoodsDomain> soldList = sl.searchAllSoldList(memNum, currentPage);
 		model.addAttribute("soldList", soldList);
 		
 		return "/My/mypage/sales_list/soldDetails_frm";
@@ -66,7 +82,9 @@ public class SalesListController {
 	 * 마이페이지 : 거래내역_구매완료
 	 */
 	@GetMapping("/sales_list/boughtDetails_frm.do")
-	public String salesDetailBought(HttpServletRequest request, Model model) {
+	public String salesDetailBought(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -75,8 +93,13 @@ public class SalesListController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		String param = "";
+		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/boughtDetails_frm.do";
+		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+		model.addAttribute("pagination", pagination);
 		
-		List<GoodsDomain> boughtList = sl.searchAllBoughtList(memNum);
+		List<GoodsDomain> boughtList = sl.searchAllBoughtList(memNum, currentPage);
 		model.addAttribute("boughtList", boughtList);
 		
 		return "/My/mypage/sales_list/boughtDetails_frm";

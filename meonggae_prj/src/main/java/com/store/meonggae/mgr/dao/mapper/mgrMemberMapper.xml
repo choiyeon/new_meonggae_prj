@@ -85,22 +85,22 @@
 				and nick like '%' || #{keyword} || '%'
 			</when>
 		</choose> 
-		<if test="startDate neq null">
-			and m.join_date &gt;= #{startDate} 
+		<if test="startDate neq null and startDate neq ''">
+			and m.join_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd')
 		</if>
-		<if test="endDate neq null">
-			and m.join_date &lt;= #{endDate} 
+		<if test="endDate neq null and endDate neq ''">
+			and m.join_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1 
 		</if>
 		
-		<if test="gender neq null">
+		<if test="gender neq null and gender neq ''">
 			and md.gender = #{gender} 
 		</if>
 		
-		<if test="loginFlag neq null">
+		<if test="loginFlag neq null and loginFlag neq ''">
 			and m.LOGIN_FLAG = #{loginFlag} 
 		</if>
 		
-		<if test="memStatus neq null">
+		<if test="memStatus neq null and memStatus neq ''">
 			and MEM_STATUS like '%' || #{memStatus} || '%' 
 		</if>
 	</select>
@@ -109,7 +109,12 @@
 	<select id="selectListMember" resultMap="mgrMemberDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberSearchVO">
 		select	RNUM,MEM_NUM,NICK,MEM_ID,NAME,IMG,LOGIN_FLAG,RECENT_LOGIN_DATE,JOIN_DATE,MEM_STATUS
 		from	(
-				select	row_number() over(order by m.nick) rnum, m.MEM_NUM, m.nick, md.MEM_ID, md.name, m.img, m.LOGIN_FLAG, ml.recent_login_date, m.JOIN_DATE, m.MEM_STATUS
+				select	row_number() over(order by m.nick) rnum, m.MEM_NUM, m.nick, 
+						case
+							when instr(md.MEM_ID, '@') > 0 then substr(md.MEM_ID, 0, instr(md.MEM_ID, '@') - 1)
+							else md.MEM_ID
+						end mem_id, 
+						md.name, m.img, m.LOGIN_FLAG, ml.recent_login_date, m.JOIN_DATE, m.MEM_STATUS
 				from	member m, member_detail md,
 						(
 						select	mem_num, max(input_date) recent_login_date
@@ -126,18 +131,18 @@
 								and nick like '%' || #{keyword} || '%'
 							</when>
 						</choose> 
-						<if test="startDate neq null">
-							and m.join_date &gt;= #{startDate} 
+						<if test="startDate neq null and startDate neq ''">
+							and m.join_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 						</if>
-						<if test="endDate neq null">
-							and m.join_date &lt;= #{endDate} 
+						<if test="endDate neq null and endDate neq ''">
+							and m.join_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 						</if>
 						
-						<if test="gender neq null">
+						<if test="gender neq null and gender neq ''">
 							and md.gender = #{gender} 
 						</if>
 						
-						<if test="loginFlag neq null">
+						<if test="loginFlag neq null and loginFlag neq ''">
 							and m.LOGIN_FLAG = #{loginFlag} 
 						</if>
 						
@@ -273,10 +278,10 @@
 						and CONTENT like '%' || #{keyword} || '%'
 					</when>
 				</choose>
-				<if test="startDate neq null">
-					and review_input_date &gt;= #{startDate} 
+				<if test="startDate neq null and startDate neq ''">
+					and review_input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd')
 				</if>
-				<if test="endDate neq null">
+				<if test="endDate neq null and endDate neq ''">
 					and review_input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 				</if>
 	</select>
@@ -309,10 +314,10 @@
 								and CONTENT like '%' || #{keyword} || '%'
 							</when>
 						</choose>
-						<if test="startDate neq null">
-							and review_input_date &gt;= #{startDate} 
+						<if test="startDate neq null and startDate neq ''">
+							and review_input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 						</if>
-						<if test="endDate neq null">
+						<if test="endDate neq null and endDate neq ''">
 							and review_input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 						</if>
 				)
@@ -332,10 +337,10 @@
 						and CONTENTS like '%' || #{keyword} || '%'
 					</when>
 				</choose>
-				<if test="startDate neq null">
-					and input_date &gt;= #{startDate} 
+				<if test="startDate neq null and startDate neq ''">
+					and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 				</if>
-				<if test="endDate neq null">
+				<if test="endDate neq null and endDate neq ''">
 					and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 				</if>
 				<if test="answerFlag neq null">
@@ -365,10 +370,10 @@
 								and CONTENTS like '%' || #{keyword} || '%'
 							</when>
 						</choose>
-						<if test="startDate neq null">
+						<if test="startDate neq null and startDate neq ''">
 							and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 						</if>
-						<if test="endDate neq null">
+						<if test="endDate neq null and endDate neq ''">
 							and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 						</if>
 						<if test="answerFlag neq null">
@@ -408,10 +413,10 @@
 						and g.detail like '%' || #{keyword} || '%'
 					</when>
 				</choose>
-				<if test="startDate neq null">
+				<if test="startDate neq null and startDate neq ''">
 					and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 				</if>
-				<if test="endDate neq null">
+				<if test="endDate neq null and endDate neq ''">
 					and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 				</if>
 				<if test="processStatusCode neq null">
@@ -454,10 +459,10 @@
 								and g.detail like '%' || #{keyword} || '%'
 							</when>
 						</choose>
-						<if test="startDate neq null">
+						<if test="startDate neq null and startDate neq ''">
 							and r.input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 						</if>
-						<if test="endDate neq null">
+						<if test="endDate neq null and endDate neq ''">
 							and r.input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1
 						</if>
 						<if test="processStatusCode neq null">
@@ -523,24 +528,24 @@
 				</otherwise>
 			</choose> 
 			<choose>
-				<when test="categoryNum neq null">
+				<when test="categoryNum neq null and categoryNum neq ''">
 					and category_num = #{categoryNum}
 				</when>
 				<otherwise> 
-					<if test="parentCategoryNum neq null">
+					<if test="parentCategoryNum neq null and parentCategoryNum neq ''">
 						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
 					</if>
 				</otherwise>
 			</choose>
 			
-			<if test="startDate neq null">
-				and input_date &gt;= #{startDate} 
+			<if test="startDate neq null and startDate neq ''">
+				and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 			</if>
-			<if test="endDate neq null">
-				and input_date &lt;= #{endDate} 
+			<if test="endDate neq null and endDate neq ''">
+				and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1 
 			</if>
 			
-			<if test="tradeMethodCode neq null">
+			<if test="tradeMethodCode neq null and tradeMethodCode neq ''">
 				<choose>
 					<when test='tradeMethodCode.equals("D")'>
 						and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
@@ -551,22 +556,22 @@
 				</choose>
 			</if>
 			
-			<if test="qualityCode neq null">
+			<if test="qualityCode neq null and qualityCode neq ''">
 				and QUALITY_CODE = #{qualityCode} 
 			</if>
 			
-			<if test="location neq null">
+			<if test="location neq null and location neq ''">
 				and location like '%' || #{location} || '%' 
 			</if>
 			
-			<if test="minPrice neq null">
+			<if test="minPrice neq null and minPrice neq ''">
 				and price &gt;= #{minPrice}
 			</if>
-			<if test="maxPrice neq null">
+			<if test="maxPrice neq null and maxPrice neq ''">
 				and price &lt;= #{maxPrice}
 			</if>
 			
-			<if test="sellStatusCode neq null">
+			<if test="sellStatusCode neq null and sellStatusCode neq ''">
 				and SELL_STATUS_CODE = #{sellStatusCode} 
 			</if>
 		</where>
@@ -621,24 +626,24 @@
 						</otherwise>
 					</choose> 
 					<choose>
-						<when test="categoryNum neq null">
+						<when test="categoryNum neq null and categoryNum neq ''">
 							and category_num = #{categoryNum}
 						</when>
 						<otherwise> 
-							<if test="parentCategoryNum neq null">
+							<if test="parentCategoryNum neq null and parentCategoryNum neq ''">
 								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
 							</if>
 						</otherwise>
 					</choose>
 					
-					<if test="startDate neq null">
+					<if test="startDate neq null and startDate neq ''">
 						and input_date &gt;= #{startDate} 
 					</if>
-					<if test="endDate neq null">
+					<if test="endDate neq null and endDate neq ''">
 						and input_date &lt;= #{endDate} 
 					</if>
 					
-					<if test="tradeMethodCode neq null">
+					<if test="tradeMethodCode neq null and tradeMethodCode neq ''">
 						<choose>
 							<when test='tradeMethodCode.equals("D")'>
 								and upper(TRADE_METHOD_CODE) in (#{tradeMethodCode}, 'B') 
@@ -649,22 +654,22 @@
 						</choose>
 					</if>
 					
-					<if test="qualityCode neq null">
+					<if test="qualityCode neq null and qualityCode neq ''">
 						and QUALITY_CODE = #{qualityCode} 
 					</if>
 					
-					<if test="location neq null">
+					<if test="location neq null and location neq ''">
 						and location like '%' || #{location} || '%' 
 					</if>
 					
-					<if test="minPrice neq null">
+					<if test="minPrice neq null and minPrice neq ''">
 						and price &gt;= #{minPrice}
 					</if>
-					<if test="maxPrice neq null">
+					<if test="maxPrice neq null and maxPrice neq ''">
 						and price &lt;= #{maxPrice}
 					</if>
 					
-					<if test="sellStatusCode neq null">
+					<if test="sellStatusCode neq null and sellStatusCode neq ''">
 						and SELL_STATUS_CODE = #{sellStatusCode} 
 					</if>
 				</where>				

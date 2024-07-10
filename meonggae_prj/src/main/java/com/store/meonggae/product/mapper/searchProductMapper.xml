@@ -25,6 +25,20 @@
 select *
 from v_select_all_goods
 </select>
+<select id="selectAllProduct2" resultMap="searchProductDomain" parameterType="com.store.meonggae.product.vo.ProductAddVO">
+SELECT *
+FROM (
+        SELECT GOODS_NUM,
+            IMG_NAME,
+            GOODS_NAME,
+            PRICE_FM,
+            LOCATION_STR,
+            TIME_AGO,
+            ROW_NUMBER() OVER (ORDER BY INPUT_DATE DESC) AS RNUM
+        FROM v_select_all_goods
+    )
+WHERE RNUM BETWEEN #{mem_num_sell} AND #{mem_num_buy}
+</select>
 <!-- 키워드(상품명&지역) 조회 -->
 <!-- 데이터 내 공백 & 키워드 내 공백 제거 -->
 <select id="selectPrdKey" resultMap="searchProductDomain" parameterType="String">

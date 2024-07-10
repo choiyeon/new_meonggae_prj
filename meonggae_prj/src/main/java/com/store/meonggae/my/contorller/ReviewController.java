@@ -12,10 +12,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.store.meonggae.my.domain.MyReviewDomain;
 import com.store.meonggae.my.domain.WriteReviewDomain;
+import com.store.meonggae.my.pagination.PaginationUtil;
 import com.store.meonggae.my.service.ReviewService;
 import com.store.meonggae.my.store.VO.ReviewVO;
 import com.store.meonggae.my.vo.WriteReviewVO;
@@ -33,7 +35,9 @@ public class ReviewController {
 	 * @return
 	 */
 	@GetMapping("/review/review_frm.do")
-	public String review(HttpServletRequest request, Model model) {
+	public String review(HttpServletRequest request,
+			@RequestParam(value="currentPage", required=false, defaultValue="1") int currentPage,
+			Model model) {
 		HttpSession session = request.getSession();
 		LoginDomain userSession = (LoginDomain)session.getAttribute("user");
 		
@@ -42,8 +46,17 @@ public class ReviewController {
 		}//end if
 		
 		String memNum = String.valueOf(userSession.getMemNum());
+		int totalCount = rs.searchReviewCount(memNum);
 		
-		List<MyReviewDomain> myReviewList = rs.searchMyReview(memNum);
+		if(totalCount > 10) {
+			String param = "";
+			String url = "http://localhost/meonggae_prj/My/mypage/review/review_frm.do";
+			int totalPage = (int)Math.ceil((double)totalCount/10);
+			String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
+			model.addAttribute("pagination", pagination);
+		}//if
+		
+		List<MyReviewDomain> myReviewList = rs.searchMyReview(memNum, currentPage);
 		List<WriteReviewDomain> writeReviewList = rs.searchWriteReview(memNum);
 		
 		model.addAttribute("myReviewList", myReviewList);

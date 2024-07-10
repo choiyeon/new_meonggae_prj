@@ -175,6 +175,26 @@
                         <div class="error_text item_style" id="nickMsg" style="display: none;"></div>
                     </td>
                 </tr>
+                <tr>
+                    <th><label for="email1">이메일</label></th>
+                    <td class="mail_type">
+                        <input data-value="이메일을 입력해주세요." name="email1" id="email1" class="inputEmail essential" type="text" maxlength="100"  />
+                        <span class="email_txt">@</span>
+                        <input type="text" list="selecEmail" name="email2" id="email2">
+                        <datalist class="selecEmail" name="selecEmail" id="selecEmail" data-value="이메일을 선택해주세요.">
+                            <option value="">선택해주세요.</option>
+                            <option value='직접 입력'>직접 입력</option>
+                            <option value='naver.com'>naver.com</option>
+                            <option value='daum.net'>daum.net</option>
+                            <option value='gmail.com'>gmail.com</option>
+                            <option value='hotmail.com'>hotmail.com</option>
+                            <option value='nate.com'>nate.com</option>
+                            <option value='korea.com'>korea.com</option>
+                        </datalist>
+                        <div class="error_text item_style" id="email1Msg" style="display: none;"></div>
+                        
+                    </td>
+                </tr>
 				<tr>
 					<th scope="row"><label for="">생년월일</label></th>
 					<td >

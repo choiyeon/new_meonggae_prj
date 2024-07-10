@@ -15,5 +15,5 @@ public class JoinVO {
 	//MEMBER
 	private String nick;
 	//MEMBER_DETAIL
-	private String id, password, birthday, addr0, addr1, cell, gender, name, zipcode;
+	private String id, password, birthday, addr0, addr1, cell, gender, name, zipcode, email1, email2, email;
 }

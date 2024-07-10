@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.store.meonggae.dao.MybatisDAO;
+import com.store.meonggae.my.pagination.SearchVO;
 import com.store.meonggae.my.store.VO.ReviewVO;
 import com.store.meonggae.my.store.domain.ReviewDomain;
 import com.store.meonggae.my.store.domain.StoreMainDomain;
@@ -21,14 +22,26 @@ public class StoreDAO {
 	/**
 	 *  내상점 메인 판매상품 리스트
 	 */
-	public List<StoreMainDomain> selectSalesList(String nick) throws PersistenceException{
+	public List<StoreMainDomain> selectSalesList(SearchVO sVO) throws PersistenceException{
 		List<StoreMainDomain> list = null;
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
-		list = ss.selectList("com.store.meonggae.store.storeSalesList", nick);
+		list = ss.selectList("com.store.meonggae.store.storeSalesList", sVO);
 		mbDAO.CloseHandler(ss);
 		
 		return list;
 	}//selectSalesList
+	
+	/**
+	 *  내상점 메인 판매상품 리스트 갯수
+	 */
+	public int selectCount(String nick) throws PersistenceException{
+		int count = 0;
+		SqlSession ss = mbDAO.getMyBatisHandler(false);
+		count = ss.selectOne("com.store.meonggae.store.storeSalesListCount", nick);
+		mbDAO.CloseHandler(ss);
+		
+		return count;
+	}//selectCount
 	
 	/**
 	 * 프로필사진 select

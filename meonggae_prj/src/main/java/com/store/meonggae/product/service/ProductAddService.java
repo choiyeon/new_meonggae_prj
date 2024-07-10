@@ -33,7 +33,10 @@ public class ProductAddService {
         int result = praDAO.insertProduct(product);
 
         // 상품 이미지 정보를 DB에 저장 (필요시 구현)
-        int result2 = praDAO.insertProductImg(product);
+        int result2 = 0;
+        if(result==1) {
+        	result2 = praDAO.insertProductImg(product);
+        }
         boolean resultFlag = false;
         if(result==1 && result2==1) {
         	resultFlag = true;
@@ -42,12 +45,13 @@ public class ProductAddService {
     }
 
 
-    
+    //상품 추가
     public void updateProduct(ProductDomain product) throws IOException {
-        // 로그 추가
-        System.out.println("Updating product: " + product);
-
         praDAO.updateProduct(product);
+    }
+    //상품 삭제
+    public void deleteProduct(ProductDomain product) throws IOException {
+    	praDAO.deleteProduct(product);
     }
     
     public String getUerIp(HttpServletRequest request){
@@ -78,34 +82,4 @@ public class ProductAddService {
     	return ip;
     	
     }
-
-    
-   
-
-//    public void insertProduct(ProductDomain product, MultipartFile image) throws IOException {
-//        // 파일 업로드 처리
-//        if (!image.isEmpty()) {
-//            String originalFilename = image.getOriginalFilename();
-//            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-//            String storedFilename = UUID.randomUUID().toString() + fileExtension;
-//            Path filePath = Paths.get(UPLOAD_DIR, storedFilename);
-//
-//            // 디렉토리가 없으면 생성
-//            if (!Files.exists(filePath.getParent())) {
-//                Files.createDirectories(filePath.getParent());
-//            }
-//
-//            // 파일 저장
-//            image.transferTo(filePath.toFile());
-//
-//            // DB에 저장할 파일 경로 설정
-//            product.setImg(storedFilename);
-//        }
-//
-//        // 상품 정보를 DB에 저장
-//        praDAO.insertProduct(product);
-//
-//        // 상품 이미지 정보를 DB에 저장
-//        praDAO.insertProductImg(product);
-//    }
 }

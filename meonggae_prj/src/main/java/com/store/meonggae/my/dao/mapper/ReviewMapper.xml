@@ -5,13 +5,25 @@
 <mapper namespace="com.store.meonggae.Review">
 
 <!-- 내가 쓴 후기 -->
-<select id="myReviewList" parameterType="String" resultType="myReviewDomain">
-select  r.goods_num goodsNum, m.nick seller, r.CONTENT reviewContents, r.INPUT_DATE inputDate
-from	review r, goods g, MEMBER m
-where   r.goods_num=g.goods_num
-		and g.mem_num_sell=m.mem_num
-		and r.mem_num='${memnum}'
-		and r.delete_flag='N'
+<select id="myReviewList" parameterType="searchVO" resultType="myReviewDomain">
+select	goodsNum, seller, reviewContents, inputDate
+from	(
+		select  r.goods_num goodsNum, m.nick seller, r.CONTENT reviewContents, r.INPUT_DATE inputDate,
+				row_number() over(order by r.INPUT_DATE desc) rnum
+		from	review r, goods g, MEMBER m
+		where   r.goods_num=g.goods_num
+				and g.mem_num_sell=m.mem_num
+				and r.mem_num='${memnumORnick}'
+				and r.delete_flag='N'
+		)
+where	rnum between ${startNum} and ${endNum}
+</select>
+
+<!-- 내가 쓴 후기 count -->
+<select id="myReviewCount" resultType="Integer" parameterType="String">
+select	count(*)
+from	review
+where	mem_num='${memnum}'
 </select>
 
 <!-- 작성 가능 리뷰 -->
@@ -22,6 +34,7 @@ where   	g.mem_num_sell=m.mem_num
 			and r.goods_num(+)=g.goods_num
 			and r.input_date is null
 			and MEM_NUM_BUY='${memnum}'
+			and g.delete_Flag='N'
 order by	g.sell_date desc
 </select>
 

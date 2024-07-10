@@ -12,8 +12,6 @@ import lombok.ToString;
 @ToString
 public class ProductDomain {
 	private String goodsNum, name, detail, quality_code, category_num, price, cnt, trade_method_code, category, location, sell_status_code;
-	//private MultipartFile img;
-//	private String imgFileName, ip;
 	private String img, ip;
 	private int mem_num_sell, delivery_fee;
 }

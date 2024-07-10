@@ -17,10 +17,10 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터 관리자</title>
-<link rel="icon" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<link rel="icon" href="${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
 
 <!-- dashlite css 시작-->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
 <!--dashlite css 끝-->
 
 <!-- jQuery CDN 시작 -->
@@ -30,7 +30,7 @@
 <!-- datepicker 시작-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
-<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script src="${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
 <script>
 	$( function() {
 		// 기본 사용
@@ -49,7 +49,7 @@
 <!-- datepicker 끝-->
 
 <!-- datepicker css 시작 -->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
 <!-- datepicker css 끝 -->
 
 <style type="text/css">
@@ -58,7 +58,7 @@
  	.errMsg{color:#ff0000;}
  	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+   .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 
@@ -78,7 +78,7 @@
 
 	var nick = "${sessionScope.mgr.nick}";
 	var managerId = "${sessionScope.mgr.manager_id}";
-	var link = "http://localhost${pageContext.request.contextPath}";
+	var link = "${pageContext.request.contextPath}";
 	$(function() {
 		
 		// 상위 거래 카테고리 선택시
@@ -191,7 +191,7 @@
 				categoryNum: categoryNum
 		}
 		$.ajax({
-			url: "http://localhost${pageContext.request.contextPath}/mgr/review/mgr_review_category.do",
+			url: "${pageContext.request.contextPath}/mgr/review/mgr_review_category.do",
 			type: "GET",
 			data: param,
 			dataType: "JSON",
@@ -227,8 +227,8 @@
 <!-- 사용자 상품 조회 CSS, 폰트 시작 -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Raleway:400,300,500,700,600' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 <!-- 사용자 상품 조회 CSS, 폰트 끝 -->
 
 </head>
@@ -289,7 +289,7 @@
 									<div class="col-sm-2">
 										<div class="form-wrap">
 											<div class="input-group-prepend" style="width:180px;">
-												<select id="selCategoryLower" class="form-select js-select2" name="categoryNum"${param.categoryNum eq null ? " disabled='disabled'" : ""}>
+												<select id="selCategoryLower" class="form-select js-select2" name="categoryNum"${param.parentCategoryNum eq null ? " disabled='disabled'" : ""}>
 													<option value="">모든 하위 카테고리</option>
 													<c:if test="${requestScope.listCategoryLower ne null}">
 													<c:forEach var="cate" items="${requestScope.listCategoryLower}" varStatus="i">
@@ -352,9 +352,9 @@
 										<div class="form-group">
 											<div class="form-control-wrap">
 												<div class="input-daterange date-picker-range input-group">
-													<div class="input-group-addon">시작일</div>
+													<div class="input-group-addon">등록일</div>
 													<input type="text" id="startDate" name="startDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.startDate}">
-													<div class="input-group-addon">종료일</div>
+													<div class="input-group-addon">~</div>
 													<input type="text" id="endDate" name="endDate" class="form-control datepicker" readonly="readonly" data-date-format="yyyy-mm-dd" maxlength="10" value="${param.endDate}">
 												</div>
 											</div>
@@ -403,7 +403,10 @@
 							</div>	
 						</div>
 					</div>
+					<div class="" style="margin-top:10px;">검색된 총 물품 수: <c:out value="${requestScope.totalCount }"/>개</div>
+					</div>
 				</div>
+				<hr style="margin: 0px;"/>
 				<div class="row g-gs">
 					<c:choose>
 						<c:when test="${requestScope.list eq null or requestScope.currentPage > requestScope.totalPage}">
@@ -488,12 +491,12 @@
 </div>
 </div>
 <!-- dashlite 시작-->
-<!-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> -->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
-<!-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
-<%-- <script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
+<!-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/bundle_beauty_my.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
+<!-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
 <!-- <div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div> -->
 <!-- dashlite 끝-->
 <script type="text/javascript">

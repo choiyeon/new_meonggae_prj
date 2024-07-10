@@ -25,6 +25,9 @@ public class SearchProductService {
     public List<SearchProductDomain> selectAllProduct(){
     	return spDAO.selectAllProduct();
     }
+    public List<SearchProductDomain> selectAllProduct2(int start, int end){
+    	return spDAO.selectAllProduct2(start, end);
+    }
     //상품 키워드 검색
     public List<SearchProductDomain> selectPrdKey(String keyword){
     	return spDAO.selectPrdKey(keyword);

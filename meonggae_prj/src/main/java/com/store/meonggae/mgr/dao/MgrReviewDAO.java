@@ -27,7 +27,7 @@ public class MgrReviewDAO {
 	} // selectManagerCount
 	
 	// 검색된 리뷰 리스트
-	public List<MgrReviewDomain> selectListManager( MgrReviewSearchVO sVO ){
+	public List<MgrReviewDomain> selectListReview( MgrReviewSearchVO sVO ){
 		
 		List<MgrReviewDomain> list = null;
 		

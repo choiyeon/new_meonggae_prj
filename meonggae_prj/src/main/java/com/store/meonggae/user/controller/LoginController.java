@@ -1,5 +1,6 @@
-package com.store.meonggae.user.controller;
+ package com.store.meonggae.user.controller;
 
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.store.meonggae.user.login.domain.LoginDomain;
 import com.store.meonggae.user.login.service.LoginService;
+import com.store.meonggae.user.login.vo.LoginLogVO;
 import com.store.meonggae.user.login.vo.LoginVO;
 
 @Controller
@@ -33,7 +36,7 @@ public class LoginController {
 	private LoginService loginService;
 
 	@PostMapping("/authenticate.do")
-	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session, HttpServletResponse response) {
+	public String authenticate(@RequestParam("uid") String id, @RequestParam("upw") String pass, HttpSession session, HttpServletResponse response, HttpServletRequest request, Model model) {
 		LoginVO loginVO = new LoginVO(id, pass);
 		LoginDomain user = null;
 
@@ -69,16 +72,19 @@ public class LoginController {
 				System.out.println("user.getId()가 null입니다.");
 			}
 
+			LoginLogVO logVO = new LoginLogVO(user.getMemNum(), request.getRemoteAddr(), request.getHeader("sec-ch-ua-platform").replaceAll("\"", ""), loginService.getMemberBrowser(request.getHeader("User-Agent")), user.getMemStatus());
+			loginService.addMemberLoginLog(logVO);
+			
 			switch (user.getMemStatus()) {
 		    case "S":
 		        session.setAttribute("message", "정지된 회원입니다.");
+		        //loginService.addMemberLoginLog(logVO);
 		        return "redirect:/index.do";
 		    case "W":
 		        session.setAttribute("message", "탈퇴한 회원입니다.");
 		        return "redirect:/index.do";
 		    case "N":
 		        session.setAttribute("user", user);
-		        
 		        Cookie cookie = new Cookie("memNum", String.valueOf(user.getMemNum()));
 		        cookie.setMaxAge(60 * 30);
 		        cookie.setPath("/");
@@ -89,7 +95,7 @@ public class LoginController {
 		    default:
 		        session.setAttribute("message", "알 수 없는 상태입니다.");
 		        return "redirect:/index.do";
-		}
+			}
 		} catch (Exception e) {
 			session.setAttribute("message", "로그인 중 오류가 발생했습니다.");
 			session.setAttribute("status", "FAILED : ERROR");

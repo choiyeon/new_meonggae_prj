@@ -39,14 +39,10 @@
                             <ul>
 
                                 <li><a href="https://github.com/s87k" target="blank">김동섭</a></li>
-
-                                <li><a href="https://github.com/KimByeongNyeon" target="blank">김병년</a></li>
-
                                 <li><a href="https://github.com/0C0019" target="blank">유재희</a></li>
-
                                 <li><a href="https://github.com/heeyoon7389" target="blank">이희윤</a></li>
-
                                 <li><a href="https://github.com/choiyeon" target="blank">최수연</a></li>
+                                <li><a href="https://github.com/KimByeongNyeon" target="blank" style="color: white; cursor: default">회개해라 김병년</a></li>
 
                             </ul>
 
