@@ -94,5 +94,9 @@
     <!-- 멍게톡 채팅 -->
     <mapper resource="com/store/meonggae/talk/dao/mapper/chatMapper.xml"/>
 	<!-- 멍게톡 채팅 끝 -->
+	
+	<!-- 사이트 방문자수 ++ -->
+    <mapper resource="com/store/meonggae/visitor/dao/mapper/visitorCntMapper.xml"/>
+	<!-- 사이트 방문자수 ++ 끝 -->
   </mappers>
 </configuration>

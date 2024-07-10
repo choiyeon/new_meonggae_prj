@@ -37,6 +37,7 @@ import com.store.meonggae.event.service.EventService;
 import com.store.meonggae.product.vo.SearchProductVO;
 import com.store.meonggae.product.vo.SteamVO;
 import com.store.meonggae.user.login.domain.LoginDomain;
+import com.store.meonggae.visitor.service.VisitorCntService;
 
 @Controller
 public class MainController {
@@ -49,6 +50,8 @@ public class MainController {
 	private ProductDetailInfoService ProductDetailInfoService;
 	@Autowired
 	private EventService EventService;
+	@Autowired(required = false)
+	private VisitorCntService vcService;
 
 	// 원래 코드 : 삭제하면 죽음뿐
 //	@RequestMapping(value = "/index.do", method = { GET, POST })
@@ -63,13 +66,35 @@ public class MainController {
 //	}
 
 	@RequestMapping(value = "/index.do", method = { GET, POST })
-	public String main(Model model) {
+	public String main(Model model, HttpSession session) {
 		// 전체상품 조회
 		List<SearchProductDomain> list = SearchProductService.selectAllProduct();
 		// 이벤트 캐러셀 조회
 		List<EventDomain> eventList = EventService.eventCarousel();
 //		model.addAttribute("prdAllList", list);
 		model.addAttribute("eventList", eventList);
+		
+		// 사이트 방문자수 ++용
+		boolean flagMemberVisit = false;
+		if(session.getAttribute("flagMemberVisit") == null) {	// 아예 방문한 적이 없으면
+			if(session.getAttribute("user") == null) {	// 로그인 세션이 null이면 (비로그인)
+				session.setAttribute("flagMemberVisit", false);
+			} else { // 혹시라도 로그인 세션이 null이 아니면 (로그인한 회원)
+				session.setAttribute("flagMemberVisit", true);
+				// 회원 방문자수 ++
+				vcService.updateVisitorCnt(true);
+			} // end else
+			// 전체 방문자수 ++
+			vcService.updateVisitorCnt(false);
+		} else {	// 방문한 적이 있으면
+			flagMemberVisit = (boolean)session.getAttribute("flagMemberVisit");
+			if(flagMemberVisit == false && session.getAttribute("user") != null) {	// 사이트 접속하고 로그인한 경우
+				session.setAttribute("flagMemberVisit", true);
+				// 회원 방문자수 ++
+				vcService.updateVisitorCnt(true);
+			} // end if
+		} // end else
+		
 		return "main_page/main_contents";
 	}
 

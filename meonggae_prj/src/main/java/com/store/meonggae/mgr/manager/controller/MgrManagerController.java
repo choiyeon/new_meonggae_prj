@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.store.meonggae.mgr.common.service.BoardUtilService;
+import com.store.meonggae.mgr.common.service.FilterParamService;
 import com.store.meonggae.mgr.manager.domain.MgrManagerDomain;
 import com.store.meonggae.mgr.manager.service.MgrManagerService;
 import com.store.meonggae.mgr.manager.vo.ManagerSearchVO;
@@ -23,6 +24,8 @@ public class MgrManagerController {
 	private MgrManagerService mmService;
 	@Autowired
 	private BoardUtilService boardUtilService;
+	@Autowired(required = false)
+	private FilterParamService filterService;
 	
 	// 관리자 - 관리자 관리 - 조회 리스트
 	@GetMapping("/mgr/manager/mgr_manager_list_frm.do")
@@ -53,6 +56,7 @@ public class MgrManagerController {
 		if(sVO.getKeyword() != null) {
 			param = "&field=" + sVO.getField() + "&keyword=" + sVO.getKeyword();
 		} // end if
+		param += filterService.generateParam(sVO);
 		String pageNation = boardUtilService.pageNation("mgr/manager/mgr_manager_list_frm.do", param, totalPage, currentPage);
 		
 		model.addAttribute("totalCount", totalCount);
@@ -76,7 +80,7 @@ public class MgrManagerController {
 	
 	// 관리자 - 관리자 관리 - 관리자 등록 폼
 	@GetMapping("/mgr/manager/mgr_manager_add_frm.do")
-	public String searchOneManager(Model model) {
+	public String managerAddFrm(Model model) {
 		
 		List<MgrManagerDomain> listManager = mmService.searchListAllManagerName();
 		model.addAttribute("listManager", listManager);
@@ -123,4 +127,14 @@ public class MgrManagerController {
 		
 		return "redirect:mgr_manager_list_frm.do";
 	} // managerAddProcess
+	
+	// 관리자 - 관리자 관리 - 관리자 등록 폼
+	@GetMapping("/mgr/manager/mgr_manager_add_frm_test.do")
+	public String managerAddFrm2(Model model) {
+		
+		List<MgrManagerDomain> listManager = mmService.searchListAllManagerName();
+		model.addAttribute("listManager", listManager);
+		
+		return "/mgr/manager/mgr_manager_add_frm_test";
+	} // searchOneManager
 } // class

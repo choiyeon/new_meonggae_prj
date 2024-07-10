@@ -79,44 +79,44 @@
 				</otherwise>
 			</choose> 
 			<choose>
-				<when test="categoryNum neq null">
+				<when test="categoryNum neq null and categoryNum neq ''">
 					and category_num = #{categoryNum}
 				</when>
 				<otherwise> 
-					<if test="parentCategoryNum neq null">
+					<if test="parentCategoryNum neq null and parentCategoryNum neq ''">
 						and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
 					</if>
 				</otherwise>
 			</choose>
 			
-			<if test="startDate neq null">
-				and input_date &gt;= #{startDate} 
+			<if test="startDate neq null and startDate neq ''">
+				and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 			</if>
-			<if test="endDate neq null">
-				and input_date &lt;= #{endDate} 
-			</if>
-			
-			<if test="tradeMethodCode neq null">
-				and TRADE_METHOD_CODE = #{tradeMethodCode} 
+			<if test="endDate neq null and endDate neq ''">
+				and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1 
 			</if>
 			
-			<if test="qualityCode neq null">
-				and QUALITY_CODE = #{qualityCode} 
+			<if test='tradeMethodCode neq null and tradeMethodCode neq "" and not tradeMethodCode.equals("B")'>
+				and upper(TRADE_METHOD_CODE) = #{tradeMethodCode} 
 			</if>
 			
-			<if test="location neq null">
+			<if test="qualityCode neq null and qualityCode neq ''">
+				and upper(QUALITY_CODE) = #{qualityCode} 
+			</if>
+			
+			<if test="location neq null and location neq ''">
 				and location like '%' || #{location} || '%' 
 			</if>
 			
-			<if test="minPrice neq null">
-				and price &gt;= #{minPrice}
+			<if test="minPrice neq null and minPrice neq ''">
+				and price &gt;= to_number(#{minPrice})
 			</if>
-			<if test="maxPrice neq null">
-				and price &lt;= #{maxPrice}
+			<if test="maxPrice neq null and maxPrice neq ''">
+				and price &lt;= to_number(#{maxPrice})
 			</if>
 			
-			<if test="sellStatusCode neq null">
-				and SELL_STATUS_CODE = #{sellStatusCode} 
+			<if test="sellStatusCode neq null and sellStatusCode neq ''">
+				and upper(SELL_STATUS_CODE) = #{sellStatusCode} 
 			</if>
 		</where>
 	</select>
@@ -162,44 +162,43 @@
 						</otherwise>
 					</choose> 
 					<choose>
-						<when test="categoryNum neq null">
+						<when test="categoryNum neq null and categoryNum neq ''">
 							and category_num = #{categoryNum}
 						</when>
 						<otherwise> 
-							<if test="parentCategoryNum neq null">
+							<if test="parentCategoryNum neq null and parentCategoryNum neq ''">
 								and (PARENT_CATEGORY_NUM = #{parentCategoryNum} or category_num = #{parentCategoryNum})
 							</if>
 						</otherwise>
 					</choose>
 					
-					<if test="startDate neq null">
-						and input_date &gt;= #{startDate} 
+					<if test="startDate neq null and startDate neq ''">
+						and input_date &gt;= to_date(#{startDate}, 'yyyy-mm-dd') 
 					</if>
-					<if test="endDate neq null">
-						and input_date &lt;= #{endDate} 
+					<if test="endDate neq null and endDate neq ''">
+						and input_date &lt; to_date(#{endDate}, 'yyyy-mm-dd') + 1 
 					</if>
-					
-					<if test="tradeMethodCode neq null">
+					<if test='tradeMethodCode neq null and tradeMethodCode neq "" and not tradeMethodCode.equals("B")'>
 						and TRADE_METHOD_CODE = #{tradeMethodCode} 
 					</if>
 					
-					<if test="qualityCode neq null">
+					<if test="qualityCode neq null and qualityCode neq ''">
 						and QUALITY_CODE = #{qualityCode} 
 					</if>
 					
-					<if test="location neq null">
+					<if test="location neq null and location neq ''">
 						and location like '%' || #{location} || '%' 
 					</if>
 					
-					<if test="minPrice neq null">
-						and price &gt;= #{minPrice}
+					<if test="minPrice neq null and minPrice neq ''">
+						and price &gt;= to_number(#{minPrice})
 					</if>
-					<if test="maxPrice neq null">
-						and price &lt;= #{maxPrice}
+					<if test="maxPrice neq null and maxPrice neq ''">
+						and price &lt;= to_number(#{maxPrice})
 					</if>
 					
-					<if test="sellStatusCode neq null">
-						and SELL_STATUS_CODE = #{sellStatusCode} 
+					<if test="sellStatusCode neq null and sellStatusCode neq ''">
+						and upper(SELL_STATUS_CODE) = #{sellStatusCode} 
 					</if>
 				</where>				
 				)

@@ -15,9 +15,9 @@
       </a>
     </div>
     <div class="nk-sidebar-brand" style="text-align:center; margin:0px auto;">
-      <a href="#void" class="logo-link nk-sidebar-logo">
-        <img class="logo-light logo-img" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
-        <img class="logo-dark logo-img" src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
+      <a href="${pageContext.request.contextPath}/mgr/dashboard/mgr_dashboard_frm.do" class="logo-link nk-sidebar-logo">
+        <img class="logo-light logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
+        <img class="logo-dark logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
       </a>
     </div>
   </div>
@@ -39,7 +39,7 @@
                     <li class="nk-menu-item" id="sidebar-dashboard">
                       <a href="${pageContext.request.contextPath}/mgr/dashboard/mgr_dashboard_frm.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-dashlite"></em>
+                          <em class="icon ni ni-growth"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">대시보드</span>
                       </a>
@@ -50,7 +50,7 @@
                   	<li class="nk-menu-item" id="sidebar-member">
                       <a href="${pageContext.request.contextPath}/mgr/member/mgr_member_list_frm.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-text-rich"></em>
+                          <em class="icon ni ni-users"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">회원 관리</span>
                       </a>
@@ -58,7 +58,7 @@
                     <li class="nk-menu-item">
                       <a href="#void" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-bitcoin-cash"></em>
+                          <em class="icon ni ni-file-docs"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">신고 관리</span>
                       </a>
@@ -66,7 +66,7 @@
                     <li class="nk-menu-item">
                       <a href="#void" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-growth"></em>
+                          <em class="icon ni ni-view-col"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">문의 관리</span>
                       </a>
@@ -74,7 +74,7 @@
                     <li class="nk-menu-item" id="sidebar-review">
                       <a href="${pageContext.request.contextPath}/mgr/review/mgr_review_list_frm.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-coins"></em>
+                          <em class="icon ni ni-files"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">후기 관리</span>
                       </a>
@@ -90,7 +90,7 @@
                     <li class="nk-menu-item">
                       <a href="#void" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-text-rich"></em>
+                          <em class="icon ni ni-tile-thumb"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">이벤트 관리</span>
                       </a>
@@ -101,7 +101,7 @@
                     <li class="nk-menu-item" id="sidebar-manager">
                       <a href="${pageContext.request.contextPath}/mgr/manager/mgr_manager_list_frm.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
-                          <em class="icon ni ni-text-rich"></em>
+                          <em class="icon ni ni-user-list"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">관리자 관리</span>
                       </a>

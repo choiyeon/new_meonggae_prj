@@ -76,7 +76,7 @@ public class MgrReviewService {
 	public List<MgrReviewDomain> searchListReviewList(MgrReviewSearchVO sVO) {
 		List<MgrReviewDomain> list = null;
 		try {
-			list = mrDAO.selectListManager(sVO);
+			list = mrDAO.selectListReview(sVO);
 		} catch(PersistenceException pe) {
 			pe.printStackTrace();
 		} // end catch
