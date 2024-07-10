@@ -104,7 +104,7 @@
 																</div>	
 															</div>
 														</div>
-														<div class="col-sm-3">
+														<div class="col-sm-4">
 															<div class="form-group">
 																<div class="form-control-wrap">
 																	<div class="input-daterange date-picker-range input-group">
@@ -190,7 +190,7 @@
 						                            <div class="single-product">
 						                            	<div class="product-block">
 						                            		<a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?goodsNum=${goodsDomain.goodsNum}">
-						                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/products-img/${ goodsDomain.img });">
+						                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/products-img/${ goodsDomain.img });">
 						                            		</div></a>
 															<div class="product-description text-left" style="margin-top:20px;">
 																<h6><a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?goodsNum=${goodsDomain.goodsNum}"><c:out value="${goodsDomain.title }"/></a></h6>
@@ -248,7 +248,7 @@
 <!-- datepicker 시작-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
-<script src="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
+<script src="${pageContext.request.contextPath}/mgr_common/assets/js/jquery-ui.js"></script> <!-- datepicker가 div 뒤에 생기는 문제 방지 -->
 <script>
 	$( function() {
 		// 기본 사용
@@ -267,13 +267,13 @@
 <!-- datepicker 끝-->
 
 <!-- datepicker css 시작 -->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/datepicker_pulse10.css">
 <!-- datepicker css 끝 -->
 
 <style type="text/css">
 	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+   .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 
@@ -380,7 +380,7 @@
 				categoryNum: categoryNum
 		}
 		$.ajax({
-			url: "http://localhost${pageContext.request.contextPath}/mgr/review/mgr_review_category.do",
+			url: "${pageContext.request.contextPath}/mgr/review/mgr_review_category.do",
 			type: "GET",
 			data: param,
 			dataType: "JSON",
