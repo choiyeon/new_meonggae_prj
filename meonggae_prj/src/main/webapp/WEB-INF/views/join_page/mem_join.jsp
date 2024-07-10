@@ -23,10 +23,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 
 <!-- Theme Stylesheet -->
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/style.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/sign_up.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/join-board.css">
-<link rel="stylesheet" href="http://localhost/meonggae_prj/common/CSS/join-main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/sign_up.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/join-board.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/join-main.css">
 
 <!-- datepicker 시작-->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -38,7 +38,7 @@
 <!--다음 우편번호 API 끝-->
 
 <script src ="../common/JS/script.js"></script>
-<script src ="http://localhost/meonggae_prj/common/JS/mem_join.js"></script>
+<script src ="${pageContext.request.contextPath}/common/JS/mem_join.js"></script>
 </head>
 <body>
 <!-- header 시작 -->
@@ -49,19 +49,19 @@
 	<c:when test="${ not empty result && result == 'true' }">
 		<script>
 			alert("회원가입 되었습니다.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 	<c:when test="${ not empty result && result == 'false' }">
 		<script>
 			alert("회원가입에 실패했습니다. 잠시후 다시 시도해주세요.");
-			location.href="http://localhost/meonggae_prj/index.do";
+			location.href="${pageContext.request.contextPath}/index.do";
 		</script>
 	</c:when>
 </c:choose>
 <div class="container" style="height:100%">
 <!-- 회원가입 시작 -->
-<form name="frm" id="frm" action="http://localhost/meonggae_prj/memJoin.do" method="post">
+<form name="frm" id="frm" action="${pageContext.request.contextPath}/memJoin.do" method="post">
         <!-- 이용약관 시작 -->
         <div class="agree">
             <div>
