@@ -41,7 +41,6 @@ public class ProductController {
         if (loginUser != null) {
             int memNum = loginUser.getMemNum();
             List<ProductDomain> productList = productAddService.selectProductByUser(memNum);
-            //System.out.println(productList);
             model.addAttribute("productList", productList);
             model.addAttribute("user", loginUser);
             model.addAttribute("memNum", loginUser.getMemNum());
@@ -102,7 +101,6 @@ public class ProductController {
 
         // 상품 등록 서비스 호출
         String userIp = productAddService.getUerIp(request);
-        //System.out.println("사용자IP : " + userIp);
         product.setIp(userIp);
         boolean uploadFlag = productAddService.insertProduct(product);
         
@@ -156,9 +154,6 @@ public class ProductController {
             return "redirect:/index.do";
         }
 
-        //System.out.println("Received update request: goodsNum=" + goodsNum + ", sellStatusCode=" + sell_status_code
-                //+ ", name=" + name + ", price=" + price + ", location=" + location);
-
         ProductDomain product = new ProductDomain();
         product.setGoodsNum(goodsNum);
         product.setSell_status_code(sell_status_code);
@@ -187,16 +182,8 @@ public class ProductController {
     		return "redirect:/index.do";
     	}
     	
-    	//System.out.println("Received update request: goodsNum=" + goodsNum + ", sellStatusCode=" + sell_status_code
-    	//+ ", name=" + name + ", price=" + price + ", location=" + location);
-    	
     	ProductDomain product = new ProductDomain();
     	product.setGoodsNum(goodsNum);
-//    	product.setSell_status_code(sell_status_code);
-//    	product.setName(name);
-//    	product.setPrice(price);
-//    	product.setLocation(location);
-    	
     	productAddService.deleteProduct(product);
     	
     	return "redirect:/product_page/tab01.do";

@@ -40,7 +40,6 @@ public class ProductAddDAO {
         try (SqlSession ss = mbDAO.getMyBatisHandler(true)) {
             ss.update("com.store.meonggae.product.updateProduct", product);
         }catch (PersistenceException e) {
-        	System.out.println("상품 업데이트에 실패했습니다.");
         	e.printStackTrace();
 		}
     }
@@ -48,7 +47,6 @@ public class ProductAddDAO {
     	try (SqlSession ss = mbDAO.getMyBatisHandler(true)) {
     		ss.update("com.store.meonggae.product.deleteProduct", product);
     	}catch (PersistenceException e) {
-    		System.out.println("상품 삭제에 실패했습니다.");
     		e.printStackTrace();
     	}
     }

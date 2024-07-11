@@ -27,6 +27,8 @@ public class MgrManagerDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.manager.selectOneListCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectManagerCount
 	
@@ -38,6 +40,8 @@ public class MgrManagerDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.manager.selectListManager", sVO);
 
+		mbDAO.closeHandler(ss);
+		
 		return list;
 	} // selectListManager
 	
@@ -47,6 +51,8 @@ public class MgrManagerDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.manager.selectListAllManagerName");
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListAllManagerName
@@ -58,6 +64,8 @@ public class MgrManagerDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		mmDomain = ss.selectOne("com.store.meonggae.mgr.manager.selectOneManager", managerId);
 
+		mbDAO.closeHandler(ss);
+		
 		return mmDomain;
 	} // selectOneManager
 	
@@ -67,6 +75,9 @@ public class MgrManagerDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		flagCanUse = ss.selectOne("com.store.meonggae.mgr.manager.selectOneManagerIdDuplicate", managerId);
+		
+		mbDAO.closeHandler(ss);
+		
 		return flagCanUse;
 	} // selectOneManagerIdDuplicate
 	
@@ -76,6 +87,9 @@ public class MgrManagerDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		flagCanUse = ss.selectOne("com.store.meonggae.mgr.manager.selectOneManagerNickDuplicate", nick);
+		
+		mbDAO.closeHandler(ss);
+		
 		return flagCanUse;
 	} // selectOneManagerIdDuplicate
 	
@@ -83,6 +97,9 @@ public class MgrManagerDAO {
 	public void insertManager(MgrManagerVO mmVO) {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		ss.insert("com.store.meonggae.mgr.manager.insertManager", mmVO);
+		
+		mbDAO.closeHandler(ss);
+		
 	} // insertManager
 	
 	// 관리자 등록시 사용되는 메일 전송 계정
@@ -90,6 +107,9 @@ public class MgrManagerDAO {
 		MgrEmailDomain mgrEmailDomain = null;
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		mgrEmailDomain = ss.selectOne("com.store.meonggae.mgr.manager.selectOneEmailAcoount", mailNum);
+		
+		mbDAO.closeHandler(ss);
+		
 		return mgrEmailDomain;
 	} // selectOneEmailAcoount
 } // class

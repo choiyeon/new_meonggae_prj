@@ -19,6 +19,9 @@ public class ChatDAO {
 		ChatGoodsDomain cgDomain = null;
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		cgDomain = ss.selectOne("com.store.meonggae.chat.selectMemNumSellByGoodsNum", goodsNum);
+		
+		mbDAO.CloseHandler(ss);
+		
 		return cgDomain;
 	} // selectMemNumSellByGoodsNum
 	
@@ -27,6 +30,9 @@ public class ChatDAO {
 		int cnt = 0;
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.insert("com.store.meonggae.chat.insertChat", chatSendVO);
+		
+		mbDAO.CloseHandler(ss);
+		
 		return cnt;
 	} // insertChat
 }

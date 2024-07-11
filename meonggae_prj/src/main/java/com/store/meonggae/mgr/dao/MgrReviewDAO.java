@@ -23,6 +23,8 @@ public class MgrReviewDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.review.selectOneListCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectManagerCount
 	
@@ -34,6 +36,9 @@ public class MgrReviewDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		
 		list = ss.selectList("com.store.meonggae.mgr.review.selectListReviewList", sVO);
+		
+		mbDAO.closeHandler(ss);
+		
 		return list;
 	} // selectListManager
 	
@@ -44,6 +49,8 @@ public class MgrReviewDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.review.selectListCategoryList", categoryNum);
 
+		mbDAO.closeHandler(ss);
+		
 		return list;
 	} // selectListCategoryList
 	
@@ -53,6 +60,8 @@ public class MgrReviewDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		mrDomain = ss.selectOne("com.store.meonggae.mgr.review.selectOneReview", mrVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return mrDomain;
 	} // selectOneReview
@@ -64,6 +73,8 @@ public class MgrReviewDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.delete("com.store.meonggae.mgr.review.deleteOneReview", mrVO);
 	
+		mbDAO.closeHandler(ss);
+		
 		return cnt;
 	} // deleteReview
 } // class

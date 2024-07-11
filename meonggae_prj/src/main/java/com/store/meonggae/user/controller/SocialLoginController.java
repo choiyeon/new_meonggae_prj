@@ -24,11 +24,9 @@ public class SocialLoginController {
 
     @GetMapping("/login_page/kakao_test.do")
     public String kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-        Map<String, Object> tokenResponse = loginService.getKaKaoAccessToken(code);
+        Map<String, Object> tokenResponse = loginService.getKaKaoAccessToken(code, request);
         String accessToken = (String) tokenResponse.get("access_token");
         LoginDomain user = loginService.getKaKaoUserInfo(accessToken);
-        
-        System.out.println(accessToken);
         
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
@@ -41,20 +39,14 @@ public class SocialLoginController {
     }
     
     @GetMapping("/logout.do")
-    public String logout(HttpSession session, SessionStatus ss) {
+    public String logout(HttpSession session, SessionStatus ss, HttpServletRequest request) {
         String accessToken = (String) session.getAttribute("access_token");
-        System.out.println("Access Token: " + accessToken);
-
         if (accessToken != null) {
             try {
-                loginService.kakaoLogOut(accessToken);
-                System.out.println("Kakao logout and unlink successful.");
+                loginService.kakaoLogOut(accessToken, request);
             } catch (Exception e) {
-                System.err.println("Kakao logout or unlink failed: " + e.getMessage());
                 e.printStackTrace();
             }
-        } else {
-            System.err.println("Access Token is null. Unable to logout from Kakao.");
         }
 
         session.invalidate();
