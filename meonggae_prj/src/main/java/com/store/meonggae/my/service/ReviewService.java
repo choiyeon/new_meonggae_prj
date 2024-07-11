@@ -11,6 +11,7 @@ import com.store.meonggae.my.domain.MyReviewDomain;
 import com.store.meonggae.my.domain.WriteReviewDomain;
 import com.store.meonggae.my.pagination.PaginationUtil;
 import com.store.meonggae.my.pagination.SearchVO;
+import com.store.meonggae.my.vo.StarScoreVO;
 import com.store.meonggae.my.vo.WriteReviewVO;
 
 @Service
@@ -83,11 +84,14 @@ public class ReviewService {
 	/**
 	 * 리뷰 작성
 	 */
-	public int writeReview(WriteReviewVO wrVO) {
+	public int writeReview(String memNum, String goodsNum, String contents, String starScore) {
 		int cnt = 0;
 		
 		try {
-			cnt = rDAO.insertReview(wrVO);
+			WriteReviewVO wrVO = new WriteReviewVO(memNum, goodsNum, contents);
+			StarScoreVO ssVO = new StarScoreVO(memNum, goodsNum, starScore);
+			
+			cnt = rDAO.insertReview(wrVO, ssVO);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch

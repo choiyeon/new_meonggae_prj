@@ -14,6 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyReviewDomain {
-	private String goodsNum, reviewContents, seller;
+	private String goodsNum, reviewContents, seller, starScore;
 	private Date inputDate;
 }

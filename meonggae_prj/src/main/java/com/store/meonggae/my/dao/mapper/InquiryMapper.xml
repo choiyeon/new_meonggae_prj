@@ -50,7 +50,7 @@ where   DELETE_FLAG='N' and MEM_NUM='${memnum}'
 <select id="selectInquiryOne" parameterType="String" resultType="inquiryDetailDomain">
 select	i.INQUIRY_NUM inquiryNum, i.MEM_NUM writerNum, i.TITLE, ic.NAME category,
 		i.CONTENTS, i.INPUT_DATE inputDate,
-		i.ANSWER_FLAG answerFlag, i.ANSWER_CONTENTS answerContents, i.ANSWER_DATE answerDate, 		i.DELETE_FLAG deleteFlag
+		i.ANSWER_FLAG answerFlag, i.ANSWER_CONTENTS answerContents, i.ANSWER_DATE answerDate, i.DELETE_FLAG deleteFlag
 from	INQUIRY i, INQUIRY_CATEGORY ic
 where	i.INQUIRY_CATEGORY_NUM=ic.INQUIRY_CATEGORY_NUM
 		and INQUIRY_NUM='${inquiryNum}'
