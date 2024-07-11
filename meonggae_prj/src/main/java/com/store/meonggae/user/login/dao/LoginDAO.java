@@ -34,6 +34,7 @@ public class LoginDAO {
 	public void insertMemberLoginLog(LoginLogVO logVO) {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		ss.insert("com.store.meonggae.user_login.insertMemberLoginLog", logVO);
+		mbDAO.CloseHandler(ss);
 	} // insertMemberLoginLog
 
 }

@@ -22,6 +22,8 @@ public class MgrHeaderDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		flagNotice = ss.selectOne("com.store.meonggae.mgr.header.selectOneIsNotice", managerId);
 		
+		mbDAO.closeHandler(ss);
+		
 		return flagNotice;
 	} // selectOneIsNotice
 	
@@ -33,6 +35,8 @@ public class MgrHeaderDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.header.selectListNoticeList", managerId);
 		
+		mbDAO.closeHandler(ss);
+		
 		return list;
 	} // selectListNotice
 	
@@ -42,6 +46,8 @@ public class MgrHeaderDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.update("com.store.meonggae.mgr.header.updateAllInquiryNoticeRead", managerId);
+		
+		mbDAO.closeHandler(ss);
 		
 		return cnt;
 	} // updateAllNoticeRead
@@ -53,6 +59,8 @@ public class MgrHeaderDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.update("com.store.meonggae.mgr.header.updateAllReportNoticeRead", managerId);
 		
+		mbDAO.closeHandler(ss);
+		
 		return cnt;
 	} // updateAllNoticeRead
 	
@@ -62,6 +70,8 @@ public class MgrHeaderDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.update("com.store.meonggae.mgr.header.updateOneNoticeRead", noticeVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return cnt;
 	} // updateOneNoticeRead

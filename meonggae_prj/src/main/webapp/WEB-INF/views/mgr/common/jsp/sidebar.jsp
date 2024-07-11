@@ -15,7 +15,7 @@
       </a>
     </div>
     <div class="nk-sidebar-brand" style="text-align:center; margin:0px auto;">
-      <a href="${pageContext.request.contextPath}/mgr/dashboard/mgr_dashboard_frm.do" class="logo-link nk-sidebar-logo">
+      <a href="${pageContext.request.contextPath}/index.do" class="logo-link nk-sidebar-logo">
         <img class="logo-light logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
         <img class="logo-dark logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
       </a>

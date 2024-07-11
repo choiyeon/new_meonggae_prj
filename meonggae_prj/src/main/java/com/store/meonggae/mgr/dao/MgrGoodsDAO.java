@@ -25,6 +25,8 @@ public class MgrGoodsDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.goods.selectOneListCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneGoodsCount
 	
@@ -34,6 +36,8 @@ public class MgrGoodsDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.goods.selectListGoods", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListGoods
@@ -45,6 +49,8 @@ public class MgrGoodsDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		mgDomain = ss.selectOne("com.store.meonggae.mgr.goods.selectOneGoods", goodsNum);
 		
+		mbDAO.closeHandler(ss);
+		
 		return mgDomain;
 	} // selectOneGoods
 	
@@ -54,6 +60,8 @@ public class MgrGoodsDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.delete("com.store.meonggae.mgr.goods.deleteOneGoods", goodsNum);
+		
+		mbDAO.closeHandler(ss);
 		
 		return cnt;
 	} // deleteReview
@@ -65,6 +73,8 @@ public class MgrGoodsDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.goods.selectListOtherGoods", memNum);
 		
+		mbDAO.closeHandler(ss);
+		
 		return list;
 	} // selectListOtherGoods
 	
@@ -74,6 +84,8 @@ public class MgrGoodsDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.goods.selectListSellerReview", memNumSell);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListSellerReview
