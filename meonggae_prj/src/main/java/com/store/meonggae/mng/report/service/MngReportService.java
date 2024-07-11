@@ -17,13 +17,13 @@ import com.store.meonggae.mng.search.vo.SearchVO;
 public class MngReportService {
 	 
 	@Autowired(required = false)
-	private MngReportDAO  trDAO;
+	private MngReportDAO  mrDAO;
 	
 	public List<MngReportDomain> searchReport(SearchVO sVO){
 		List<MngReportDomain> list=null;
 		try {
 			
-			list=trDAO.selectReport(sVO);//시작번호와 끝번호 사이의 글 조회
+			list=mrDAO.selectReport(sVO);//시작번호와 끝번호 사이의 글 조회
 			
 		}catch(PersistenceException pe) {
 			pe.printStackTrace();
@@ -31,22 +31,28 @@ public class MngReportService {
 		return list;
 	}//searchReport
 	
-	  public int getTotalCount(SearchVO sVO) {
-		  
-		    int totalCount = 0;
-		    try {
-		      totalCount = trDAO.selectTotalCount(sVO);
-		    } catch (PersistenceException pe) {
-		      pe.printStackTrace();
-		    }
-		    return totalCount;
-		  }
+//	  public int getTotalCounts(SearchVO sVO) {
+//		  
+//		    int totalCount = 0;
+//		    try {
+//		      totalCount = mrDAO.selectTotalCount(sVO);
+//		    } catch (PersistenceException pe) {
+//		      pe.printStackTrace();
+//		    }
+//		    return totalCount;
+//		  }
+	
+	
+	public int getTotalCounts(SearchVO sVO) {
+	    return mrDAO.getTotalCounts(sVO);
+	}
+	
 	  
 	  public MngReportDomain searchDetailReport(String rep_num) {
 		  
 	        MngReportDomain report = null;
 	        try {
-	            report = trDAO.selectDetailReport(rep_num);
+	            report = mrDAO.selectDetailReport(rep_num);
 	        } catch (PersistenceException pe) {
 	            pe.printStackTrace();
 	        }
@@ -55,7 +61,7 @@ public class MngReportService {
 	
 	  public void updateReport(MngReportDomain rd) {
 			try {
-				trDAO.updateReport(rd);
+				mrDAO.updateReport(rd);
 			} catch (PersistenceException pe) {
 				pe.printStackTrace();
 			}
