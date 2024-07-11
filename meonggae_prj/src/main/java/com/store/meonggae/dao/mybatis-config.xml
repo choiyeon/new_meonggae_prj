@@ -45,6 +45,7 @@
 	<typeAlias type="com.store.meonggae.my.domain.MyReviewDomain" alias="myReviewDomain"/>
 	<typeAlias type="com.store.meonggae.my.domain.WriteReviewDomain" alias="writeReviewDomain"/>
 	<typeAlias type="com.store.meonggae.my.vo.WriteReviewVO" alias="wrVO"/>
+	<typeAlias type="com.store.meonggae.my.vo.StarScoreVO" alias="starScoreVO"/>
 	
 	<typeAlias type="com.store.meonggae.my.pagination.SearchVO" alias="searchVO"/>
 	

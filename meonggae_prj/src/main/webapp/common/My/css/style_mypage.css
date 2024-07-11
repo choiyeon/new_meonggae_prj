@@ -321,13 +321,13 @@
 }
 
 #boughtGoods{
-	font-size: 18px;
-	font-weight: normal;
-	color: #28403C;
-	margin-top: 5px;
+	font-size: 16px;
+	margin-top: 15px;
+	color: #4B4B4B;
 }
 
 #reivewContents{
 	font-size: 16px;
 	font-weight: normal;
+	width: 80%;
 }
