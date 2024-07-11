@@ -14,6 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MgrMemberReportDomain {
-	private String title, contents, nickSell, processStatusCode;
+	private String repNum, title, contents, nickSell, processStatusCode;
 	private Date inputDate, processDate;
 }

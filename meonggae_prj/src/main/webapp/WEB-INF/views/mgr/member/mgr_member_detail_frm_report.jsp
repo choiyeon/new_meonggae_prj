@@ -119,7 +119,7 @@
 													<span class="tb-amount">${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }</span>
 												</div>
 												<div class="nk-tb-col tb-col-mb">
-													<span class="tb-amount"><c:out value="${reportDomain.title }"/></span>
+													<span class="tb-amount"><a href="${pageContext.request.contextPath}/mng/report/report_detail.do?rep_num=${reportDomain.repNum }"><c:out value="${reportDomain.title }"/></a></span>
 												</div>
 												<div class="nk-tb-col tb-col-mb">
 													<span class="tb-amount"><c:out value="${requestScope.memberPersonalDomain.nick }"/></span>

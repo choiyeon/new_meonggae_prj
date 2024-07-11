@@ -55,7 +55,7 @@
                         <span class="nk-menu-text my-menu-text">회원 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
+                    <li class="nk-menu-item" id="sidebar-report">
                       <a href="${pageContext.request.contextPath}/mng/report/report_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-file-docs"></em>
@@ -87,7 +87,7 @@
                         <span class="nk-menu-text my-menu-text">물품 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
+                    <li class="nk-menu-item" id="sidebar-event">
                       <a href="#void" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-tile-thumb"></em>
