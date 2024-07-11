@@ -7,14 +7,14 @@
 <head>
 <meta charset="UTF-8">
 <title>문의 리스트 조회</title>
-<link rel="icon" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<link rel="icon" href="${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
 <!--bootstrap 시작-->
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
 <!--bootstrap 끝-->
 
 <!-- dashlite css 시작-->
-<link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
 <!--dashlite css 끝-->
 
 <!-- <link rel="stylesheet" href="http://211.63.89.136${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
@@ -39,8 +39,8 @@
    	}
 
 	#frmBoard {
-		margin-top: 50px;
-		margin-bottom: 20px;
+		margin-top: 30px;
+		margin-bottom: 10px;
 	}
 	
 	.total-count {
@@ -53,7 +53,30 @@
 	
 	$(function(){
 	
+		
+		$("#btnSearch").click(function(){
+			chkNull();
+		});//click
+		
+		$("#btnAllSearch").click(function(){
+			location.href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do?currentPage=1";
+		});//click	
+		
+		$("#keyword").keydown(function( evt ){
+			if( evt.which == 13 ){
+				chkNull();
+			}//end if
+		});//keydown
+		
 	});//ready
+	
+	function chkNull(){
+		if($("#keyword").val().trim() != ""){
+			//alert("검색키워드를 입력해주세요")
+			$("#frmBoard").submit();
+		}//end if
+	}//chkNull
+	
 </script>
 </head>
 <body class="nk-body bg-lighter npc-general has-sidebar no-touch nk-nio-theme">
@@ -75,7 +98,7 @@
 		
 	 <div class="card-body">	
 		<div class="total-count">
-		총 게시글 수 : [<strong><c:out value="${ param.inquiry_num }"/></strong>번]<br>
+		 총 게시글 수 : <strong><c:out value="${ totalRecords }"/></strong>  개<br>
 		</div>
 		<c:catch var="e">
 	<table class="table table-hover">
@@ -89,7 +112,7 @@
 	<c:if test="${ empty requestScope.listInquiry }">
 	<tr>
 		<td colspan="5" style="text-align: center">
-		사원이 존재하지 않는 부서
+		  문의가 존재하지 않습니다.
 		</td>
 	</tr>
 	</c:if>
@@ -105,10 +128,10 @@
 	</table>
 </c:catch>
 <c:if test="${ not empty e }">
-사원번호는 숫자로만 구성됩니다.
+오류가 발생했습니다.
 </c:if>
 <div style="text-align:  center;">
-	<form action="inquiry_result.jsp" name="frmBoard" id="frmBoard">
+	<form action="inquiry_result.do" method="get" name="frmBoard" id="frmBoard">
 		<select name="field" id="field">
 		<option value="0"${ param.field eq 0?" selected='selected'":"" }>제목</option>
 		<option value="1"${ param.field eq 1?" selected='selected'":"" }>내용</option>
@@ -117,11 +140,20 @@
 		<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px"/>
 		<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
 		<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
+		<input type="hidden" name="currentPage" value="${ param.currentPage }"/>
 		<input type="text" style="display: none;"/>
 	</form>
 	</div>
-	
-</div>
+
+
+ 	 <!-- 페이지네이션 -->
+            <div style="text-align: center;">
+                <c:forEach begin="1" end="${ totalPages }" var="i">
+                    <a href="inquiry_result.do?currentPage=${ i }&field=${ param.field }&keyword=${ param.keyword }">${ i }</a>
+                </c:forEach>
+            </div>
+
+	</div>
 
 </div>
 </div>
