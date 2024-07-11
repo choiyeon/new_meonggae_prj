@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터</title>
-<link rel="icon" href="http://localhost/meonggae_prj/common/tamcatIcon.ico" />
+<link rel="icon" href="${pageContext.request.contextPath}/common/tamcatIcon.ico" />
 
 <!-- jQuery CDN -->
 <script
@@ -37,11 +37,11 @@
 <script src="../common/JS/event_content_ajax.js"></script>
 <!-- <script src="../common/JS/event_detail_ajax.js"></script> -->
 <link rel="stylesheet"
-	href="http://localhost/meonggae_prj/common/CSS/style.css">
+	href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet"
-	href="http://localhost/meonggae_prj/common/CSS/event_style.css">
+	href="${pageContext.request.contextPath}/common/CSS/event_style.css">
 <link rel="stylesheet"
-	href="http://localhost/meonggae_prj/common/CSS/responsive.css">
+	href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 </head>
 <body>
 	<!-- header 시작 -->
