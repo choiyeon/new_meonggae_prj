@@ -1,7 +1,5 @@
 package com.store.meonggae.mgr.common.service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
@@ -17,9 +15,14 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.stereotype.Service;
 
-import com.google.zxing.WriterException;
 import com.store.meonggae.mgr.common.vo.EmailVO;
 
+/**
+ * @author kds
+ * 이미지를 메일로 전송하는 경우, 
+ * 이미지 데이터를 base64로 전송하면 src가 사라짐 
+ * localhost같은 게 붙으면 src에 이상한 값이 붙어서 엑박 뜸
+ */
 @Service
 public class EmailSender {
 	
@@ -32,8 +35,6 @@ public class EmailSender {
      * @throws GeneralSecurityException
      */
     public void mailSend(EmailVO eVO, String contentType) throws UnsupportedEncodingException, NoSuchAlgorithmException, GeneralSecurityException { // 발신자 이메일 계정 정보
-    	Properties prop = new Properties();
-    	
     	// 발신자 계정 정보
         final String username = eVO.getSenderEmail(); // 발신자 네이버 이메일 주소
         final String password = eVO.getSenderPassword(); // 발신자 네이버 이메일 비밀번호

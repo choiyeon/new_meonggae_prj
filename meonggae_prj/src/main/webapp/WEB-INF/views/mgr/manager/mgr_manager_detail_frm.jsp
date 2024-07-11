@@ -48,6 +48,10 @@
 			url.searchParams.delete('managerId');
 			location.href = "${pageContext.request.contextPath}/mgr/manager/mgr_manager_list_frm.do" + url.search;
 		}); // click
+		
+		$("#btnUpdate").click(function () {
+			location.href="${pageContext.request.contextPath}/mgr/manager/mgr_manager_update_frm.do?managerId=${requestScope.mgrManagerDomain.managerId}"
+		});
 	}); // $(document).ready(function() { })
 	
 </script>
@@ -87,12 +91,10 @@
 						<div class="nk-block-head-content">
 							<h4 class="nk-block-title">관리자 정보</h4>
 						</div>
-						<div class="nk-block-head-content align-self-start d-lg-none">
-							<a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside">
-								<em class="icon ni ni-menu-alt-r"></em>
-							</a>
-						</div>
 					</div>
+<!-- 					<div class="nk-block-between" style="display: flex;"> -->
+<!-- 						<input type="button" id="btnUpdate" class="btn btn-secondary" value="수정하기" style="margin-left: auto;"/> -->
+<!-- 					</div> -->
 				</div>
 				<div class="nk-block">
 					<div class="nk-data data-list">
@@ -165,6 +167,21 @@
 							<div class="data-col">
 								<span class="data-label">닉네임</span>
 								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.nick }"/></span>
+							</div>
+							<div class="data-col data-col-end">
+							</div>
+						</div>
+						<div class="data-item">
+							<div class="data-col">
+								<span class="data-label">이메일</span>
+								<c:choose>
+								<c:when test="${requestScope.mgrManagerDomain.email ne null and requestScope.mgrManagerDomain.email ne ''}">
+								<span class="data-value"><c:out value="${requestScope.mgrManagerDomain.email }"/></span>
+								</c:when>
+								<c:otherwise>
+								<span class="data-value">-</span>
+								</c:otherwise>
+								</c:choose>
 							</div>
 							<div class="data-col data-col-end">
 							</div>
