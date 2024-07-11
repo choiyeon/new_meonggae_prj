@@ -18,6 +18,8 @@ public class VisitorCntDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		totalCnt = ss.update("com.store.meonggae.visitor.mergeIntoVisitorCnt", isMember);
 		
+		mbDAO.CloseHandler(ss);
+		
 		return totalCnt;
 	} // mergeIntoVisitorCnt
 } // class

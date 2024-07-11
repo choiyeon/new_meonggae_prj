@@ -36,6 +36,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneListCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneMemberCount
 	
@@ -45,6 +47,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListMember", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListMember
@@ -56,6 +60,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		mmpDomain = ss.selectOne("com.store.meonggae.mgr.member.selectOneMemberPersonal", memNum);
 		
+		mbDAO.closeHandler(ss);
+		
 		return mmpDomain;
 	} // selectOneGoods
 	
@@ -64,6 +70,9 @@ public class MgrMemberDAO {
 		int cnt = 0;
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.update("com.store.meonggae.mgr.member.updateOneMemberSuspend", suspendVO);
+		
+		mbDAO.closeHandler(ss);
+		
 		return cnt;
 	} // updateOneMemberSuspend
 	
@@ -72,6 +81,9 @@ public class MgrMemberDAO {
 		int cnt = 0;
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		cnt = ss.update("com.store.meonggae.mgr.member.updateOneMemberUnSuspend", memNum);
+		
+		mbDAO.closeHandler(ss);
+		
 		return cnt;
 	} // updateOneMemberUnSuspend
 	
@@ -83,6 +95,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneLoginLogListCnt", memNum);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneMemberLoginLogCount
 	
@@ -92,6 +106,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListLoginLog", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListLoginLog
@@ -104,6 +120,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneSteamListCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneMemberLoginLogCount
 	
@@ -113,6 +131,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListSteam", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListLoginLog
@@ -125,6 +145,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneReviewCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneMemberLoginLogCount
 	
@@ -134,6 +156,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListReview", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListLoginLog
@@ -146,6 +170,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneInquiryCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneMemberLoginLogCount
 	
@@ -155,6 +181,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListInquiry", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListLoginLog
@@ -167,6 +195,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneReportCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneReportListCnt
 
@@ -176,6 +206,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListReport", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListReport
@@ -188,6 +220,8 @@ public class MgrMemberDAO {
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		totalCnt = ss.selectOne("com.store.meonggae.mgr.member.selectOneTradeCnt", sVO);
 		
+		mbDAO.closeHandler(ss);
+		
 		return totalCnt;
 	} // selectOneReportListCnt
 	
@@ -197,6 +231,8 @@ public class MgrMemberDAO {
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		list = ss.selectList("com.store.meonggae.mgr.member.selectListTrade", sVO);
+		
+		mbDAO.closeHandler(ss);
 		
 		return list;
 	} // selectListReport

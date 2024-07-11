@@ -15,7 +15,7 @@
       </a>
     </div>
     <div class="nk-sidebar-brand" style="text-align:center; margin:0px auto;">
-      <a href="${pageContext.request.contextPath}/mgr/dashboard/mgr_dashboard_frm.do" class="logo-link nk-sidebar-logo">
+      <a href="${pageContext.request.contextPath}/index.do" class="logo-link nk-sidebar-logo">
         <img class="logo-light logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
         <img class="logo-dark logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
       </a>
@@ -56,15 +56,15 @@
                       </a>
                     </li>
                     <li class="nk-menu-item">
-                      <a href="#void" class="nk-menu-link">
+                      <a href="${pageContext.request.contextPath}/mng/report/report_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-file-docs"></em>
                         </span>
                         <span class="nk-menu-text my-menu-text">신고 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
-                      <a href="#void" class="nk-menu-link">
+                    <li class="nk-menu-item" id="sidebar-inquiry" >
+                      <a href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-view-col"></em>
                         </span>

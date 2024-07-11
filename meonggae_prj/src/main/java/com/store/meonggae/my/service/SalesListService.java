@@ -73,7 +73,7 @@ public class SalesListService {
 		int cnt = 0;
 		
 		try {
-			cnt = dsDAO.selectSalesCount(memNum);
+			cnt = dsDAO.selectSoldCount(memNum);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch
@@ -104,7 +104,7 @@ public class SalesListService {
 		int cnt = 0;
 		
 		try {
-			cnt = dsDAO.selectSalesCount(memNum);
+			cnt = dsDAO.selectBoughtCount(memNum);
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 		}//end catch

@@ -12,8 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>멍게장터</title>
-<meta http-equiv="refresh" content="3;${pageContext.request.contextPath}/index.do">
-<link rel="icon" href="http://211.63.89.136/spring_mvc/common/favicon.ico"/>
+<link rel="icon" href="${pageContext.request.contextPath}/common/favicon.ico"/>
 <!--bootstrap 시작-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -35,7 +34,8 @@
 <script type="text/javascript">
 
 	$(function() {
-
+		alert('관리 권한이 없습니다. 대시보드로 이동합니다');
+		location.href="${pageContext.request.contextPath}/mgr/dashboard/mgr_dashboard_frm.do";
 	}); // $(document).ready(function() { })
 
 </script>
@@ -44,7 +44,7 @@
 <body>
 
 <div>
-권한이 없습니다. 잠시 후 메인 페이지로 돌아갑니다
+
 </div>
 
 </body>

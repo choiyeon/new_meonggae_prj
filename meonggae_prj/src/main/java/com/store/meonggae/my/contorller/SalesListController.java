@@ -40,7 +40,8 @@ public class SalesListController {
 		
 		String memNum = String.valueOf(userSession.getMemNum());
 		String param = "";
-		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/salesDetails_frm.do";
+		String contextPath = request.getContextPath();
+		String url = contextPath + "/My/mypage/sales_list/salesDetails_frm.do";
 		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
 		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 		model.addAttribute("pagination", pagination);
@@ -67,8 +68,9 @@ public class SalesListController {
 		
 		String memNum = String.valueOf(userSession.getMemNum());
 		String param = "";
-		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/soldDetails_frm.do";
-		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String contextPath = request.getContextPath();
+		String url = contextPath + "/My/mypage/sales_list/soldDetails_frm.do";
+		int totalPage = (int)Math.ceil((double)sl.searchSoldCount(memNum)/PaginationUtil.getInstance().pageScale());
 		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 		model.addAttribute("pagination", pagination);
 		
@@ -94,8 +96,9 @@ public class SalesListController {
 		
 		String memNum = String.valueOf(userSession.getMemNum());
 		String param = "";
-		String url = "http://localhost/meonggae_prj/My/mypage/sales_list/boughtDetails_frm.do";
-		int totalPage = (int)Math.ceil((double)sl.searchSalesCount(memNum)/PaginationUtil.getInstance().pageScale());
+		String contextPath = request.getContextPath();
+		String url = contextPath + "/My/mypage/sales_list/boughtDetails_frm.do";
+		int totalPage = (int)Math.ceil((double)sl.searchBoughtCount(memNum)/PaginationUtil.getInstance().pageScale());
 		String pagination = PaginationUtil.getInstance().pagiNation(url, param, totalPage, currentPage);
 		model.addAttribute("pagination", pagination);
 		

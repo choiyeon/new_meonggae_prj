@@ -29,6 +29,9 @@ public class MgrLoginDAO {
 		String secondAuthKey = "";
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
 		secondAuthKey = ss.selectOne("com.store.meonggae.mgr.login.selectOneManager2ndAuthKey", managerId);
+		
+		mbDAO.closeHandler(ss);
+		
 		return secondAuthKey;
-	}
+	} // selectOneManager2ndAuthKey
 } // class

@@ -18,8 +18,13 @@ public class MgrInterceptor implements HandlerInterceptor {
 		
 		boolean flag = (mgr != null) && (flagMgrLogin != null ? (boolean)flagMgrLogin : false) && (mgrSecondAuth != null ? (boolean)mgrSecondAuth : false);	// session이 있으면 true, 없으면 false
 		
-		if(!flag) {	 // 세션이 없으면 로그인 폼으로 이동
-			response.sendRedirect("http://localhost/meonggae_prj/mgr/login/mgr_login_frm.do");
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(request.getServerName())
+		.append(request.getContextPath())
+		.append("/error/err_no_manager_login.do");
+		
+		if(!flag) {	 // 관리자 로그인을 수행하지 않고 관리 패널에 접근시 사용자 대시보드로 이동
+			response.sendRedirect(sb.toString());
 		} // end if
 		
 		return flag;	// true: 다음으로 진행, false: 멈춤

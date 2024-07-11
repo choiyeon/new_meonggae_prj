@@ -24,7 +24,7 @@ public class MngReportController {
 	@Autowired(required = false)
 	private MngReportService rs;
 	
-	@GetMapping("/report/report_result.do")
+	@GetMapping("mng/report/report_result.do")
 	public String searchReport( 
 			SearchVO sVO,Model model) {
 			
@@ -36,22 +36,22 @@ public class MngReportController {
 		
 		model.addAttribute("listReport", list);
 		
-		return "report/report_result";
+		return "mng/report/report_result";
 	}	
 	
 
-	@GetMapping("/report/report_detail.do")
+	@GetMapping("mng/report/report_detail.do")
     public String searchDetailReport(HttpServletRequest request, Model model) {
         String reportNum = request.getParameter("rep_num");
         MngReportDomain rd = rs.searchDetailReport(reportNum);
 
         model.addAttribute("rd", rd);
 
-        return "report/report_detail";	
+        return "mng/report/report_detail";	
     }
 
 
-	@PostMapping("/report/updateReport.do")
+	@PostMapping("mng/report/updateReport.do")
 	public String updateReport(MngReportDomain rd, HttpSession session) {
 		try {
 			rs.updateReport(rd);
@@ -60,7 +60,7 @@ public class MngReportController {
 			pe.printStackTrace();
 			session.setAttribute("message", "신고 수정에 실패하셨습니다.");
 		}
-		return "redirect:/report/report_detail.do?rep_num=" + rd.getRep_num();
+		return "redirect:report_detail.do?rep_num=" + rd.getRep_num();
 	}
 	
 	
