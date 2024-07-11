@@ -16,8 +16,8 @@
     </div>
     <div class="nk-sidebar-brand" style="text-align:center; margin:0px auto;">
       <a href="${pageContext.request.contextPath}/index.do" class="logo-link nk-sidebar-logo">
-        <img class="logo-light logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
-        <img class="logo-dark logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
+        <img class="logo-light logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo">
+        <img class="logo-dark logo-img" src="${pageContext.request.contextPath}/mgr_common/images/logo3.png" style="border-radius:12%;" srcset="${pageContext.request.contextPath}/mgr_common/images/logo3.png 2x" alt="logo-dark">
       </a>
     </div>
   </div>
@@ -55,7 +55,7 @@
                         <span class="nk-menu-text my-menu-text">회원 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
+                    <li class="nk-menu-item" id="sidebar-report">
                       <a href="${pageContext.request.contextPath}/mng/report/report_result.do" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-file-docs"></em>
@@ -87,7 +87,7 @@
                         <span class="nk-menu-text my-menu-text">물품 관리</span>
                       </a>
                     </li>
-                    <li class="nk-menu-item">
+                    <li class="nk-menu-item" id="sidebar-event">
                       <a href="#void" class="nk-menu-link">
                         <span class="nk-menu-icon">
                           <em class="icon ni ni-tile-thumb"></em>
