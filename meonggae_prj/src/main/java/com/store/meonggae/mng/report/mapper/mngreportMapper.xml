@@ -55,6 +55,26 @@
   </select>
 
 
+	<!-- 총 게시글 수 -->
+	<select id="getTotalCounts" resultType="int" parameterType="searchVO">
+	    SELECT COUNT(*)
+	    FROM REPORT
+	    <where>
+	        <if test="keyword != null and keyword != ''">
+	            AND (
+	                <choose>
+	                    <when test="field == 0">
+	                        INSTR(TITLE, #{keyword}) > 0
+	                    </when>
+	                    <when test="field == 1">
+	                        INSTR(CONTENTS, #{keyword}) > 0
+	                    </when>
+	                </choose>
+	            )
+	        </if>
+	    </where>
+	</select>
+
 	 <!-- 상세 신고 조회
 	
 	  -->

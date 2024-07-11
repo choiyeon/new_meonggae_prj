@@ -66,7 +66,7 @@
 <script type="text/javascript">
     $(function(){
         $("#btnList").click(function(){
-            location.href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do?currentPage=${param.currentPage}";
+            location.href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do?currentPage=1";
         });
 
         $("#btnUpdate").click(function(){
