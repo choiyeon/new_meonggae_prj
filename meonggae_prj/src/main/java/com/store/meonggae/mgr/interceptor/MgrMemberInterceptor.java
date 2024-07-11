@@ -23,8 +23,13 @@ public class MgrMemberInterceptor implements HandlerInterceptor {
 			flag = mgrDomain.getPermission().equals("10") || mgrDomain.getPermission().equals("11");
 		} // end if
 		
+		StringBuilder sb = new StringBuilder("http://");
+		sb.append(request.getServerName())
+		.append(request.getContextPath())
+		.append("/error/err_no_permission.do");
+		
 		if(!flag) {	 // 관리자 권한이 충분하지 않으면 대시보드로 이동
-			response.sendRedirect("http://localhost/meonggae_prj/mgr/dashboard/mgr_dashboard_frm.do");
+			response.sendRedirect(sb.toString());
 		} // end if
 		
 		return flag;

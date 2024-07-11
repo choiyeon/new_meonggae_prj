@@ -44,15 +44,11 @@ public class LoginController {
 			user = loginService.selectOneUser(loginVO);
 			if (user == null) {
 				session.setAttribute("message", "로그인 실패. 아이디 또는 비밀번호를 확인하세요.");
-				System.out.println("사용자를 찾을 수 없습니다.");
 				return "redirect:/index.do";
 			}
 
-			System.out.println("로그인 시도 - 입력된 ID: " + loginVO.getId() + ", DB에서 조회한 암호화된 비밀번호: " + user.getPass());
-
 			PasswordEncoder pe = new BCryptPasswordEncoder();
 			if (!pe.matches(loginVO.getPass(), user.getPass())) {
-				System.out.println("암호가 일치하지 않습니다: " + loginVO.getPass() + " vs " + user.getPass());
 				session.setAttribute("message", "로그인 실패. 아이디 또는 비밀번호를 확인하세요.");
 				session.setAttribute("status", "FALIED : UN MATCH PASSWORD");
 				return "redirect:/index.do";
@@ -63,15 +59,6 @@ public class LoginController {
 			TextEncryptor te = Encryptors.text(key, salt);
 
 			user.setPass("");
-			if (user.getId() != null) {
-				/*
-				 * String decryptedId = te.decrypt(user.getId()); System.out.println("암호화된 ID: "
-				 * + user.getId() + ", 복호화된 ID: " + decryptedId); user.setId(decryptedId);
-				 */
-			} else {
-				System.out.println("user.getId()가 null입니다.");
-			}
-
 			LoginLogVO logVO = new LoginLogVO(user.getMemNum(), request.getRemoteAddr(), request.getHeader("sec-ch-ua-platform").replaceAll("\"", ""), loginService.getMemberBrowser(request.getHeader("User-Agent")), user.getMemStatus());
 			loginService.addMemberLoginLog(logVO);
 			
@@ -100,11 +87,6 @@ public class LoginController {
 			session.setAttribute("message", "로그인 중 오류가 발생했습니다.");
 			session.setAttribute("status", "FAILED : ERROR");
 			e.printStackTrace();
-			if (user != null) {
-				System.out.println("user.getPass(): " + user.getPass() + ", loginVO.getPass(): " + loginVO.getPass());
-			} else {
-				System.out.println("user가 null입니다.");
-			}
 		}
 		return "redirect:/index.do";
 	}
