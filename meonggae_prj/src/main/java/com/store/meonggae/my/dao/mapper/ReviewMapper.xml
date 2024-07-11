@@ -6,12 +6,13 @@
 
 <!-- 내가 쓴 후기 -->
 <select id="myReviewList" parameterType="searchVO" resultType="myReviewDomain">
-select	goodsNum, seller, reviewContents, inputDate
+select	goodsNum, seller, reviewContents, inputDate, starScore
 from	(
-		select  r.goods_num goodsNum, m.nick seller, r.CONTENT reviewContents, r.INPUT_DATE inputDate,
+		select  r.goods_num goodsNum, m.nick seller, r.CONTENT reviewContents, r.INPUT_DATE inputDate, s.STAR starScore,
 				row_number() over(order by r.INPUT_DATE desc) rnum
-		from	review r, goods g, MEMBER m
+		from	review r, goods g, MEMBER m, star_rate s
 		where   r.goods_num=g.goods_num
+				and r.goods_num=s.goods_num
 				and g.mem_num_sell=m.mem_num
 				and r.mem_num='${memnumORnick}'
 				and r.delete_flag='N'
@@ -45,10 +46,23 @@ set		delete_flag='Y'
 where	goods_num='${goodsnum}'
 </update>
 
+<!-- 별점삭제 -->
+<update id="deleteStarScore" parameterType="String">
+update	star_rate
+set		delete_flag='Y'
+where	goods_num='${goodsnum}'
+</update>
+
 <!-- 리뷰작성 -->
 <insert id="insertReview" parameterType="wrVO">
 insert into REVIEW(MEM_NUM, GOODS_NUM, CONTENT)
 values('${memNum}', '${goodsNum}', '${contents}')
+</insert>
+
+<!-- 별점추가 -->
+<insert id="insertStar" parameterType="starScoreVO">
+insert into star_rate(MEM_NUM, GOODS_NUM, STAR)
+values('${memNum}', '${goodsNum}', '${starScore}')
 </insert>
 
 </mapper>

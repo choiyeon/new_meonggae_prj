@@ -41,14 +41,14 @@ set     ADDR='${addr0}', ADDR_DETAIL='${addr1}', ZIPCODE='${zipcode}', TEL='${te
 where   MEM_NUM='${memnun}'
 </update>
 
-<!-- member 테이블 : 닉네임O -->
+<!-- member 테이블 : 프로필O -->
 <update id="updateMemberNick" parameterType="piVO">
 update	MEMBER
 set     NICK='${nick}', IMG='${profile}'
 where   MEM_NUM='${memnun}'
 </update>
 
-<!-- member 테이블 : 닉네임X -->
+<!-- member 테이블 : 프로필X -->
 <update id="updateMember" parameterType="piVO">
 update	MEMBER
 set     NICK='${nick}'

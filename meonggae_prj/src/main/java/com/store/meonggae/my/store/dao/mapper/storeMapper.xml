@@ -48,6 +48,8 @@ from		(
 					and r.mem_num=m.mem_num
 			        and g.goods_num=r.goods_num
 					and g.MEM_NUM_SELL=#{num}
+					and s.delete_flag='N'
+					and r.delete_flag='N'
 			)
 where		rnum between #{startNum} and #{endNum}
 </select>
@@ -59,6 +61,7 @@ from		GOODS g, MEMBER m, STAR_RATE s
 where		s.goods_num=g.goods_num
 			and g.mem_num_sell=m.mem_num
 			and m.nick='${nick}'
+			and s.delete_flag='N'
 </select>
 
 </mapper>

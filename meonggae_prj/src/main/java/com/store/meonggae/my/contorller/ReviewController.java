@@ -86,7 +86,7 @@ public class ReviewController {
 		String goodsNum = request.getParameter("sendData");
 		
 		int cnt = rs.deleteReview(goodsNum);
-		if(cnt != 0) {
+		if(cnt == 2) {
 			jsonObj.put("result", "true");
 		}//if
 		
@@ -113,11 +113,10 @@ public class ReviewController {
 		String memNum = String.valueOf(userSession.getMemNum());
 		String goodsNum = request.getParameter("goodsNum");
 		String contents = request.getParameter("reivewContents");
+		String starScore = request.getParameter("starScore");
 		
-		WriteReviewVO wrVO = new WriteReviewVO(memNum, goodsNum, contents); 
-		
-		int cnt = rs.writeReview(wrVO);
-		if(cnt != 0) {
+		int cnt = rs.writeReview(memNum, goodsNum, contents, starScore);
+		if(cnt == 2) {
 			jsonObj.put("result", "success");
 		}//if
 		

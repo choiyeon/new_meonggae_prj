@@ -52,5 +52,4 @@ public class MypageMainDAO {
 		return list;
 	}//selectBoughtList
 	
-	
 }
