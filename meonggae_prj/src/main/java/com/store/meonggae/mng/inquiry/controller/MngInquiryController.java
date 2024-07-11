@@ -24,7 +24,7 @@ public class MngInquiryController {
 	@Autowired(required = false)
 	private MngInquiryService is;
 	
-	@GetMapping("/inquiry/inquiry_result.do")
+	@GetMapping("mng/inquiry/inquiry_result.do")
 	public String searchInquiry( 
 			SearchVO sVO,Model model) {
 			
@@ -36,21 +36,21 @@ public class MngInquiryController {
 		
 		model.addAttribute("listInquiry", list);
 		
-		return "inquiry/inquiry_result";
+		return "mng/inquiry/inquiry_result";
 	}	
 	
 
-	@GetMapping("/inquiry/inquiry_detail00.do")
+	@GetMapping("mng/inquiry/inquiry_detail.do")
     public String searchDetailInquiry(HttpServletRequest request, Model model) {
         String inquiryNum = request.getParameter("inquiry_num");
         MngInquiryDomain id = is.searchDetailInquiry(inquiryNum);
 
         model.addAttribute("id", id);
 
-        return "inquiry/inquiry_detail00";	
+        return "mng/inquiry/inquiry_detail";	
     }
 
-	@PostMapping("/inquiry/updateInquiry.do")
+	@PostMapping("mng/inquiry/updateInquiry.do")
 	public String updateInquiry(MngInquiryDomain id, HttpSession session) {
 		try {
 			is.updateInquiry(id);
@@ -59,20 +59,22 @@ public class MngInquiryController {
 			pe.printStackTrace();
 			session.setAttribute("message", "문의 수정에 실패하셨습니다.");
 		}
-		return "redirect:/inquiry/inquiry_detail00.do?inquiry_num=" + id.getInquiry_num();
+		return "redirect:inquiry_detail.do?inquiry_num=" + id.getInquiry_num();
 	}
 	
 	  //spring_mvc/inquiry/deleteInquiry.do
-    @PostMapping("/inquiry/deleteInquiry.do")
+    @PostMapping("mng/inquiry/deleteInquiry.do")
     public String deleteInquiry(MngInquiryDomain id, HttpSession session) {
         try {
             is.deleteInquiry(id);
             session.setAttribute("message", "문의가 성공적으로 삭제되었습니다.");
+            session.setAttribute("deleted", true); // 삭제 플래그 설정
         } catch (PersistenceException pe) {
             pe.printStackTrace();
             session.setAttribute("message", "문의 삭제에 실패하셨습니다.");
+            session.setAttribute("deleted", true); // 실패해도 플래그 설정
         }
-        return "redirect:/inquiry/inquiry_result.do";
+        return "redirect:inquiry_detail.do?inquiry_num="+ id.getInquiry_num();
     }
 	
 }

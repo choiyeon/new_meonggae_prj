@@ -83,7 +83,7 @@
     UPDATE REPORT
     SET
       PROCESS_CONTENTS = #{process_contents},
-      process_date=sysdate
+      process_date = sysdate
     WHERE
       REP_NUM = #{rep_num}
   </update>
