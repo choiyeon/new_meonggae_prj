@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -36,16 +38,14 @@ public class LoginService {
 	private LoginDAO lDAO;
 
 	private final String CLIENT_ID = "0738d40e4912047a5dbb57d8ca06a869";
-	private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
-	private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
+	//private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
+	//private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
 
 	public LoginDomain selectOneUser(LoginVO lVO) {
 		return lDAO.login(lVO);
 	}
 
-	public Map<String, Object> getKaKaoAccessToken(String code) throws Exception {
-		System.out.println("getKaKaoAccessToken method called"); // 메서드 호출 확인
-
+	public Map<String, Object> getKaKaoAccessToken(String code, HttpServletRequest request) throws Exception {
 		// 1. 토큰 받아오는 url 설정
 		String url = "https://kauth.kakao.com/oauth/token";
 		RestTemplate restTemplate = new RestTemplate();
@@ -53,6 +53,8 @@ public class LoginService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+		String contextPath = request.getContextPath();
+        String REDIRECT_URI = contextPath + "/login_page/kakao_test.do";
 		// 2. 필수 파라미터 map으로 값 넣기
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 		params.add("grant_type", "authorization_code");
@@ -97,8 +99,6 @@ public class LoginService {
 		
 		String nickname = preNick+postNick;
 		
-		System.out.println(nickname);
-		
 		String memId = null;
 		String nick = nickname;
 		String profile = null;
@@ -137,9 +137,11 @@ public class LoginService {
 		return user;
 	}
 
-	public void kakaoLogOut(String accessToken) throws Exception {
+	public void kakaoLogOut(String accessToken, HttpServletRequest request) throws Exception {
 		String url = "https://kapi.kakao.com/v1/user/logout";
-
+		String contextPath = request.getContextPath();
+        String LOGOUT_REDIRECT_URI = contextPath + "/index.do/logout.do";
+		
 		// URL에 쿼리 매개변수를 추가합니다.
 		url += "?client_id=" + URLEncoder.encode(CLIENT_ID, "UTF-8") + "&logout_redirect_uri="
 				+ URLEncoder.encode(LOGOUT_REDIRECT_URI, "UTF-8");
@@ -150,7 +152,6 @@ public class LoginService {
 		con.setRequestProperty("Authorization", "Bearer " + accessToken);
 
 		int responseCode = con.getResponseCode();
-		System.out.println("POST Response Code :: " + responseCode);
 
 		if (responseCode == HttpURLConnection.HTTP_OK) { // success
 			try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
@@ -161,13 +162,9 @@ public class LoginService {
 					response.append(inputLine);
 				}
 
-				// print result
-				System.out.println(response.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println("POST request not worked. Response Code: " + responseCode);
 		}
 	}
 	

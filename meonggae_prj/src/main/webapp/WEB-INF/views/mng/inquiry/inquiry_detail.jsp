@@ -5,11 +5,23 @@
 <head>
 <meta charset="UTF-8">
 <title>문의 상세보기</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="http://211.63.89.135/spring_mvc/common/css/main.css" type="text/css" media="all" />
-<link rel="stylesheet" href="http://211.63.89.135/spring_mvc/common/css/board.css" type="text/css" media="all" />
+<link rel="icon" href="${pageContext.request.contextPath}/mgr_common/images/favicon.png"/>
+<!--bootstrap 시작-->
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
+<!--bootstrap 끝-->
+
+<!-- dashlite css 시작-->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/mgr_common/assets/css/dashlite.css?ver=3.2.3">
+<!--dashlite css 끝-->
+
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/board.css" type="text/css" media="all" /> -->
+<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/common/css/main.css" type="text/css" media="all" /> -->
+
+<!--jquery CDN 시작-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<!--jquery CDN 끝-->
+
 <style type="text/css">
     body {
         font-family: Arial, sans-serif;
@@ -35,12 +47,26 @@
     .table-bordered th {
         background-color: #F8F8F8; /* 테이블 내 th 요소의 배경색 */
     }
+    
+    .card-header {
+        min-height: 100px; /* 카드 헤더의 최소 높이를 설정합니다 */
+        display: flex;
+        align-items: center;
+        margin-top: 0px; /* 상단 헤더와 겹치지 않도록 상단 여백 추가 */
+        margin-bottom: 14px;
+    }
+   
+    .card {
+   	 	margin-top: 40px;
+   	 	margin-botton: 40px;
+   	}
   
+   
 </style>
 <script type="text/javascript">
     $(function(){
         $("#btnList").click(function(){
-            location.href="http://211.63.89.135/spring_mvc/inquiry/inquiry_result.do?currentPage=${param.currentPage}";
+            location.href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do?currentPage=1";
         });
 
         $("#btnUpdate").click(function(){
@@ -52,15 +78,21 @@
         $("#btnDelete").click(function(){
             if(confirm("글을 삭제하시겠습니까?")){
             	$("#frmDetail")[0].action="deleteInquiry.do";
-            	alert( $("#frmDetail")[0].action)
-                $("#frmDetail").submit();
+                $("#frmDetail").submit();   
             }
         });
+        
 
         <c:if test="${not empty sessionScope.message}">
             alert("${sessionScope.message}");
             <c:remove var="message" scope="session" />
         </c:if>
+        
+        <c:if test="${sessionScope.deleted == true}">
+            location.href="${pageContext.request.contextPath}/mng/inquiry/inquiry_result.do?currentPage=${param.currentPage}";
+            <c:remove var="deleted" scope="session" />
+        </c:if>
+   
     });
 
     function chkNull(){
@@ -74,7 +106,17 @@
     }
 </script>
 </head>
-<body>
+<body class="nk-body bg-lighter npc-general has-sidebar no-touch nk-nio-theme">
+<div class="nk-app-root">
+<div class="nk-main ">
+<!-- 사이드바 시작 -->
+<c:import url="/WEB-INF/views/mgr/common/jsp/sidebar.jsp"/>
+<!-- 사이드바 끝 -->
+<div class="nk-wrap ">
+<!-- 헤더 시작 -->
+<c:import url="/WEB-INF/views/mgr/common/jsp/header.jsp"/>
+<!-- 헤더 끝 -->
+<!-- 본문 시작 -->
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
@@ -89,8 +131,8 @@
                         <td><c:out value="${ id.title }"/></td>
                     </tr>
                     <tr>
-                        <th class="narrow-th">작성자</th>
-                        <td><c:out value="${ id.answer_manager_id }"/></td>
+                        <th class="narrow-th">회원번호</th>
+                        <td><c:out value="${ id.mem_num }"/></td>
                         <th class="narrow-th">작성일</th>
                         <td><c:out value="${ id.input_date }"/></td>
                     </tr>
@@ -100,7 +142,7 @@
                     </tr>
                 </table>
                 
-            <form method="post" name="frmDetail" id="frmDetail">
+            <form method="post" name="frmDetail" id="frmDetail" >
                 <input type="hidden" name="inquiry_num" value="${ id.inquiry_num }"/>
                 <table class="table table-bordered mt-3 answer-table">
                     <tr>
@@ -127,5 +169,25 @@
         </div>
     </div>
 </div>
+<!-- 본문 끝 -->
+<!-- 푸터 시작 -->
+<c:import url="/WEB-INF/views/mgr/common/jsp/footer.jsp"/>
+<!-- 푸터 끝 -->
+</div>
+</div>
+</div>
+<!-- dashlite 시작-->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/bundle.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/scripts.js?ver=3.2.3"></script> --%>
+<!-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/demo-settings.js?ver=3.2.3"></script> -->
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/charts/gd-analytics.js?ver=3.2.3"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/mgr_common/assets/js/libs/jqvmap.js?ver=3.2.3"></script> --%>
+<div class="ui-timepicker-container ui-timepicker-hidden ui-helper-hidden" style="display: none;"><div class="ui-timepicker ui-widget ui-widget-content ui-menu ui-corner-all"><ul class="ui-timepicker-viewport"></ul></div></div>
+<!-- dashlite 끝-->
+<script type="text/javascript">
+	$(function() {
+		$("#sidebar-manager").addClass("active current-page");
+	}); // $(document).ready(function() { })
+</script>	
 </body>
 </html>

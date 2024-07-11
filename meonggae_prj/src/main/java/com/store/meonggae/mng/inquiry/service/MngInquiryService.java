@@ -19,13 +19,13 @@ import com.store.meonggae.mng.search.vo.SearchVO;
 public class MngInquiryService {
 	 
 	@Autowired(required = false)
-	private MngInquiryDAO  tiDAO;
+	private MngInquiryDAO  miDAO;
 	
 	public List<MngInquiryDomain> searchInquiry(SearchVO sVO){
 		List<MngInquiryDomain> list=null;
 		try {
 			
-			list=tiDAO.selectInquiry(sVO);//시작번호와 끝번호 사이의 글 조회
+			list=miDAO.selectInquiry(sVO);//시작번호와 끝번호 사이의 글 조회
 			
 		}catch(PersistenceException pe) {
 			pe.printStackTrace();
@@ -33,22 +33,28 @@ public class MngInquiryService {
 		return list;
 	}//searchInquiry
 	
-	  public int getTotalCount(SearchVO sVO) {
-		  
-		    int totalCount = 0;
-		    try {
-		      totalCount = tiDAO.selectTotalCount(sVO);
-		    } catch (PersistenceException pe) {
-		      pe.printStackTrace();
-		    }
-		    return totalCount;
-		  }
+//	  public int getTotalCounts(SearchVO sVO) {
+//		  
+//		    int totalCount = 0;
+//		    try {
+//		      totalCount = miDAO.getTotalCounts(sVO);
+//		    } catch (PersistenceException pe) {
+//		      pe.printStackTrace();
+//		    }
+//		    return totalCount;
+//		  }
+	
+	
+	public int getTotalCounts(SearchVO sVO) {
+	    return miDAO.getTotalCounts(sVO);
+	}
+	
 	  
 	  public MngInquiryDomain searchDetailInquiry(String inquiry_num) {
 		  
 	        MngInquiryDomain inquiry = null;
 	        try {
-	            inquiry = tiDAO.selectDetailInquiry(inquiry_num);
+	            inquiry = miDAO.selectDetailInquiry(inquiry_num);
 	        } catch (PersistenceException pe) {
 	            pe.printStackTrace();
 	        }
@@ -57,7 +63,7 @@ public class MngInquiryService {
 	
 	  public void updateInquiry(MngInquiryDomain id) {
 			try {
-				tiDAO.updateInquiry(id);
+				miDAO.updateInquiry(id);
 			} catch (PersistenceException pe) {
 				pe.printStackTrace();
 			}
@@ -66,7 +72,7 @@ public class MngInquiryService {
 	
 	    public void deleteInquiry(MngInquiryDomain id) {
 	        try {
-	            tiDAO.deleteInquiry(id);
+	            miDAO.deleteInquiry(id);
 	        } catch (PersistenceException pe) {
 	            pe.printStackTrace();
 	        }

@@ -29,14 +29,21 @@ public class MngReportDAO {
 		return list;
 	}
 	
-	 public int selectTotalCount(SearchVO sVO) throws PersistenceException {
-		 
-	        int totalCount = 0;
-	        SqlSession ss = mbDAO.getMyBatisHandler(false);
-	        totalCount = ss.selectOne("kr.co.sist.report.selectTotalCount", sVO);
-	        mbDAO.closeHandler(ss);
-	        return totalCount;
-	    }
+//	 public int selectTotalCount(SearchVO sVO) throws PersistenceException {
+//		 
+//	        int totalCount = 0;
+//	        SqlSession ss = mbDAO.getMyBatisHandler(false);
+//	        totalCount = ss.selectOne("kr.co.sist.report.selectTotalCount", sVO);
+//	        mbDAO.closeHandler(ss);
+//	        return totalCount;
+//	    }
+	
+	public int getTotalCounts(SearchVO sVO) throws PersistenceException {
+	    SqlSession ss = mbDAO.getMyBatisHandler(false);
+	    int totalRecords = ss.selectOne("kr.co.sist.report.getTotalCounts", sVO);
+	    mbDAO.closeHandler(ss);
+	    return totalRecords;
+	}
 	 
 	 public MngReportDomain selectDetailReport(String rep_num) throws PersistenceException {
 		 
