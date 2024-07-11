@@ -91,8 +91,8 @@ alert('인증번호가 유효하지 않습니다');
 					<div class="nk-block nk-block-middle nk-auth-body">
 						<div class="brand-logo pb-5">
 							<div class="logo-link text-center">
-								<img class="logo-light logo-img logo-img-lg" src="${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo">
-								<img class="logo-dark logo-img logo-img-lg" src="${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo-dark">
+								<img class="logo-light logo-img logo-img-lg" src="${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo">
+								<img class="logo-dark logo-img logo-img-lg" src="${pageContext.request.contextPath}/mgr_common/images/logo.png" srcset="${pageContext.request.contextPath}/mgr_common/images/logo.png 2x" alt="logo-dark">
 							</div>
 						</div>
 						<div class="nk-block-head">

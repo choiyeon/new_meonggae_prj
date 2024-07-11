@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-import com.store.meonggae.mgr.common.vo.MgrSearchVO;
 import com.store.meonggae.mgr.goods.vo.MgrGoodsSearchVO;
 
 import lombok.AllArgsConstructor;

@@ -49,6 +49,8 @@ public class StoreDAO {
 	public String selectProfile(String nick) throws PersistenceException{
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		String profile = ss.selectOne("com.store.meonggae.store.userProfile", nick);
+		mbDAO.CloseHandler(ss);
+		
 		return profile;
 	}//selectProfile
 	
@@ -58,6 +60,8 @@ public class StoreDAO {
 	public String selectMemNum(String nick) throws PersistenceException{
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		String memNum = ss.selectOne("com.store.meonggae.store.userNum", nick);
+		mbDAO.CloseHandler(ss);
+		
 		return memNum;
 	}//selectMemNum
 	
@@ -67,6 +71,8 @@ public class StoreDAO {
 	public List<ReviewDomain> selectReview(ReviewVO rVO) throws PersistenceException{
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		List<ReviewDomain> list = ss.selectList("com.store.meonggae.store.reviewList", rVO);
+		mbDAO.CloseHandler(ss);
+		
 		return list;
 	}//selectMemNum
 	
@@ -76,6 +82,8 @@ public class StoreDAO {
 	public List<Double> selectStarScore(String nick) throws PersistenceException{
 		SqlSession ss = mbDAO.getMyBatisHandler(false);
 		List<Double> list = ss.selectList("com.store.meonggae.store.starScore", nick);
+		mbDAO.CloseHandler(ss);
+		
 		return list;
 	}//selectMemNum
 	

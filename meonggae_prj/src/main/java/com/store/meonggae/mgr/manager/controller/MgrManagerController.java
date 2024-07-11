@@ -2,6 +2,8 @@ package com.store.meonggae.mgr.manager.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,8 +122,14 @@ public class MgrManagerController {
 	
 	// 관리자 - 관리자 관리 - 관리자 등록 - 추가 process
 	@PostMapping("/mgr/manager/mgr_manager_add_process.do")
-	public String addManagerProcess(MgrManagerVO mMgrVO, RedirectAttributes redirectAttributes) {
-		boolean flagAddResult = mmService.addManagerProcess(mMgrVO);
+	public String addManagerProcess(MgrManagerVO mMgrVO, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		
+		// serverName에 localhost같은 게 들어올 경우 구글이 막음
+//		String serverName = request.getServerName();
+		String serverName = "211.63.89.136";
+		String contextPath = request.getContextPath();
+		
+		boolean flagAddResult = mmService.addManagerProcess(mMgrVO, serverName, contextPath);
 		
 		redirectAttributes.addFlashAttribute("flagAddResult", flagAddResult);
 		
@@ -136,5 +144,17 @@ public class MgrManagerController {
 		model.addAttribute("listManager", listManager);
 		
 		return "/mgr/manager/mgr_manager_add_frm_test";
+	} // searchOneManager
+	
+	// 관리자 - 관리자 관리 - 관리자 수정 폼
+	@GetMapping("/mgr/manager/mgr_manager_update_frm.do")
+	public String managerUpdateFrm(String managerId, Model model) {
+		List<MgrManagerDomain> listManager = mmService.searchListAllManagerName();
+		MgrManagerDomain mmDomain = mmService.searchOneManager(managerId);
+		
+		model.addAttribute("listManager", listManager);
+		model.addAttribute("mgrManagerDomain", mmDomain);
+		
+		return "/mgr/manager/mgr_manager_update_frm";
 	} // searchOneManager
 } // class

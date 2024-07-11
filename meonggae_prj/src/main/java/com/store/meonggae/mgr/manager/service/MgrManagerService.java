@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -153,6 +152,9 @@ public class MgrManagerService {
 			if(mmDomain.getParentManagerName() != null && mmDomain.getParentManagerName() != "") {
 				mmDomain.setParentManagerName(te.decrypt(mmDomain.getParentManagerName()));
 			} // end if
+			if(mmDomain.getEmail() != null && mmDomain.getEmail() != "") {
+				mmDomain.setEmail(te.decrypt(mmDomain.getEmail()));
+			} // end if
 			mmDomain.setPermission(te.decrypt(mmDomain.getPermission()));
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
@@ -220,7 +222,7 @@ public class MgrManagerService {
 	} // searchOneManagerIdDuplicate
 	
 	// 관리자 신규 등록
-	public boolean addManagerProcess(MgrManagerVO mMgrVO) {
+	public boolean addManagerProcess(MgrManagerVO mMgrVO, String serverName, String contextPath) {
 		boolean flagAddResult = false;
 		MgrEmailDomain mgrEmailDomain = null;
 		
@@ -250,7 +252,7 @@ public class MgrManagerService {
 				
 				googleOTPAuthURL = otpUtil.getGoogleOTPAuthURL(secretKey, mMgrVO.getManagerId(), "meonggae");
 				
-				otpUtil.getQRImage(googleOTPAuthURL, "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images/qr.png", 200, 200);
+				otpUtil.getQRImage(googleOTPAuthURL, "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images/qr_" + mMgrVO.getManagerId() + ".png", 200, 200);
 				
 				mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
 				
@@ -261,7 +263,15 @@ public class MgrManagerService {
 				String senderEmail = teMail.decrypt(mgrEmailDomain.getSenderEmail());
 				String senderPassword = teMail.decrypt(mgrEmailDomain.getSenderPassword());
 				
-				EmailVO eVO = new EmailVO(0, mMgrVO.getEmail(), "멍게장터 관리자 인증 이메일", "<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='" + "http://211.63.89.136/meonggae_prj/mgr_common/images/qr.png" + "' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>", senderEmail, senderPassword);
+				StringBuilder sb = new StringBuilder();
+				sb.append("<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='http://")
+				.append(serverName)
+				.append(contextPath)
+				.append("/mgr_common/images/qr_")
+				.append(mMgrVO.getManagerId())
+				.append(".png' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>");
+				
+				EmailVO eVO = new EmailVO(0, mMgrVO.getEmail(), "멍게장터 관리자 인증 이메일", sb.toString(), senderEmail, senderPassword);
 				
 				email.mailSend(eVO, "html");
 				mMgrVO.setEmail(te.encrypt(mMgrVO.getEmail()));

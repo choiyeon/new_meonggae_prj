@@ -3,12 +3,17 @@ package com.store.meonggae.mgr.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.WebUtils;
 
+import com.store.meonggae.mgr.interceptor.service.MgrInterceptorService;
 import com.store.meonggae.mgr.login.domain.MgrDomain;
 
 public class MgrDashOnlyInterceptor implements HandlerInterceptor {
+	
+	@Autowired(required = false)
+	private MgrInterceptorService miService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -16,11 +21,15 @@ public class MgrDashOnlyInterceptor implements HandlerInterceptor {
 		
 		Object mgrObj = WebUtils.getSessionAttribute(request, "mgr");
 		MgrDomain mgrDomain = null;
+		String permission = ""; 
 		boolean flag = false;
 		
 		if(mgrObj != null) {
 			mgrDomain = (MgrDomain)mgrObj;
-			flag = !mgrDomain.getPermission().equals("00");
+			
+			permission = miService.searchOneManagerPermission(mgrDomain.getManager_id());	
+			
+			flag = !permission.equals("00");
 		} // end if
 		
 		StringBuilder sb = new StringBuilder("http://");
