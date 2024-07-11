@@ -39,8 +39,8 @@
    	}
 
 	#frmBoard {
-		margin-top: 50px;
-		margin-bottom: 20px;
+		margin-top: 30px;
+		margin-bottom: 10px;
 	}
 	
 	.total-count {
@@ -52,7 +52,30 @@
 <script type="text/javascript">
 	$(function(){
 	
+
+		$("#btnSearch").click(function(){
+			chkNull();
+		});//click
+		
+		$("#btnAllSearch").click(function(){
+			location.href="${pageContext.request.contextPath}/mng/report/report_result.do?currentPage=1";
+		});//click	
+		
+		$("#keyword").keydown(function( evt ){
+			if( evt.which == 13 ){
+				chkNull();
+			}//end if
+		});//keydown
+		
 	});//ready
+	
+	function chkNull(){
+		if($("#keyword").val().trim() != ""){
+			//alert("검색키워드를 입력해주세요")
+			$("#frmBoard").submit();
+		}//end if
+	}//chkNull
+	
 </script>
 </head>
 <body class="nk-body bg-lighter npc-general has-sidebar no-touch nk-nio-theme">
@@ -74,22 +97,22 @@
 		
 		<div class="card-body">	
 			<div class="total-count">
-			총 게시글 수 : [<strong><c:out value="${ param.rep_num }"/></strong>번] <br>
+			총 게시글 수 : <strong><c:out value="${ totalRecords }"/></strong>  개<br>
 			</div>
 			<c:catch var="e">
 		<table class="table table-hover">
-		<tr>
-		<th style="width: 80px">신고번호</th>
-		<th style="width: 200px">제목</th>
-		<th style="width: 80px">상품번호</th>
-		<th style="width: 120px">신고자</th>
-		<th style="width: 120px">작성일</th>
-		<th style="width: 120px">처리상태</th>
-		</tr>
+			<tr>
+			<th style="width: 80px">신고번호</th>
+			<th style="width: 200px">제목</th>
+			<th style="width: 80px">상품번호</th>
+			<th style="width: 120px">신고자</th>
+			<th style="width: 120px">작성일</th>
+			<th style="width: 120px">처리상태</th>
+			</tr>
 		<c:if test="${ empty requestScope.listReport }">
 		<tr>
 		<td colspan="5" style="text-align: center">
-		사원이 존재하지 않는 부서
+		 신고가 존재하지 않습니다.
 		</td>
 		</tr>
 		</c:if>
@@ -106,10 +129,10 @@
 		</table>
 </c:catch>
 <c:if test="${ not empty e }">
-신고번호는 숫자로만 구성됩니다.
+오류가 발생했습니다.
 </c:if>
 <div style="text-align:  center;">
-	<form action="inquiry_result.jsp" name="frmBoard" id="frmBoard">
+	<form action="report_result.do" method="get" name="frmBoard" id="frmBoard">
 		<select name="field" id="field">
 		<option value="0"${ param.field eq 0?" selected='selected'":"" }>제목</option>
 		<option value="1"${ param.field eq 1?" selected='selected'":"" }>내용</option>
@@ -118,12 +141,19 @@
 		<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px"/>
 		<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
 		<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
+		<input type="hidden" name="currentPage" value="${ param.currentPage }"/>
 		<input type="text" style="display: none;"/>
 	</form>
 	</div>
 
+ 	<!-- 페이지네이션 -->
+            <div style="text-align: center;">
+                <c:forEach begin="1" end="${ totalPages }" var="i">
+                    <a href="report_result.do?currentPage=${ i }&field=${ param.field }&keyword=${ param.keyword }">${ i }</a>
+                </c:forEach>
+            </div>
 	
-</div>
+	</div>
 
 </div>
 </div>
