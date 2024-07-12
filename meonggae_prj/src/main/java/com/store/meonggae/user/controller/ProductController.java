@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.store.meonggae.product.domain.BuyerDomain;
 import com.store.meonggae.product.domain.ProductDomain;
 import com.store.meonggae.product.service.ProductAddService;
 import com.store.meonggae.user.login.domain.LoginDomain;
@@ -188,6 +189,38 @@ public class ProductController {
     	
     	return "redirect:/product_page/tab01.do";
     }
+    
+    //판매자 선택
+ 	@GetMapping("/product_page/check_buyer.do")
+ 	public String checkBuyer(@RequestParam("goodsNum") String goodsNum, Model model) {
+ 		List<BuyerDomain> buyerList = productAddService.checkBuyer(goodsNum);
+ 		model.addAttribute("buyerList",buyerList);
 
+ 		return "product_page/check_buyer";
+ 	}
+
+ 	//구매 완료 하기
+ 	@PostMapping("/product_page/product_buy.do")
+ 	public String buyProduct(
+ 			@RequestParam("goodsNum") String goodsNum,
+ 			@RequestParam("buyer") String buyer,
+ 			HttpSession session,
+ 			RedirectAttributes redirectAttributes) throws IOException {
+ 		LoginDomain loginUser = (LoginDomain) session.getAttribute("user");
+ 		
+ 		if (loginUser == null) {
+ 			redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스 입니다.");
+ 			return "redirect:/index.do";
+ 		}
+ 		
+ 		ProductDomain product = new ProductDomain();
+ 		product.setGoodsNum(goodsNum);
+ 		int buyerNum = Integer.parseInt(buyer);
+ 		product.setMem_num_buy(buyerNum);
+ 		System.out.println(product);
+ 		productAddService.buyProduct(product);
+ 		
+ 		return "redirect:/product_page/tab01.do";
+ 	}
     
 }

@@ -22,6 +22,7 @@
 	<typeAlias type="com.store.meonggae.product.domain.SearchReviewDomain" alias="searchReviewDomain"/>
 
 	<typeAlias type="com.store.meonggae.product.domain.ProductDomain" alias="productDomain"/>
+	<typeAlias type="com.store.meonggae.product.domain.BuyerDomain" alias="buyerDomain"/>
 	
 <!-- store,my -->
 	<!-- store -->

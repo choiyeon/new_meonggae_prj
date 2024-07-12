@@ -33,7 +33,8 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css"
 	type="text/css">
 <!-- Theme Stylesheet -->
-<script src="../common/JS/script.js"></script>
+<!-- <script src="../common/JS/script.js"></script> -->
+<jsp:include page="../main_page/script.jsp" />
 <script src="../common/JS/event_content_ajax.js"></script>
 <!-- <script src="../common/JS/event_detail_ajax.js"></script> -->
 <link rel="stylesheet"
