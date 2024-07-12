@@ -37,7 +37,8 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <!--다음 우편번호 API 끝-->
 
-<script src ="../common/JS/script.js"></script>
+<!-- <script src ="../common/JS/script.js"></script> -->
+<jsp:include page="../main_page/script.jsp" />
 <script src ="${pageContext.request.contextPath}/common/JS/mem_join.js"></script>
 </head>
 <body>

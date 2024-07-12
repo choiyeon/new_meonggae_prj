@@ -21,8 +21,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
-<script src ="${pageContext.request.contextPath}/common/JS/product_detail.js"></script>
+<%-- <script src ="${pageContext.request.contextPath}/common/JS/script.js"></script> --%>
+<%-- <script src ="${pageContext.request.contextPath}/common/JS/product_detail.js"></script> --%>
+<jsp:include page="../main_page/script.jsp" />
+<jsp:include page="../main_page/product_detailJS.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 </head>
@@ -259,7 +261,7 @@
 $(function() {
 	$("#meonggaeTalk-btn").click(function() {
 		if($("[name='user_memNum']").val() != null && $("[name='user_memNum']").val() != '') {
-			location.href="http://localhost${pageContext.request.contextPath}/chat_dm.do?memNumSend=${user.memNum}&goodsNum=${ spd.goodsNum }";
+			location.href="${pageContext.request.contextPath}/chat_dm.do?memNumSend=${user.memNum}&goodsNum=${ spd.goodsNum }";
 		} // end if
 	}); // click
 }); // ready

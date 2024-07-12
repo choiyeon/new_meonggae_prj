@@ -22,8 +22,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
-<script src ="${pageContext.request.contextPath}/common/JS/infinite_scroll.js"></script><!-- 퀵메뉴js포함 -->
+<%-- <script src ="${pageContext.request.contextPath}/common/JS/script.js"></script> --%>
+<%-- <script src ="${pageContext.request.contextPath}/common/JS/infinite_scroll.js"></script><!-- 퀵메뉴js포함 --> --%>
+<jsp:include page="../main_page/script.jsp" />
+<jsp:include page="../main_page/infinite_scroll.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/infinite_scroll.css"><!-- 퀵메뉴css포함 -->
