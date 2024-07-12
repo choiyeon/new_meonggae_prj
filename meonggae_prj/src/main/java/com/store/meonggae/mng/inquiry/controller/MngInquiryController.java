@@ -71,7 +71,7 @@ public class MngInquiryController {
 	    model.addAttribute("totalRecords", totalRecords);
 
 	    return "mng/inquiry/inquiry_result";
-	}
+	}//searchInquiry
 
 	@GetMapping("mng/inquiry/inquiry_detail.do")
     public String searchDetailInquiry(HttpServletRequest request, Model model) {
