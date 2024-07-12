@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.event">
+
+
+<!-- 게시글목록
+	
+	 -->
+	<select id="selectEventList" resultType="ed" parameterType="searchVO">
+	  SELECT
+	    event_num,
+	    title,
+	    content,
+	    img,
+	    start_date,
+	    end_date,
+	    input_date,
+	    RNUM
+	  FROM (
+	    SELECT
+	      event_num,
+	      title,
+	      content,
+	      img,
+	      start_date,
+	      end_date,
+	      input_date,
+	      ROW_NUMBER() OVER(ORDER BY input_date DESC) RNUM
+	    FROM
+	      event
+	    <where>
+	      <if test="keyword != null and keyword != ''">
+	        AND (
+	          <choose>
+	            <when test="field == 0">
+	              INSTR(title, #{keyword}) > 0
+	            </when>
+	            <when test="field == 1">
+	              INSTR(content, #{keyword}) > 0
+	            </when>
+	          </choose>
+	        )
+	      </if>
+	    </where>
+	  ) WHERE RNUM BETWEEN #{startNum} AND #{endNum}
+</select>
+
+	<!-- 이벤트 총 개수 -->
+	<select id="getTotalCounts" resultType="int" parameterType="searchVO">
+			select count(*)
+			from EVENT
+			<where>
+		        <if test="keyword != null and keyword != ''">
+		            AND (
+		                <choose>
+		                    <when test="field == 0">
+		                        INSTR(TITLE, #{keyword}) > 0
+		                    </when>
+		                    <when test="field == 1">
+		                        INSTR(CONTENT, #{keyword}) > 0
+		                    </when>
+		                </choose>
+		            )
+		        </if>
+		    </where>
+	</select>
+
+ <!-- 상세 이벤트 조회
+	
+	  -->
+	<select id="selectDetailEvent" resultType="ed" parameterType="String">
+		  SELECT
+		    event_num,
+		    title,
+		    content,
+		    img,
+		    start_date,
+		    end_date,
+		    input_date
+		  FROM
+		    event
+		  WHERE
+		    event_num = #{event_num}
+	</select>
+		  
+		  
+	<update id="updateEvent" parameterType="ed">
+	  UPDATE event
+	  SET
+	  	title = #{title},
+	  	start_date = #{start_date},
+	  	end_date = #{end_date},
+	  	img = #{img},
+	    content = #{content},
+	  WHERE
+	    event_num = #{event_num}
+	</update>
+
+
+</mapper>

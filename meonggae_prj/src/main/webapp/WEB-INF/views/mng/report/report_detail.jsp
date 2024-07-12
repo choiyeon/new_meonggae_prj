@@ -64,6 +64,10 @@
   
 </style>
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "${pageContext.request.contextPath}";
+	
     $(function(){
         $("#btnList").click(function(){
             location.href="${pageContext.request.contextPath}/mng/report/report_result.do?currentPage=1";
@@ -119,7 +123,7 @@
                         <td><c:out value="${ rd.title }"/></td>
                     </tr>
                     <tr>
-                        <th class="narrow-th">신고자</th>
+                        <th class="narrow-th">회원번호</th>
                         <td><c:out value="${ rd.mem_num_rep }"/></td>
                         <th class="narrow-th">작성일</th>
                         <td><c:out value="${ rd.input_date }"/></td>
@@ -130,7 +134,8 @@
                     </tr>
                     <tr>
                         <th class="narrow-th">신고내용</th>
-                        <td colspan="3" class="content-cell"><c:out value="${ rd.contents }"/></td>
+                        <td colspan="3" class="content-cell"><c:out value="${ rd.contents }" escapeXml="false"/>
+                        </td>
                     </tr>
                 </table>
                 
@@ -179,7 +184,7 @@
 <!-- dashlite 끝-->
 <script type="text/javascript">
 	$(function() {
-		$("#sidebar-manager").addClass("active current-page");
+		$("#sidebar-report").addClass("active current-page");
 	}); // $(document).ready(function() { })
 </script>	
 </body>

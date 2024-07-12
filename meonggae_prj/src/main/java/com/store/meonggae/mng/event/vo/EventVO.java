@@ -1,4 +1,4 @@
-package com.store.meonggae.my.vo;
+package com.store.meonggae.mng.event.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class StarScoreVO {
-	private String memNum, goodsNum, starScore;
+public class EventVO {
+	int cnt;
+	String title, event_status, content;
 }
