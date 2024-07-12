@@ -56,6 +56,14 @@
 			pwModify();
 		});
 		
+		/* 프로필 프리뷰 */
+		$("#upfile").change(fileSelect);
+		
+		/* 프로필 선택 버튼 */
+		$("#upfileBtn").click(function(){
+			$("#upfile").click();
+		});
+		
 		// 회원탈퇴
 		$("#quitBtn").click(function(){
 			location.href = "quitMember.do";
@@ -216,10 +224,20 @@
 		}).open();
 	};//zipcodeApi
 	
-	var img_elm = document.getElementById("#profileImg");
-	img_elm.onerror = function() {
-		this.scr = "${pageContext.request.contextPath}/common/My/image/loading.png";
-	}
+	function fileSelect(e){
+		
+		var files = e.target.files;
+		var reader = new FileReader();
+		reader.onload = function(e){
+			$("#profileImg").attr("src", e.target.result);
+		}
+		reader.readAsDataURL(files[0]);
+		
+	}//사진 미리보기
+	
+	
+	
+	
 </script>
 
 <!-- 내용 시작 -->
@@ -240,9 +258,9 @@
 		<tr>
 			<td id="tableTitle1" class="tableTitle1">프로필 사진</td>
 			<td>
-			<img src="${pageContext.request.contextPath}/profile-img/${ user.img }" class="img-circle" style="width: 100px; height: 100px"
-						id="profileImg" onError="this.src='${pageContext.request.contextPath}/common/My/image/loading.png';"/><br/><br/>
-			<input type="file" name="upfile" id ="upfile">
+			<img src="${pageContext.request.contextPath}/profile-img/${ user.img }" class="img-circle" style="width: 100px; height: 100px" id="profileImg" name="profileImg" onError="this.src='${pageContext.request.contextPath}/common/My/image/loading.png';"/>
+			<input type="file" name="upfile" id="upfile" accept=".jpg, .jpge, .png"/>
+			<input type="button" name="upfileBtn" id="upfileBtn" value="프로필 사진 변경" class="btn btn-warning"/>
 			<div id="imgGuide">.png, .jpg, .jpge 확장자 파일만 등록 가능합니다.</div>
 			</td>
 		</tr>
