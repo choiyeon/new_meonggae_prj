@@ -123,7 +123,7 @@
         </div>
         <div class="card-body">
                   
-            <form method="post" name="frmDetail" id="frmDetail">
+            <form method="post" name="frmDetail" id="frmDetail" >
                 <input type="hidden" name="event_num" value="${ ed.event_num }"/>
                 <table class="table table-bordered mt-3 answer-table">
                     <tr>
