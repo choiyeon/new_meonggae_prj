@@ -34,16 +34,16 @@ from VIEW_EVENT
 	</if>
 	<if test="eventStatus != null and eventStatus != ''">
 		<choose>
-			<when test="eventStatus == '진행'">
-		 		and end_date > SYSDATE
+			<when test='eventStatus.equals("진행")'>
+		 		and to_date(end_date,'yyyy-mm-dd') >= to_date(to_char(SYSDATE, 'yyyy-mm-dd'),'yyyy-mm-dd')
 			</when>
-			<when test="eventStatus == '종료'">
-				and <![CDATA[end_date < SYSDATE]]>
+			<when test='eventStatus.equals("종료")'>
+				and <![CDATA[to_date(end_date,'yyyy-mm-dd') < to_date(to_char(SYSDATE, 'yyyy-mm-dd'),'yyyy-mm-dd')]]>
 			</when>
 		</choose>
 	</if>
 </where>
-) where rnum between #{ startPageNum } and #{ endPageNum }
+) where rnum between #{ startPageNum }  and #{ endPageNum }
 </select>
 <!-- 이벤트 상세페이지 event_num -->
 <select id="selectDetailEvent" resultType="com.store.meonggae.event.domain.EventDomain" parameterType="int">

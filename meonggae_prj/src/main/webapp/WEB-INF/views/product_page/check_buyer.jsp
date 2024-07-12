@@ -34,7 +34,6 @@ function sell() {
 		return;
 	}else{
 		
-	alert(value);
         $.ajax({
             url: "${pageContext.request.contextPath}/product_page/product_buy.do",
             type: "POST",
