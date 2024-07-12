@@ -215,7 +215,8 @@ a {
     font-weight: bold !important;
     text-decoration: none;
 }
-.steamCount li span, i {
+.steamCount li a span,
+.steamCount li a i {
     color: #999;
 }
 
