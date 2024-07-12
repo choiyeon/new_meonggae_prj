@@ -115,7 +115,7 @@
 														<span class="tb-amount"><c:out value="${requestScope.totalCount - ((requestScope.currentPage - 1) * requestScope.pageScale) - i.index }"/></span>
 													</div>
 													<div class="nk-tb-col tb-col-mb">
-														<span class="tb-amount"><c:out value="${inquiryDomain.title }"/></span>
+														<span class="tb-amount"><a href="${pageContext.request.contextPath}/mng/inquiry/inquiry_detail.do?inquiry_num=${inquiryDomain.inquiryNum }"><c:out value="${inquiryDomain.title }"/></a></span>
 													</div>
 													<div class="nk-tb-col tb-col-mb">
 														<span class="tb-amount"><c:out value="${requestScope.memberPersonalDomain.nick }"/></span>
@@ -212,7 +212,7 @@
 <style type="text/css">
 	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+   .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 

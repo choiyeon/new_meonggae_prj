@@ -24,7 +24,7 @@
 					                            <div class="single-product">
 					                            	<div class="product-block">
 					                            		<a href="${pageContext.request.contextPath}/mgr/goods/mgr_goods_detail_frm.do?goodsNum=${steamDomain.goodsNum}">
-					                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/products-img/${steamDomain.img});">
+					                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/products-img/${steamDomain.img});">
 					                            		</div>
 														</a>
 														<div class="product-description text-left" style="margin-top:20px;">

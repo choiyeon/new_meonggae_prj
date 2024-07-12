@@ -49,12 +49,18 @@ public class MngInquiryService {
 	    return miDAO.getTotalCounts(sVO);
 	}
 	
+	public String removeTag(String content) {
+		String contentNoTag = content.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");		
+		return contentNoTag;
+	} // removeTag
+	
 	  
 	  public MngInquiryDomain searchDetailInquiry(String inquiry_num) {
 		  
 	        MngInquiryDomain inquiry = null;
 	        try {
 	            inquiry = miDAO.selectDetailInquiry(inquiry_num);
+	            //inquiry.setContents(removeTag(inquiry.getContents()));
 	        } catch (PersistenceException pe) {
 	            pe.printStackTrace();
 	        }
