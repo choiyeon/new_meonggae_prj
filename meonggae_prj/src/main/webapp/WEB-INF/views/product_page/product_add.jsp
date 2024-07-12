@@ -32,7 +32,8 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css"
     type="text/css">
 <!-- Theme Stylesheet -->
-<script src="../common/JS/script.js"></script>
+<!-- <script src="../common/JS/script.js"></script> -->
+<jsp:include page="../main_page/script.jsp" />
 <script src="../common/JS/product_add.js"></script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function() {

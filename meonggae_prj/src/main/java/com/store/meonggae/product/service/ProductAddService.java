@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.store.meonggae.product.dao.ProductAddDAO;
+import com.store.meonggae.product.domain.BuyerDomain;
 import com.store.meonggae.product.domain.ProductDomain;
 
 @Service
@@ -52,6 +53,15 @@ public class ProductAddService {
     //상품 삭제
     public void deleteProduct(ProductDomain product) throws IOException {
     	praDAO.deleteProduct(product);
+    }
+    //상품 구매
+    public void buyProduct(ProductDomain product) throws IOException {
+    	praDAO.buyProduct(product);
+    }
+    
+    //판매자 선택
+    public List<BuyerDomain> checkBuyer(String goodsNum) {
+    	return praDAO.checkBuyer(goodsNum);
     }
     
     public String getUerIp(HttpServletRequest request){

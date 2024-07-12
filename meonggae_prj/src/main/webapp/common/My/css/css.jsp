@@ -20,8 +20,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" type="text/css">
 
 <!-- Theme Stylesheet -->
-<script src ="${pageContext.request.contextPath}/common/JS/script.js"></script>
+<%-- <script src ="${pageContext.request.contextPath}/common/JS/script.js"></script> --%>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/common/CSS/responsive.css">
+<jsp:include page="/WEB-INF/views/main_page/script.jsp"/>
 </head>
 <body>

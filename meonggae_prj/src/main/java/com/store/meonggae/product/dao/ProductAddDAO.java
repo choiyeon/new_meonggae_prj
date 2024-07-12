@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.store.meonggae.dao.MybatisDAO;
+import com.store.meonggae.product.domain.BuyerDomain;
 import com.store.meonggae.product.domain.ProductDomain;
 
 @Component
@@ -48,6 +49,20 @@ public class ProductAddDAO {
     		ss.update("com.store.meonggae.product.deleteProduct", product);
     	}catch (PersistenceException e) {
     		e.printStackTrace();
+    	}
+    }
+    //상품 판매
+    public void buyProduct(ProductDomain product) {
+    	try (SqlSession ss = mbDAO.getMyBatisHandler(true)) {
+    		ss.update("com.store.meonggae.product.buyProduct", product);
+    	}catch (PersistenceException e) {
+    		e.printStackTrace();
+    	}
+    }
+    //판매자 선택
+    public List<BuyerDomain> checkBuyer(String goodsNum) throws PersistenceException {
+    	try (SqlSession ss = mbDAO.getMyBatisHandler(false)) {
+    		return ss.selectList("com.store.meonggae.product.checkBuyer", goodsNum);
     	}
     }
 }
