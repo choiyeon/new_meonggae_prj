@@ -30,10 +30,17 @@
         margin-bottom: 20px;
         cursor: pointer;
         transition: background-color 0.2s;
+        border-radius: 6px; /* 모서리를 둥글게 만듭니다 */
+        overflow: hidden; /* 이미지 둥근 모서리를 카드와 일치시키기 위해 추가 */
     }
     .card:hover {
         background-color: rgba(0, 0, 0, 0.1);
     }
+    
+    .card-img-top {
+        border-radius: 6px 6px 0 0; /* 카드의 이미지 상단 모서리도 둥글게 만듭니다 */
+    }
+    
     .tabs {
         display: flex;
         justify-content: center;
