@@ -39,7 +39,7 @@
    	}
 
 	#frmBoard {
-		margin-top: 30px;
+		margin-top: 10px;
 		margin-bottom: 10px;
 	}
 	
@@ -48,10 +48,19 @@
 		margin-bottom: 16px;
 	}
 	
+	.pagenation {
+		margin-top: 8px;
+		font-size: 18px;
+	}
+	
+	
 </style>
 <script type="text/javascript">
+	var nick = "${sessionScope.mgr.nick}";
+	var managerId = "${sessionScope.mgr.manager_id}";
+	var link = "${pageContext.request.contextPath}";
+
 	$(function(){
-	
 
 		$("#btnSearch").click(function(){
 			chkNull();
@@ -105,7 +114,7 @@
 			<th style="width: 80px">신고번호</th>
 			<th style="width: 200px">제목</th>
 			<th style="width: 80px">상품번호</th>
-			<th style="width: 120px">신고자</th>
+			<th style="width: 120px">회원번호</th>
 			<th style="width: 120px">작성일</th>
 			<th style="width: 120px">처리상태</th>
 			</tr>
@@ -131,27 +140,31 @@
 <c:if test="${ not empty e }">
 오류가 발생했습니다.
 </c:if>
-<div style="text-align:  center;">
-	<form action="report_result.do" method="get" name="frmBoard" id="frmBoard">
-		<select name="field" id="field">
-		<option value="0"${ param.field eq 0?" selected='selected'":"" }>제목</option>
-		<option value="1"${ param.field eq 1?" selected='selected'":"" }>내용</option>
-		<option value="2"${ param.field eq 2?" selected='selected'":"" }>작성자</option>
-		</select>
-		<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px"/>
-		<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
-		<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
-		<input type="hidden" name="currentPage" value="${ param.currentPage }"/>
-		<input type="text" style="display: none;"/>
-	</form>
-	</div>
 
- 	<!-- 페이지네이션 -->
+ 		<!-- 페이지네이션 -->
+ 		<div class="pagenation">
             <div style="text-align: center;">
                 <c:forEach begin="1" end="${ totalPages }" var="i">
                     <a href="report_result.do?currentPage=${ i }&field=${ param.field }&keyword=${ param.keyword }">${ i }</a>
                 </c:forEach>
             </div>
+           </div>
+           
+	<!-- 키워드 검색 -->            
+	<div style="text-align:  center;">
+		<form action="report_result.do" method="get" name="frmBoard" id="frmBoard">
+			<select name="field" id="field">
+			<option value="0"${ param.field eq 0?" selected='selected'":"" }>제목</option>
+			<option value="1"${ param.field eq 1?" selected='selected'":"" }>내용</option>
+			</select>
+			<input type="text" name="keyword" id="keyword" value="${ param.keyword }" style="width: 230px"/>
+			<input type="button" value="검색" id="btnSearch" class="btn btn-info btn-sm"/>
+			<input type="button" value="전체글" id="btnAllSearch" class="btn btn-info btn-sm"/>
+			<input type="hidden" name="currentPage" value="${ param.currentPage }"/>
+			<input type="text" style="display: none;"/>
+		</form>
+		</div>
+
 	
 	</div>
 
@@ -174,7 +187,7 @@
 <!-- dashlite 끝-->
 <script type="text/javascript">
 	$(function() {
-		$("#sidebar-manager").addClass("active current-page");
+		$("#sidebar-report").addClass("active current-page");
 	}); // $(document).ready(function() { })
 </script>	
 </body>

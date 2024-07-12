@@ -55,6 +55,7 @@ public class MngInquiryService {
 	        MngInquiryDomain inquiry = null;
 	        try {
 	            inquiry = miDAO.selectDetailInquiry(inquiry_num);
+	      
 	        } catch (PersistenceException pe) {
 	            pe.printStackTrace();
 	        }
