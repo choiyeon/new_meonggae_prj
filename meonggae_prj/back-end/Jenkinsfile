@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+
+    tools{
+        maven 'Maven'//젠킨스 tools의 설정한 Maven 이름
+    }
+
+    environment{
+        JAVA_HOME = 'C:\\dev\\java-11-openjdk-11.0.15.9-1' //자바가 설치된 경로
+        PATH = "${env.JAVA_HOME}\\bin;${env.PATH}"
+    }
+
+    // trigger{
+    //     pollSCM('H/6 * * * 1-5')
+    // }
+
+    stages {
+        stage('clone repository') {
+            steps {
+            git branch:'main',credentialsId:'github-token', 
+                        url:'https://github.com/s87k/new_meonggae_prj.git'
+           }
+        }
+
+        stage('build WAR'){
+            steps{
+                script{
+                    def mvnHome = tool name:'Maven', type:'hudson.tasks.Maven$MavenInstallation'
+                    withEnv(["MAVEN_HOME=${mvnHome}"] ){
+                        //pom.xml에 version노드의 이름으로 war가 targit 디렉토리에 생성된다.
+                        bat "\"${mvnHome}\\bin\\mvn\" clean package -DskipTests"
+                    }
+                }
+            }
+        }
+
+        stage('Copy WAR') {
+            steps {
+                script {
+                    def warFile = 'target\\sist-1.0.0-BUILD-SNAPSHOT.war'
+                    def destDir = 'C:\\test_docker'
+                    bat """
+                    if not exist ${destDir} mkdir ${destDir}
+                    copy ${warFile} ${destDir}\\test_meonggae.war
+                    """
+                }
+            }
+        }
+
+       stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageName = "test_meonggae_image"
+                    def containerName = "test_meonggae_container"
+                    
+                    // 기존 Docker 컨테이너 중지 및 삭제
+                    bat """
+                    docker stop ${containerName} || exit 0
+                    docker rm ${containerName} || exit 0
+                    """
+                    
+                    // 기존 Docker 이미지 삭제
+                    bat """
+                    docker rmi -f ${imageName} || exit 0
+                    """
+                    
+                    // Dockerfile이 있는 디렉토리로 이동
+                    dir('C:\\test_docker') {
+                        def app = docker.build(imageName)
+                    }
+                }
+            }
+        }
+
+        stage('Run Docker Image') {
+            steps {
+                script {
+                    def containerName = "test_meonggae_container"
+                    // Docker 이미지 실행
+                    docker.image("test_meonggae_image").run("-d --name ${containerName} -p 80:8080")
+                }
+            }
+        }
+    }
+}
