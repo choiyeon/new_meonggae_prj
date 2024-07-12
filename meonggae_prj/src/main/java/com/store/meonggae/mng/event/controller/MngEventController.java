@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.store.meonggae.mng.event.domain.MngEventDomain;
 import com.store.meonggae.mng.event.service.MngEventService;
-import com.store.meonggae.mng.report.domain.MngReportDomain;
-import com.store.meonggae.mng.report.service.MngReportService;
 import com.store.meonggae.mng.search.vo.SearchVO;
 
 
