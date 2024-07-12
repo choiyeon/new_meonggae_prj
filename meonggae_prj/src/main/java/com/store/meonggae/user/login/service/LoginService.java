@@ -37,15 +37,16 @@ public class LoginService {
 	@Autowired
 	private LoginDAO lDAO;
 
-	private final String CLIENT_ID = "0738d40e4912047a5dbb57d8ca06a869";
-	//private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
-	//private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
+	private final String CLIENT_ID = "0738d40e4912047a5dbb57d8ca06a869";/*병년*/
+//	private final String CLIENT_ID = "0a6c5685d149b27678bbc3870b307ad0";/*수연*/
+	private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
+	private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
 
 	public LoginDomain selectOneUser(LoginVO lVO) {
 		return lDAO.login(lVO);
 	}
 
-	public Map<String, Object> getKaKaoAccessToken(String code, HttpServletRequest request) throws Exception {
+	public Map<String, Object> getKaKaoAccessToken(String code) throws Exception {
 		// 1. 토큰 받아오는 url 설정
 		String url = "https://kauth.kakao.com/oauth/token";
 		RestTemplate restTemplate = new RestTemplate();
@@ -53,8 +54,6 @@ public class LoginService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-		String contextPath = request.getContextPath();
-        String REDIRECT_URI = contextPath + "/login_page/kakao_test.do";
 		// 2. 필수 파라미터 map으로 값 넣기
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 		params.add("grant_type", "authorization_code");
@@ -137,10 +136,8 @@ public class LoginService {
 		return user;
 	}
 
-	public void kakaoLogOut(String accessToken, HttpServletRequest request) throws Exception {
+	public void kakaoLogOut(String accessToken) throws Exception {
 		String url = "https://kapi.kakao.com/v1/user/logout";
-		String contextPath = request.getContextPath();
-        String LOGOUT_REDIRECT_URI = contextPath + "/index.do/logout.do";
 		
 		// URL에 쿼리 매개변수를 추가합니다.
 		url += "?client_id=" + URLEncoder.encode(CLIENT_ID, "UTF-8") + "&logout_redirect_uri="
