@@ -421,7 +421,7 @@
 											<div class="card-inner">
 					                            <div class="single-product">
 					                            	<div class="product-block">
-					                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
+					                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
 					                            		</div>
 														<div class="product-description text-left" style="margin-top:20px;">
 															<h6>여성의류${ i.index }</h6>
@@ -490,7 +490,7 @@
 											<div class="card-inner">
 					                            <div class="single-product">
 					                            	<div class="product-block">
-					                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
+					                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
 					                            		</div>
 														<div class="product-description text-left" style="margin-top:20px;">
 															<h6>여성의류${ i.index }</h6>
@@ -562,7 +562,7 @@
 											<div class="card-inner">
 					                            <div class="single-product">
 					                            	<div class="product-block">
-					                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
+					                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
 					                            		</div>
 														<div class="product-description text-left" style="margin-top:20px;">
 															<h6>여성의류${ i.index }</h6>
@@ -1991,7 +1991,7 @@
 									<div class="card-inner">
 			                            <div class="single-product">
 			                            	<div class="product-block">
-			                            		<div class="myImg col-xxl-12" style="background-image: url(http://211.63.89.136${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
+			                            		<div class="myImg col-xxl-12" style="background-image: url(${pageContext.request.contextPath}/user/products-img/product-${ i.index }.jpg);">
 			                            		</div>
 												<div class="product-description text-left" style="margin-top:20px;">
 													<h6>여성의류${ i.index }</h6>

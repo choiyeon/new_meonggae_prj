@@ -54,10 +54,12 @@
 		<result column="TITLE" property="title"/>
 		<result column="CONTENTS" property="contents"/>
 		<result column="INPUT_DATE" property="inputDate"/>
+		<result column="INQUIRY_NUM" property="inquiryNum"/>
 		<result column="ANSWER_FLAG" property="answerFlag"/>
 		<result column="ANSWER_DATE" property="answerDate"/>
 	</resultMap>
 	<resultMap type="com.store.meonggae.mgr.member.domain.MgrMemberReportDomain" id="mgrMemberReportDomResult">
+		<result column="REP_NUM" property="repNum"/>
 		<result column="TITLE" property="title"/>
 		<result column="CONTENTS" property="contents"/>
 		<result column="NICK_SELL" property="nickSell"/>
@@ -357,9 +359,9 @@
 	
 	<!-- 문의 목록 게시판 리스트 -->
 	<select id="selectListInquiry" resultMap="mgrMemberInquiryDomResult" parameterType="com.store.meonggae.mgr.member.vo.MgrMemberInquiySearchVO">
-		select	rnum,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+		select	rnum,INQUIRY_NUM,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
 		from	(
-				select	row_number() over(order by input_date desc) RNUM,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
+				select	row_number() over(order by input_date desc) RNUM,INQUIRY_NUM,TITLE,CONTENTS,INPUT_DATE,ANSWER_FLAG,ANSWER_DATE
 				from	inquiry
 				where	mem_num = #{memNum} 
 						<choose>

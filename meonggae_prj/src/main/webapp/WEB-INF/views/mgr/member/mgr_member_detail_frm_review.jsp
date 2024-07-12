@@ -213,7 +213,7 @@
  	.errMsg{color:#ff0000;}
  	
 	/* datepicker 아이콘 가져오기 */
-   .ui-widget-header .ui-icon { background-image: url('http://211.63.89.136${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
+   .ui-widget-header .ui-icon { background-image: url('${pageContext.request.contextPath}/mgr_common/images/btns.png'); } 
 	
 </style>
 

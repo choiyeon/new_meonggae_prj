@@ -147,7 +147,13 @@ function callAjaxUpdateOneNoticeRead(noticeData) {
 		}, 
 		success: function(jsonObj) {
 			if(jsonObj.result) {
-				
+				let link = '';
+				if(param.noticeType == "I") {
+					link = "/meonggae_prj/mng/inquiry/inquiry_detail.do?inquiry_num=" + param.noticeNum;
+				} else {
+					link = "/meonggae_prj/mng/report/report_detail.do?rep_num=" + param.noticeNum;
+				} // end else
+				location.href=link;
 			} // end if
 		} // success
 	}); // ajax

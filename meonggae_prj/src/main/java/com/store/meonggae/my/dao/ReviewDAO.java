@@ -11,6 +11,7 @@ import com.store.meonggae.dao.MybatisDAO;
 import com.store.meonggae.my.domain.MyReviewDomain;
 import com.store.meonggae.my.domain.WriteReviewDomain;
 import com.store.meonggae.my.pagination.SearchVO;
+import com.store.meonggae.my.vo.StarScoreVO;
 import com.store.meonggae.my.vo.WriteReviewVO;
 
 @Component
@@ -64,7 +65,8 @@ public class ReviewDAO {
 		int cnt = 0;
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
-		cnt = ss.update("com.store.meonggae.Review.deleteReview", goodsNum);
+		cnt += ss.update("com.store.meonggae.Review.deleteReview", goodsNum);
+		cnt += ss.update("com.store.meonggae.Review.deleteStarScore", goodsNum);
 		mbDAO.CloseHandler(ss);
 		
 		return cnt;
@@ -73,11 +75,12 @@ public class ReviewDAO {
 	/**
 	 * 리뷰 작성
 	 */
-	public int insertReview(WriteReviewVO wrVO) throws PersistenceException{
+	public int insertReview(WriteReviewVO wrVO, StarScoreVO ssVO) throws PersistenceException{
 		int cnt = 0;
 		
 		SqlSession ss = mbDAO.getMyBatisHandler(true);
-		cnt = ss.update("com.store.meonggae.Review.insertReview", wrVO);
+		cnt += ss.update("com.store.meonggae.Review.insertReview", wrVO);
+		cnt += ss.update("com.store.meonggae.Review.insertStar", ssVO);
 		mbDAO.CloseHandler(ss);
 		
 		return cnt;

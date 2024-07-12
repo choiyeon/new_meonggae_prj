@@ -34,7 +34,8 @@
 	type="text/css">
 <!-- Theme Stylesheet -->
 
-<script src="${pageContext.request.contextPath}/common/JS/script.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/common/JS/script.js"></script> --%>
+<jsp:include page="../main_page/script.jsp" />
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/common/CSS/style.css">
 <link rel="stylesheet"

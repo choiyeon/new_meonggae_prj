@@ -14,6 +14,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class MgrMemberInqiryDomain {
-	private String title, contents, answerFlag;
+	private String title, contents, answerFlag, inquiryNum;
 	private Date inputDate, answerDate;
 }

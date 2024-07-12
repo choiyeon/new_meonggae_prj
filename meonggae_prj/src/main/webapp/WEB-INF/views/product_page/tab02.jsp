@@ -31,12 +31,11 @@ $(function() {
                 'goodsNum': goodsNum
             },
             success: function(data) {
-                console.log("Update successful:", data);
                 window.location.reload(); // 업데이트 후 페이지를 새로고침하여 변경사항 반영
                 alert("상품이 수정되었습니다.")
             },
             error: function(xhr, status, error) {
-                console.error('AJAX 요청 실패: ' + status + " " + error);
+                //console.error('AJAX 요청 실패: ' + status + " " + error);
             }
         });
     });
@@ -81,6 +80,13 @@ $(function() {
     	}//end if
     });//click
 });//ready
+function checkSellStatus(select) {
+    if (select.value.startsWith('S')) {
+    	var goodsNumStr = select.value.substring(1);
+    	window.open("check_buyer.do?goodsNum="+goodsNumStr, "checkBuyer", "width=472, height=241, top="+
+    	(window.screenY+203)+", left="+(window.screenX+306));
+    }
+}
 </script>
 <form>
     <table class="table table-hover" style="width: 100%;">
@@ -103,10 +109,10 @@ $(function() {
                 <tr>
                     <td><img alt="상품 정보"
                         src="${pageContext.request.contextPath}/products-img/${product.img}"></td>
-                    <td><select name="sellStatus" class="sellStatus">
+                    <td><select name="sellStatus" class="sellStatus" onchange="checkSellStatus(this)">
                             <option value="N"
                                 <c:if test="${product.sell_status_code == 'N'}">selected</c:if>>판매중</option>
-                            <option value="S"
+                            <option value="S${product.goodsNum}"
                                 <c:if test="${product.sell_status_code == 'S'}">selected</c:if>>판매완료</option>
                     </select></td>
                     <td>${product.category}</td>
@@ -120,8 +126,12 @@ $(function() {
                     <td><input type="text" value="${product.location}"
                         name="location" class="location"></td>
                     <td>${product.cnt}</td>
-                    <td><input type="button" class="change btn btn-success btn-sm"
-                        value="수정" data-value="${product.goodsNum}"></td>
+                    <td>
+                    <c:if test="${product.sell_status_code == 'N'}">
+                    <input type="button" id=change class="change btn btn-success btn-sm"
+                        value="수정" data-value="${product.goodsNum}">
+                    </c:if>
+                    </td>
                     <td><input type="button" id="delete" class="delete btn2 btn-danger btn-sm"
                         value="삭제" data-value="${product.goodsNum}"></td>
                 </tr>

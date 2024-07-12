@@ -10,6 +10,7 @@
 	<resultMap type="mgrManagerDomain" id="mgrManagerDomResult">
 		<result column="MANAGER_ID" property="managerId"/>
 		<result column="DNAME" property="dname"/>
+		<result column="DEPTNO" property="deptno"/>
 		<result column="PARENT_MANAGER_ID" property="parentManagerId"/>
 		<result column="PARENT_MANAGER_NAME" property="parentManagerName"/>
 		<result column="NAME" property="name"/>
@@ -89,8 +90,8 @@
 	<!-- 게시판 목록 하나 조회 -->
 	<select id="selectOneManager" resultMap="mgrManagerDomResult" parameterType="String">
 		select	m.NAME, m.birth, m.tel, m.gender, m.addr1, m.addr2,
-				(select name from manager where manager_id = m.PARENT_MANAGER_ID) PARENT_MANAGER_NAME,
-				m.manager_id, m.nick, m.permission, m.input_date
+				(select name from manager where manager_id = m.PARENT_MANAGER_ID) PARENT_MANAGER_NAME, m.PARENT_MANAGER_ID,
+				m.manager_id, m.nick, m.email, m.deptno, m.permission, m.input_date
 		from	manager m, dept d
 		where	m.deptno = d.deptno and m.manager_id=#{managerId}
 	</select>

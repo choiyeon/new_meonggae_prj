@@ -8,7 +8,6 @@ import com.google.zxing.common.BitMatrix;
 import de.taimos.totp.TOTP;
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -17,7 +16,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
+import java.util.Base64;
 
+/**
+ * @author kds
+ * OTP를 생성하여 QR코드 이미지를 메일로 전송하는 경우, 
+ * 이미지 데이터를 base64로 전송하면 src가 사라짐 
+ * localhost같은 게 붙으면 src에 이상한 값이 붙어서 엑박 뜸
+ */
 @Service
 public class OTPUtil {
 	
@@ -76,6 +82,14 @@ public class OTPUtil {
         return pngOutputStream.toByteArray();
     } // getQRImage
     
+    // byte[]를 base64로 인코딩
+    public String encodeByteArr2Base64(byte[] byteArr) {
+    	
+    	String base64 = Base64.getEncoder().encodeToString(byteArr);
+    	
+    	return base64;
+    } // encodeByteArr2Base64
+    
 //    public static void main(String[] args) {
 //    	OTPUtil otp = new OTPUtil();
 //    	
@@ -84,6 +98,7 @@ public class OTPUtil {
 //    	int height = 200;
 //    	int width = 200;
 //    	String filePath = "C:/dev/test.png";
+//    	String imgBase64 = "";
 //    	
 //    	System.out.println("최초 개인키 생성 시 사용하는 메소드");
 //    	String secretKey = otp.getSecretKey();
@@ -99,7 +114,7 @@ public class OTPUtil {
 //    	
 //    	System.out.println("url, 파일생성할경로, 높이px, 폭px을 받아서 QR코드 이미지를 생성하는 메소드");
 //    	try {
-//			otp.getQRImage(googleOTPAuthURL, filePath, height, width);
+//    		imgBase64 = otp.encodeByteArr2Base64(otp.getQRImage(googleOTPAuthURL, height, width));
 //		} catch (WriterException e) {
 //			e.printStackTrace();
 //		} catch (IOException e) {

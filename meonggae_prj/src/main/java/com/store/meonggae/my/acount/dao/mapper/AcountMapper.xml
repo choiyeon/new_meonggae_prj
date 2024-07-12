@@ -7,24 +7,30 @@
 <!-- 계정정보 존재여부 확인 -->
 <select id="chkAcount" resultType="Integer" parameterType="chkAcountVO">
 select		count(*)
-from		MEMBER_DETAIL
-where		name like '${name}'
+from		MEMBER_DETAIL md, member m
+where		md.mem_num = m.mem_num
+			and mem_status != 'W'
+			and name like '${name}'
 			and email like '${email}'
 </select>
 
 <!-- 아이디 select -->
 <select id="selectId" resultType="String" parameterType="chkAcountVO">
 select		mem_id
-from		MEMBER_DETAIL
-where		name like '${name}'
+from		MEMBER_DETAIL md, member m
+where		md.mem_num = m.mem_num
+			and mem_status != 'W'
+			and name like '${name}'
 			and email like '${email}'
 </select>
 
-<!-- 계정정보 존재여부 확인(비밀번호 포함) -->
+<!-- 계정정보 존재여부 확인(아이디 포함) -->
 <select id="chkAcountPw" resultType="Integer" parameterType="chkPwAcountVO">
 select		count(*)
-from		MEMBER_DETAIL
-where		name like '${name}'
+from		MEMBER_DETAIL md, member m
+where		md.mem_num = m.mem_num
+			and mem_status != 'W'
+			and name like '${name}'
 			and mem_id like '${id}'
 			and email like '${email}'
 </select>

@@ -56,7 +56,6 @@ String nick = request.getParameter("nick");
 		</div>
 		<div id="userInfo" class="userInfo">
 			<div id="nick" class="nick"><%= nick %>님의 상점</div>
-			<!-- <a href="#void" id="userDeclaration"><i class="fa fa-exclamation"></i> 신고</a> -->
 		</div>
 	</div>
 		<span id="storeMenu" class="storeMenu">
