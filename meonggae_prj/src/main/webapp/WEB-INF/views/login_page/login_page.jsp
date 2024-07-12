@@ -59,10 +59,10 @@
 							class="form-control" required>
 					</div>
 					<div class="button-login-box">
-						<!-- 카카오 로그인 버튼 시작 0738d40e4912047a5dbb57d8ca06a869-->
+						<!-- 카카오 로그인 버튼 시작 0738d40e4912047a5dbb57d8ca06a869  ${pageContext.request.contextPath} http://localhost/meonggae_prj -->
 						<a
 							href="https://kauth.kakao.com/oauth/authorize?
-							client_id=0738d40e4912047a5dbb57d8ca06a869&
+							client_id=0a6c5685d149b27678bbc3870b307ad0&
 							redirect_uri=http://localhost/meonggae_prj/login_page/kakao_test.do&
 							response_type=code&
 							prompt=login">
