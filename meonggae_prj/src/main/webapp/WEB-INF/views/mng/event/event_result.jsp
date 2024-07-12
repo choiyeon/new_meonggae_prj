@@ -114,6 +114,10 @@
 		font-size: 24px;
 	}
 	
+	.total-count {
+		margin-top: 20px;
+		margin-left: 40px;
+	}
 	
 </style>
 <script type="text/javascript">
@@ -167,7 +171,9 @@
 	<!-- 본문 시작 -->
 	<div class="container mt-5">
    <div class="banner">이벤트 리스트 조회</div>
-   
+   <div class="total-count">
+			총 게시글 수 : <strong><c:out value="${ totalRecords }"/></strong>  개<br>
+			</div>
     <div class="row custom-row">
         <c:forEach var="ed" items="${ requestScope.listEvent }" varStatus="i">
             <div class="col-md-5">
