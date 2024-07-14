@@ -440,8 +440,8 @@
 									<label class="form-label" for="fv-full-name">주소</label>
 									<div class="form-control-wrap">
 										<div class="input-group">
-<!-- 											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value=""> -->
-											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value="서울시 강남구 역삼동">
+											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value="">
+<!-- 											<input type="text" class="form-control invalid" id="addr1" name="addr1" readonly value="서울시 강남구 역삼동"> -->
 											<span class="invalid">주소는 필수 입력입니다.</span>
 											<input type="button" class="btn btn-light" id="addChk" value="우편번호검색"></input>
 										</div>

@@ -18,7 +18,7 @@ pipeline {
         stage('clone repository') {
             steps {
             git branch:'main',credentialsId:'github-token', 
-                        url:'https://github.com/s87k/new_meonggae_prj.git'
+                        url:'https://github.com/s87k/meonggae_prj.git'
            }
         }
 
@@ -37,11 +37,11 @@ pipeline {
         stage('Copy WAR') {
             steps {
                 script {
-                    def warFile = 'target\\sist-1.0.0-BUILD-SNAPSHOT.war'
+                    def warFile = 'target\\meonggae-1.0.0-BUILD-SNAPSHOT.war'
                     def destDir = 'C:\\test_docker'
                     bat """
                     if not exist ${destDir} mkdir ${destDir}
-                    copy ${warFile} ${destDir}\\test_meonggae.war
+                    copy ${warFile} ${destDir}\\meonggae_prj.war
                     """
                 }
             }

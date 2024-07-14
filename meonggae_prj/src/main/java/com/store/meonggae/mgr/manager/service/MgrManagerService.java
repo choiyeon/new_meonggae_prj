@@ -1,5 +1,6 @@
 package com.store.meonggae.mgr.manager.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
@@ -30,12 +32,15 @@ import com.store.meonggae.mgr.manager.vo.MgrManagerVO;
 @Service
 public class MgrManagerService {
 	
-	@Autowired
+	@Autowired(required = false)
 	private MgrManagerDAO mmDAO;
-	@Autowired
+	@Autowired(required = false)
 	private OTPUtil otpUtil;
-	@Autowired
+	@Autowired(required = false)
 	private EmailSender email;
+	@Autowired(required = false)
+	private TaskScheduler taskScheduler;
+
 	
 	// 검색된 관리자 수
 	public int getTotalCount(ManagerSearchVO sVO) {
@@ -252,28 +257,45 @@ public class MgrManagerService {
 				
 				googleOTPAuthURL = otpUtil.getGoogleOTPAuthURL(secretKey, mMgrVO.getManagerId(), "meonggae");
 				
-				otpUtil.getQRImage(googleOTPAuthURL, "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images/qr_" + mMgrVO.getManagerId() + ".png", 200, 200);
+				String pathSys = "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images";
+				File file = new File(pathSys);
+				file.mkdirs();
 				
-				mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
-				
-				String keyMail = "krcosist";
-				String saltMail = "0234824632";
-				TextEncryptor teMail = Encryptors.text(keyMail, saltMail);
-
-				String senderEmail = teMail.decrypt(mgrEmailDomain.getSenderEmail());
-				String senderPassword = teMail.decrypt(mgrEmailDomain.getSenderPassword());
-				
-				StringBuilder sb = new StringBuilder();
-				sb.append("<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='http://")
-				.append(serverName)
-				.append(contextPath)
-				.append("/mgr_common/images/qr_")
-				.append(mMgrVO.getManagerId())
-				.append(".png' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>");
-				
-				EmailVO eVO = new EmailVO(0, mMgrVO.getEmail(), "멍게장터 관리자 인증 이메일", sb.toString(), senderEmail, senderPassword);
-				
-				email.mailSend(eVO, "html");
+				final String timeNow = String.valueOf(new Date().getTime());
+				otpUtil.getQRImage(googleOTPAuthURL, pathSys + "/qr_" + mMgrVO.getManagerId() + "_" + timeNow + ".png", 200, 200);
+				final String managerId =  mMgrVO.getManagerId();
+				final String emailAddr = mMgrVO.getEmail();
+//				Thread.sleep(2000);
+				new java.util.Timer().schedule( 
+				        new java.util.TimerTask() {
+				            @Override
+				            public void run() {
+				                // your code here
+				            	sendMail(serverName, contextPath, managerId, emailAddr, timeNow);
+				            }
+				        }, 
+				        30000 
+				);
+//				mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
+//				
+//				String keyMail = "krcosist";
+//				String saltMail = "0234824632";
+//				TextEncryptor teMail = Encryptors.text(keyMail, saltMail);
+//
+//				String senderEmail = teMail.decrypt(mgrEmailDomain.getSenderEmail());
+//				String senderPassword = teMail.decrypt(mgrEmailDomain.getSenderPassword());
+//				
+//				StringBuilder sb = new StringBuilder();
+//				sb.append("<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='http://")
+//				.append(serverName)
+//				.append(contextPath)
+//				.append("/mgr_common/images/qr_")
+//				.append(mMgrVO.getManagerId())
+//				.append(".png' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>");
+//				
+//				EmailVO eVO = new EmailVO(0, mMgrVO.getEmail(), "멍게장터 관리자 인증 이메일", sb.toString(), senderEmail, senderPassword);
+//				
+//				email.mailSend(eVO, "html");
 				mMgrVO.setEmail(te.encrypt(mMgrVO.getEmail()));
 				
 				mmDAO.insertManager(mMgrVO);
@@ -283,17 +305,49 @@ public class MgrManagerService {
 				pe.printStackTrace();
 			} catch (UnsupportedEncodingException uee) {
 				uee.printStackTrace();
-			} catch (NoSuchAlgorithmException nae) {
-				nae.printStackTrace();
-			} catch (GeneralSecurityException gse) {
-				gse.printStackTrace();
 			} catch (WriterException we) {
 				we.printStackTrace();
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
-			} // end catch
+			} // end catch 
 		} // end if
-		
+		 
 		return flagAddResult;
 	} // addManagerProcess
+	
+	public void sendMail(String serverName, String contextPath, String managerId, String emailAddr, String timeNow) {
+		MgrEmailDomain mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
+		
+		String keyMail = "krcosist";
+		String saltMail = "0234824632";
+		TextEncryptor teMail = Encryptors.text(keyMail, saltMail);
+
+		String senderEmail = teMail.decrypt(mgrEmailDomain.getSenderEmail());
+		String senderPassword = teMail.decrypt(mgrEmailDomain.getSenderPassword());
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<div style='text-align: center;'><h4>멍게장터 구글 OTP 인증 링크</h4><div style='margin:0px auto; width:200px; height:200px; margin-top:5%'><img src='http://")
+		.append(serverName)
+		.append(contextPath)
+		.append("/mgr_common/images/qr_")
+		.append(managerId)
+		.append("_")
+		.append(timeNow)
+		.append(".png' width='200px' height='200px'></div><div style='margin-top:5%'><span>구글 Authenticator 어플리케이션에 등록해주시기 바랍니다</span></div></div>");
+		
+		EmailVO eVO = new EmailVO(0, emailAddr, "멍게장터 관리자 인증 이메일", sb.toString(), senderEmail, senderPassword);
+		
+		try {
+			email.mailSend(eVO, "html");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 } // class
