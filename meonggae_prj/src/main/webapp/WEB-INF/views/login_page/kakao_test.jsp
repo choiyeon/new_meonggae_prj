@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
-	<link rel="icon" href="http://192.168.10.219/spring_mvc/common/favicon/favicon.ico"/>
+	<link rel="icon" href="${pageContext.request.contextPath}/common/tamcatIcon.ico"/>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -30,7 +30,7 @@
 		<p>ID : ${user.id}</p>
 		<p>Nick : ${user.nick} ( ${sessionScope.user_nick })</p>>
 		<p>Profile Image : <img src = "${user.profile }" alt = "유저 이미지"></p>
-		<a href="${pageContext.request.contextPath}/index.do">메인 페이지로 이동</a>
+		<a href="http://localhost/meonggae_prj/index.do">메인 페이지로 이동</a>
 	</div>
 <jsp:include page="../footer/footer.jsp"></jsp:include>
 </body>

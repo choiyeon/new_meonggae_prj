@@ -59,11 +59,11 @@
 							class="form-control" required>
 					</div>
 					<div class="button-login-box">
-						<!-- 카카오 로그인 버튼 시작 -->
+						<!-- 카카오 로그인 버튼 시작 0738d40e4912047a5dbb57d8ca06a869  ${pageContext.request.contextPath} http://localhost/meonggae_prj -->
 						<a
 							href="https://kauth.kakao.com/oauth/authorize?
-							client_id=0738d40e4912047a5dbb57d8ca06a869&
-							redirect_uri=${pageContext.request.contextPath}/login_page/kakao_test.do&
+							client_id=0a6c5685d149b27678bbc3870b307ad0&
+							redirect_uri=http://localhost/meonggae_prj/login_page/kakao_test.do&
 							response_type=code&
 							prompt=login">
 							<img
@@ -77,7 +77,7 @@
 							data-onsuccess="onSignIn" data-theme="dark"></div>
 						<br> -->
 						<!-- 구글 로그인 버튼 끝-->
-						<a href="${pageContext.request.contextPath}/join_page/mem_join.do">소셜
+						<a href="${pageContext.request.contextPath}/join_page/mem_join.do">
 							인증 없이 회원가입 하기</a><br>
 						<a href="${pageContext.request.contextPath}/My/acount/acount.do">아이디/비밀번호 찾기</a>
 						<div style="padding-top: 10px;">
