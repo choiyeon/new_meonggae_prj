@@ -274,7 +274,7 @@ public class MgrManagerService {
 				            	sendMail(serverName, contextPath, managerId, emailAddr, timeNow);
 				            }
 				        }, 
-				        30000 
+				        20000 
 				);
 //				mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
 //				
@@ -315,6 +315,7 @@ public class MgrManagerService {
 		return flagAddResult;
 	} // addManagerProcess
 	
+	// 메일 전송을 지연 실행시키기 위해 메소드로 분리
 	public void sendMail(String serverName, String contextPath, String managerId, String emailAddr, String timeNow) {
 		MgrEmailDomain mgrEmailDomain = mmDAO.selectOneEmailAcoount("1");
 		
