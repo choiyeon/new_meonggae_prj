@@ -190,7 +190,7 @@
 <!-- dashlite 끝-->
 <script type="text/javascript">
 	$(function() {
-		$("#sidebar-manager").addClass("active current-page");
+		$("#sidebar-inquiry").addClass("active current-page");
 	}); // $(document).ready(function() { })
 </script>	
 </body>
