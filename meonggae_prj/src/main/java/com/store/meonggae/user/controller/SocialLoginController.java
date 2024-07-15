@@ -24,7 +24,7 @@ public class SocialLoginController {
 
     @GetMapping("/login_page/kakao_test.do")
     public String kakaoLogin(@RequestParam("code") String code, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-        Map<String, Object> tokenResponse = loginService.getKaKaoAccessToken(code, request);
+        Map<String, Object> tokenResponse = loginService.getKaKaoAccessToken(code);
         String accessToken = (String) tokenResponse.get("access_token");
         LoginDomain user = loginService.getKaKaoUserInfo(accessToken);
         
@@ -39,11 +39,11 @@ public class SocialLoginController {
     }
     
     @GetMapping("/logout.do")
-    public String logout(HttpSession session, SessionStatus ss, HttpServletRequest request) {
+    public String logout(HttpSession session, SessionStatus ss) {
         String accessToken = (String) session.getAttribute("access_token");
         if (accessToken != null) {
             try {
-                loginService.kakaoLogOut(accessToken, request);
+                loginService.kakaoLogOut(accessToken);
             } catch (Exception e) {
                 e.printStackTrace();
             }

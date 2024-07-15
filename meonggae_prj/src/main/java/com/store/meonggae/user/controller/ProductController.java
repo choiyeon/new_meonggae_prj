@@ -217,7 +217,6 @@ public class ProductController {
  		product.setGoodsNum(goodsNum);
  		int buyerNum = Integer.parseInt(buyer);
  		product.setMem_num_buy(buyerNum);
- 		System.out.println(product);
  		productAddService.buyProduct(product);
  		
  		return "redirect:/product_page/tab01.do";
