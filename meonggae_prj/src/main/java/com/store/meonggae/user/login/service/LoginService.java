@@ -39,8 +39,10 @@ public class LoginService {
 
 //	private final String CLIENT_ID = "0738d40e4912047a5dbb57d8ca06a869";/*병년*/
 	private final String CLIENT_ID = "0a6c5685d149b27678bbc3870b307ad0";/*수연*/
-	private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
-	private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
+//	private final String REDIRECT_URI = "http://localhost/meonggae_prj/login_page/kakao_test.do";
+//	private final String LOGOUT_REDIRECT_URI = "http://localhost/meonggae_prj/index.do/logout.do";
+	private final String REDIRECT_URI = "http://stu8.sist.co.kr/meonggae_prj/login_page/kakao_test.do";
+	private final String LOGOUT_REDIRECT_URI = "http://stu8.sist.co.kr/meonggae_prj/index.do/logout.do";
 
 	public LoginDomain selectOneUser(LoginVO lVO) {
 		return lDAO.login(lVO);

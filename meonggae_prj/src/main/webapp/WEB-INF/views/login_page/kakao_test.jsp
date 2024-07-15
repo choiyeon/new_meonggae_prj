@@ -30,7 +30,8 @@
 		<p>ID : ${user.id}</p>
 		<p>Nick : ${user.nick} ( ${sessionScope.user_nick })</p>>
 		<p>Profile Image : <img src = "${user.profile }" alt = "유저 이미지"></p>
-		<a href="http://localhost/meonggae_prj/index.do">메인 페이지로 이동</a>
+<!-- 		<a href="http://localhost/meonggae_prj/index.do">메인 페이지로 이동</a> -->
+		<a href="http://stu8.sist.co.kr/meonggae_prj/index.do">메인 페이지로 이동</a>
 	</div>
 <jsp:include page="../footer/footer.jsp"></jsp:include>
 </body>
