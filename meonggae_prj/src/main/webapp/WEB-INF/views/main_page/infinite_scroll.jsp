@@ -48,7 +48,6 @@
 		                                    '</div>');
 		            },
 		            success: function(result) {
-		            	console.log(result);
 		                if(result.length === 0 || result == '') {
 		                	// 리스트가 비어있으면 감지 div 숨기기
 		                    $("#listEnd").hide();
