@@ -63,13 +63,24 @@
 						<a
 							href="https://kauth.kakao.com/oauth/authorize?
 							client_id=0a6c5685d149b27678bbc3870b307ad0&
-							redirect_uri=http://localhost/meonggae_prj/login_page/kakao_test.do&
+							redirect_uri=http://stu8.sist.co.kr/meonggae_prj/login_page/kakao_test.do&
 							response_type=code&
 							prompt=login">
 							<img
 							src="${pageContext.request.contextPath}/common/images/kakao_login_medium_wide.png"
 							width="222" alt="카카오 로그인 버튼">
 						</a>
+<!-- 						<a -->
+<!-- 							href="https://kauth.kakao.com/oauth/authorize? -->
+<!-- 							client_id=0a6c5685d149b27678bbc3870b307ad0& -->
+<!-- 							redirect_uri=http://localhost/meonggae_prj/login_page/kakao_test.do& -->
+<!-- 							response_type=code& -->
+<!-- 							prompt=login"> -->
+<!-- 							<img -->
+<%-- 							src="${pageContext.request.contextPath}/common/images/kakao_login_medium_wide.png" --%>
+<!-- 							width="222" alt="카카오 로그인 버튼"> -->
+<!-- 						</a> -->
+
 						<!-- 카카오 로그인 버튼 끝 -->
 						<!-- 구글 로그인 버튼 시작 -->
 					<!-- 	<div class="g-signin2"
