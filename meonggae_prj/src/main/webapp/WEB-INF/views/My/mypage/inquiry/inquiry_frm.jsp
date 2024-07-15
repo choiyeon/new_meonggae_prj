@@ -51,32 +51,42 @@
 				<!-- 메뉴목록 -->
 			</div>
 				<div id="notice" class="notice">답변이 완료된 후에는 수정이 불가능합니다.</div>
-
-				<table id="inquiryTable" class="table table-hover">
-					<thead>
-						<tr>
-							<td style="width: 60%">제목</td>
-							<td style="width: 20%">상태</td>
-							<td style="width: 20%">작성일</td>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${ inquiryList }" var="il">
+				
+				<c:choose>
+				<c:when test="${not empty inquiryList}">
+					<table id="inquiryTable" class="table table-hover">
+						<thead>
 							<tr>
-								<td><a
-									href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_detail.do?inquiryNum=${ il.inquiryNum }">
-										<c:out value="${ il.title }" />
-								</a></td>
-								<td>${ il.answerFlag eq 'N'?'답변 대기중':'답변 완료' }</td>
-								<td><fmt:formatDate value="${ il.inputDate }"
-										pattern="yyyy-MM-dd" /></td>
+								<td style="width: 60%">제목</td>
+								<td style="width: 20%">상태</td>
+								<td style="width: 20%">작성일</td>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				<c:if test="${ not empty pagination }">
-					<div class="pagination" style="display: flex; justify-content: center;">${pagination}</div>
-				</c:if>
+						</thead>
+						<tbody>
+							<c:forEach items="${ inquiryList }" var="il">
+								<tr>
+									<td><a
+										href="${pageContext.request.contextPath}/My/mypage/inquiry/inquiry_detail.do?inquiryNum=${ il.inquiryNum }">
+											<c:out value="${ il.title }" />
+									</a></td>
+									<td>${ il.answerFlag eq 'N'?'답변 대기중':'답변 완료' }</td>
+									<td><fmt:formatDate value="${ il.inputDate }"
+											pattern="yyyy-MM-dd" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					<c:if test="${ not empty pagination }">
+						<div class="pagination" style="display: flex; justify-content: center;">${pagination}</div>
+					</c:if>
+				</c:when>
+				<c:otherwise>
+					<div class="noGoodsDibs">
+					작성한 문의가 없습니다!
+					</div>
+				</c:otherwise>
+				</c:choose>
+				
 				<input type="button" value="문의쓰기" id="inquiryWriteBtn"
 					class="btn btn-primary btn-sm" />
 		</div>
