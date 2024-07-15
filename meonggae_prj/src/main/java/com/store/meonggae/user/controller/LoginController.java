@@ -59,7 +59,7 @@ public class LoginController {
 			TextEncryptor te = Encryptors.text(key, salt);
 
 			user.setPass("");
-			LoginLogVO logVO = new LoginLogVO(user.getMemNum(), request.getRemoteAddr(), request.getHeader("sec-ch-ua-platform").replaceAll("\"", ""), loginService.getMemberBrowser(request.getHeader("User-Agent")), user.getMemStatus());
+			LoginLogVO logVO = new LoginLogVO(user.getMemNum(), request.getRemoteAddr(), request.getHeader("sec-ch-ua-platform") != null ? request.getHeader("sec-ch-ua-platform").replaceAll("\"", "-") : "", loginService.getMemberBrowser(request.getHeader("User-Agent")), user.getMemStatus());
 			loginService.addMemberLoginLog(logVO);
 			
 			switch (user.getMemStatus()) {
