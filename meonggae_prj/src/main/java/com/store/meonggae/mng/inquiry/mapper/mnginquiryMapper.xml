@@ -106,7 +106,8 @@
 	    UPDATE INQUIRY
 	    SET
 	      ANSWER_CONTENTS = #{answer_contents},
-	      ANSWER_DATE = sysdate
+	      ANSWER_DATE = sysdate,
+	      ANSWER_FLAG = 'Y'
 	    WHERE
 	      INQUIRY_NUM = #{inquiry_num}
 	  </update>
