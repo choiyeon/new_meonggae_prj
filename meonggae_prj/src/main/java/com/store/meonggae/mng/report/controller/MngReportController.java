@@ -56,7 +56,6 @@ public class MngReportController {
 
 	    sVO.setStartNum(startNum);
 	    sVO.setEndNum(endNum);
-	    System.out.println("-------------------------------------" + sVO);
 
 	    List<MngReportDomain> list = rs.searchReport(sVO);
 

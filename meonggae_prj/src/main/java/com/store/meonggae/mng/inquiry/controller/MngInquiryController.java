@@ -54,7 +54,6 @@ public class MngInquiryController {
 
 	    sVO.setStartNum(startNum);
 	    sVO.setEndNum(endNum);
-	    System.out.println("-------------------------------------" + sVO);
 
 	    List<MngInquiryDomain> list = is.searchInquiry(sVO);
 

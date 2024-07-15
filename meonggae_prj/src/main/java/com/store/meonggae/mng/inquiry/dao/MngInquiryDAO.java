@@ -23,7 +23,6 @@ public class MngInquiryDAO {
 	
 		List<MngInquiryDomain> list=null;
 		SqlSession ss=mbDAO.getMyBatisHandler(false);
-		System.out.println("-----------"+ list);
 		list=ss.selectList("kr.co.sist.inquiry.selectInquiryList", sVO);
 		mbDAO.closeHandler(ss);
 		return list;
