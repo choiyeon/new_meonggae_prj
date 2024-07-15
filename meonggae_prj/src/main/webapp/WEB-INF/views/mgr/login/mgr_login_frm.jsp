@@ -103,8 +103,8 @@
 											<label class="form-label" for="email-address">아이디</label>
 										</div>
 										<div class="form-control-wrap">
-											<input autocomplete="off" type="text" class="form-control form-control-lg" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value="super">
-<!-- 											<input autocomplete="off" type="text" class="form-control form-control-lg login" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value=""> -->
+<!-- 											<input autocomplete="off" type="text" class="form-control form-control-lg" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value="super"> -->
+											<input autocomplete="off" type="text" class="form-control form-control-lg login" id="manager_id" name="manager_id" placeholder="아이디를 입력해주세요" value="">
 										</div>
 									</div>
 									<div class="form-group">
@@ -112,8 +112,8 @@
 											<label class="form-label" for="password">비밀번호</label>
 										</div>
 										<div class="form-control-wrap">
-											<input autocomplete="new-password" type="password" class="form-control form-control-lg" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value="qwer1234!">
-<!-- 											<input autocomplete="new-password" type="password" class="form-control form-control-lg login" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value=""> -->
+<!-- 											<input autocomplete="new-password" type="password" class="form-control form-control-lg" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value="qwer1234!"> -->
+											<input autocomplete="new-password" type="password" class="form-control form-control-lg login" id="pass" name="pass" placeholder="비밀번호를 입력해주세요" value="">
 										</div>
 									</div>
 									<div>

@@ -113,10 +113,10 @@
 		});//moreReviewBtn
 	});//ready
 	
-	var img_elm = document.getElementById("#profileImg");
+/* 	var img_elm = document.getElementById("#profileImg");
 	img_elm.onerror = function() {
 		this.scr = "${pageContext.request.contextPath}/common/My/image/loading.png";
-	}
+	} */
 </script>
 
 <%
