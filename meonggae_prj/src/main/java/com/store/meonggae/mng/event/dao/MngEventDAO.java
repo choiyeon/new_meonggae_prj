@@ -24,7 +24,6 @@ public class MngEventDAO {
 		
 		List<MngEventDomain> list=null;
 		SqlSession ss=mbDAO.getMyBatisHandler(false);
-		System.out.println("-----------"+ list);
 		list=ss.selectList("kr.co.sist.event.selectEventList", sVO);
 		mbDAO.closeHandler(ss);
 		return list;
@@ -52,7 +51,7 @@ public class MngEventDAO {
 	 public void updateEvent(MngEventDomain ed) throws PersistenceException {
 	        SqlSession ss = mbDAO.getMyBatisHandler(true);
 	        try {
-	        	System.out.println(ed);
+	        	//System.out.println(ed);
 	            ss.update("kr.co.sist.event.updateEvent", ed);
 	        
 	        } catch (PersistenceException pe) {

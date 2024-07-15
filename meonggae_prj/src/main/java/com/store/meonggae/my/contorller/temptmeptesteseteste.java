@@ -82,7 +82,7 @@ public class temptmeptesteseteste {
             // 이메일 전송
             // Transport : SMTP 서버와 통신하여 이메일 메세지를 전송하는 역할
             Transport.send(message);
-            System.out.println("message sent successfully...");
+            //System.out.println("message sent successfully...");
 
         } catch (MessagingException e) {
             e.printStackTrace(); // 디버깅을 위해 스택 트레이스 출력
