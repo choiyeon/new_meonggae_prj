@@ -19,17 +19,17 @@ int height = 200;
 int width = 200;
 String filePath = "C:/dev/";
 
-System.out.println("최초 개인키 생성 시 사용하는 메소드");
+// System.out.println("최초 개인키 생성 시 사용하는 메소드");
 String secretKey = otp.getSecretKey();
-System.out.println("getSecretKey(): " + secretKey);
+// System.out.println("getSecretKey(): " + secretKey);
 
-System.out.println("OTP검증 요청 때마다 개인키로 OTP 생성하는 메소드");
+// System.out.println("OTP검증 요청 때마다 개인키로 OTP 생성하는 메소드");
 String totpCode = otp.getTOTPCode(secretKey);
-System.out.println("getSecretKey(secretKey): " + totpCode);
+// System.out.println("getSecretKey(secretKey): " + totpCode);
 
-System.out.println("개인키, 계정명(유저ID), 발급자(회사명)을 받아서 구글OTP 인증용 링크를 생성하는 메소드");
+// System.out.println("개인키, 계정명(유저ID), 발급자(회사명)을 받아서 구글OTP 인증용 링크를 생성하는 메소드");
 String googleOTPAuthURL = otp.getGoogleOTPAuthURL(secretKey, account, issuer);
-System.out.println("getGoogleOTPAuthURL(secretKey, account, issuer): " + googleOTPAuthURL);
+// System.out.println("getGoogleOTPAuthURL(secretKey, account, issuer): " + googleOTPAuthURL);
 
 %>
 <!DOCTYPE html>
@@ -69,7 +69,7 @@ System.out.println("getGoogleOTPAuthURL(secretKey, account, issuer): " + googleO
 
 <div>
 <%
-System.out.println("url, 파일생성할경로, 높이px, 폭px을 받아서 QR코드 이미지를 생성하는 메소드");
+// System.out.println("url, 파일생성할경로, 높이px, 폭px을 받아서 QR코드 이미지를 생성하는 메소드");
 otp.getQRImage(googleOTPAuthURL, filePath, height, width);
 %>
 </div>

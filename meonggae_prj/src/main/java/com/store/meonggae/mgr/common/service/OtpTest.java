@@ -107,10 +107,10 @@ public class OtpTest {
 		OTPUtil oUtil = new OTPUtil();
 		String dbKey = oUtil.getSecretKey();
 		ot.setDbKey(dbKey);
-		System.out.println(dbKey);
+		//System.out.println(dbKey);
 		MgrSecondAuthVO msaVO = new MgrSecondAuthVO("manager6", 231576);
 		boolean flagCheckCode = ot.isSecondAuthCorrect(msaVO);
-		System.out.println(flagCheckCode);
+		//System.out.println(flagCheckCode);
 	}
 
 }

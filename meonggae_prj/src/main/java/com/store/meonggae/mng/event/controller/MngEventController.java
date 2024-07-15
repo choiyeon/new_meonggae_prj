@@ -40,7 +40,6 @@ public class MngEventController {
 
 	    sVO.setStartNum(startNum);
 	    sVO.setEndNum(endNum);
-	    System.out.println("-------------------------------------" + sVO);
 
 	    List<MngEventDomain> list = es.searchEvent(sVO);
 

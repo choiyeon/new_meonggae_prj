@@ -23,7 +23,6 @@ public class MngReportDAO {
 		
 		List<MngReportDomain> list=null;
 		SqlSession ss=mbDAO.getMyBatisHandler(false);
-		System.out.println("-----------"+ list);
 		list=ss.selectList("kr.co.sist.report.selectReportList", sVO);
 		mbDAO.closeHandler(ss);
 		return list;
@@ -58,7 +57,7 @@ public class MngReportDAO {
 	 public void updateReport(MngReportDomain rd) throws PersistenceException {
 	        SqlSession ss = mbDAO.getMyBatisHandler(true);
 	        try {
-	        	System.out.println(rd);
+	        	//System.out.println(rd);
 	            ss.update("kr.co.sist.report.updateReport", rd);
 	        
 	        } catch (PersistenceException pe) {
