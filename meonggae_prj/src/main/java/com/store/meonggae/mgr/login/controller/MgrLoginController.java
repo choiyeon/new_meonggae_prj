@@ -30,9 +30,11 @@ public class MgrLoginController {
 	@RequestMapping(value="/mgr/login/mgr_login_frm.do", method={GET, POST})
 	public String mgrLoginFrm(HttpServletRequest request) {
 		String retDo = "mgr/login/mgr_login_frm";
-		if(!mls.chkIp(request.getRemoteAddr())) {
-			retDo = "mgr/error/err-no-permission";
-		} // end if
+		
+		// 관리자 접속시 허용 아이피 제한 부분
+//		if(!mls.chkIp(request.getRemoteAddr())) {
+//			retDo = "mgr/error/err-no-permission";
+//		} // end if
 		return retDo;
 	} // mgrLoginFrm
 	
@@ -48,7 +50,8 @@ public class MgrLoginController {
 		
 		String retDo = "forward:mgr_second_auth_frm.do";
 		
-		if(mls.chkIp(request.getRemoteAddr())) {
+		// 관리자 접속시 허용 아이피 제한 부분
+//		if(mls.chkIp(request.getRemoteAddr())) {
 			MgrDomain mgrDomain = mls.searchOneMgr(mgrVO);
 			//System.out.println(mgrDomain);
 			if(mgrDomain != null) {
@@ -68,9 +71,9 @@ public class MgrLoginController {
 				
 				retDo = "redirect:/mgr/login/mgr_login_frm.do";
 			} // end else
-		} else {
-			retDo = "redirect:/mgr/error/err-no-permission.do";
-		} // end else
+//		} else {
+//			retDo = "redirect:/mgr/error/err-no-permission.do";
+//		} // end else
 		
 		return retDo;
 	} // mgrLoginProcess

@@ -159,7 +159,7 @@
 	<script type="text/javascript">
 		$(function (){
 			if(${requestScope.flagAddResult }) {
-				alert('관리자 등록에 성공하였습니다. 등록한 메일을 확인해주세요');
+				alert('관리자 등록에 성공하였습니다. 잠시 후 등록한 메일을 확인해주세요');
 			} else {
 				alert('관리자 등록에 실패하였습니다');
 			} // else
