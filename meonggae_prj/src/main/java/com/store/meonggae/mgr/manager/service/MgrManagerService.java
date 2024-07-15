@@ -257,12 +257,17 @@ public class MgrManagerService {
 				
 				googleOTPAuthURL = otpUtil.getGoogleOTPAuthURL(secretKey, mMgrVO.getManagerId(), "meonggae");
 				
+				// 내 프로젝트 위치, 다른 팀원 프로젝트 위치
 				String pathSys = "C:/dev/project/project3/git5/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images";
+				String pathSys2 = "C:/Users/user/git/new_meonggae_prj/meonggae_prj/src/main/webapp/mgr_common/images";
 				File file = new File(pathSys);
 				file.mkdirs();
+				File file2 = new File(pathSys2);
+				file2.mkdirs();
 				
 				final String timeNow = String.valueOf(new Date().getTime());
 				otpUtil.getQRImage(googleOTPAuthURL, pathSys + "/qr_" + mMgrVO.getManagerId() + "_" + timeNow + ".png", 200, 200);
+				otpUtil.getQRImage(googleOTPAuthURL, pathSys2 + "/qr_" + mMgrVO.getManagerId() + "_" + timeNow + ".png", 200, 200);
 				final String managerId =  mMgrVO.getManagerId();
 				final String emailAddr = mMgrVO.getEmail();
 //				Thread.sleep(2000);
