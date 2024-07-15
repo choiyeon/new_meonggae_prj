@@ -17,7 +17,7 @@ public class ChatController {
 	
 	@GetMapping("/chat.do")
 	public String chatFrm() {
-		return "redirect:http://localhost:8080/chat_frm";
+		return "redirect:http://localhost:8880/chat_frm";
 		//return "meongae_talk/talk_page";
 	} // chatFrm
 	
@@ -27,7 +27,7 @@ public class ChatController {
 		chatSendVO.setContent(referer);
 		int cnt = chatService.addChat(chatSendVO);
 		
-		return "redirect:http://localhost:8080/chat_frm";
+		return "redirect:http://localhost:8880/chat_frm";
 		//return "meongae_talk/talk_page";
 	} // chatFrm
 }

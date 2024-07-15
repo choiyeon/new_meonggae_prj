@@ -110,8 +110,8 @@ alert('인증번호가 유효하지 않습니다');
 									<label class="form-label" for="email-address">인증번호</label>
 								</div>
 								<div class="form-control-wrap">
-									<input autocomplete="off" type="text" class="form-control form-control-lg" id="authKey" name="authKey" placeholder="인증번호를 입력해주세요" value="123456">
-<!-- 									<input autocomplete="off" type="text" class="form-control form-control-lg" id="authKey" name="authKey" placeholder="인증번호를 입력해주세요" value=""> -->
+<!-- 									<input autocomplete="off" type="text" class="form-control form-control-lg" id="authKey" name="authKey" placeholder="인증번호를 입력해주세요" value="123456"> -->
+									<input autocomplete="off" type="text" class="form-control form-control-lg" id="authKey" name="authKey" placeholder="인증번호를 입력해주세요" value="">
 								</div>
 							</div>
 							<div>

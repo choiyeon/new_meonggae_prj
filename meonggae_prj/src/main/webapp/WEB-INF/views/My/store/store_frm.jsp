@@ -36,12 +36,12 @@
 <!-- CSS -->
 
 <script type="text/javascript">
-	$(function(){
+/* 	$(function(){
 		var img_elm = document.getElementById("#profileImg");
 		img_elm.onerror = function() {
 			this.scr = "${pageContext.request.contextPath}/common/My/image/loading.png";
 		}
-	});//ready
+	});//ready */
 </script>
 
 <%
